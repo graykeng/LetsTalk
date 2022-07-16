@@ -11,6 +11,7 @@ public class Main {
         JFrame window = new JFrame();
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         window.setLayout(new BorderLayout());
+        window.setPreferredSize(new Dimension(600, 600));
         window.setResizable(true);
         window.setTitle("LetsTalk");
 
@@ -21,6 +22,6 @@ public class Main {
         window.setLocationRelativeTo(null);
         window.setVisible(true);
 
-        mainWindow.startThread();
+        //mainWindow.startThread();
     }
 }
