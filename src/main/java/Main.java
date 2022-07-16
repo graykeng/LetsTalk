@@ -5,6 +5,9 @@ import java.awt.*;
 
 public class Main {
     public static void main(String[] args){
+        /**
+         * Setting Frame
+         */
         JFrame window = new JFrame();
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         window.setLayout(new BorderLayout());
