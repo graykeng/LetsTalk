@@ -24,7 +24,7 @@ public class Main {
         window.setVisible(true);
 
 
-        Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/letstalk", "root", "b130572645");
+        Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/letstalk", "root", "zhousibeiMV0629");
         Statement statement = con.createStatement();
         ResultSet resultSet = statement.executeQuery("select * from emoji");
         while (resultSet.next()){
