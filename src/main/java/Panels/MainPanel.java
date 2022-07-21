@@ -1,8 +1,8 @@
-package Windows;
+package Panels;
 
 import javax.swing.*;
 
-public class MainWindow extends JPanel implements Runnable {
+public class MainPanel extends JPanel implements Runnable {
     private Thread screenThread;
 
 

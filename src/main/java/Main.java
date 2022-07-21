@@ -1,4 +1,4 @@
-import Windows.MainWindow;
+import Panels.MainPanel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -16,8 +16,8 @@ public class Main {
         window.setResizable(true);
         window.setTitle("LetsTalk");
 
-        MainWindow mainWindow = new MainWindow();
-        window.add(mainWindow);
+        MainPanel mainPanel = new MainPanel();
+        window.add(mainPanel);
 
         window.pack();
         window.setLocationRelativeTo(null);
