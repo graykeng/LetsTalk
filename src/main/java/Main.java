@@ -2,9 +2,10 @@ import Windows.MainWindow;
 
 import javax.swing.*;
 import java.awt.*;
+import java.sql.*;
 
 public class Main {
-    public static void main(String[] args){
+    public static void main(String[] args) throws SQLException {
         /**
          * Setting Frame
          */
@@ -22,6 +23,13 @@ public class Main {
         window.setLocationRelativeTo(null);
         window.setVisible(true);
 
+
+        Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/letstalk", "root", "b130572645");
+        Statement statement = con.createStatement();
+        ResultSet resultSet = statement.executeQuery("select * from emoji");
+        while (resultSet.next()){
+            System.out.println(resultSet.getString("emoji_number"));
+        }
         //mainWindow.startThread();
     }
 }
