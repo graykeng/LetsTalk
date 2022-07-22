@@ -1,6 +1,6 @@
-import Panels.ChatPanel;
-import Panels.ChatSelectPanel;
+import Constants.Constants;
 import Panels.MainPanel;
+import Panels.PopUpPanel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,16 +13,16 @@ public class Main {
          */
         JFrame window = new JFrame();
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        window.setLayout(new GridLayout(1,2));
-        window.setPreferredSize(new Dimension(800, 600));
-        window.setResizable(true);
+        window.setLayout(new BorderLayout());
+        window.setPreferredSize(new Dimension(Constants.WIDTH, Constants.HEIGHT));
+        window.setResizable(false);
         window.setTitle("LetsTalk");
 
-        ChatSelectPanel selectPanel = new ChatSelectPanel();
-        window.add(selectPanel);
+        MainPanel mainPanel = new MainPanel();
+        window.add(mainPanel);
 
-        ChatPanel chatPanel = new ChatPanel();
-        window.add(chatPanel);
+        PopUpPanel popUpPanel = new PopUpPanel();
+        window.add(popUpPanel);
 
         window.pack();
         window.setLocationRelativeTo(null);
