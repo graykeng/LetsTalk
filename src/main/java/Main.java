@@ -3,6 +3,7 @@ import Panels.ChatPanel;
 import Panels.ChatSelectPanel;
 import Panels.MainPanel;
 import Panels.PopUpPanel;
+import Panels.UserInfoPanel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -23,8 +24,8 @@ public class Main {
         MainPanel mainPanel = new MainPanel();
         window.add(mainPanel);
 
-        PopUpPanel popUpPanel = new PopUpPanel();
-        window.add(popUpPanel);
+        UserInfoPanel userInfoPanel = new UserInfoPanel();
+        window.add(userInfoPanel);
 
 
         window.pack();
