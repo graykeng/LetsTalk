@@ -24,7 +24,8 @@ public class UserInfoPanel extends JPanel {
     private JLabel birthdayTXT;
     private JLabel ageTXT;
     private JLabel interestTXT;
-    private JButton singleInterest;
+    private JLabel photoWallTXT;
+    private JLabel singleInterest;
 
     private String[] interestArray;
 
@@ -48,6 +49,7 @@ public class UserInfoPanel extends JPanel {
         birthdayTXT = new JLabel();
         ageTXT = new JLabel();
         interestTXT = new JLabel();
+        photoWallTXT = new JLabel();
 
         interestArray = new String[]{"Basketball", "LOL", "WOW", "COOK"};
 
@@ -68,7 +70,7 @@ public class UserInfoPanel extends JPanel {
 
         interests.setLayout(null);
         interests.setLocation(0, (int)(profile.getPreferredSize().getHeight() + information.getPreferredSize().getHeight()));
-        interests.setSize(Constants.WIDTH, Constants.HEIGHT/3);
+        interests.setSize(Constants.WIDTH, Constants.HEIGHT/6);
 
         photoWall.setLayout(null);
         photoWall.setLocation(0, (int)(profile.getPreferredSize().getHeight() + information.getPreferredSize().getHeight() + interests.getPreferredSize().getHeight()));
@@ -119,18 +121,25 @@ public class UserInfoPanel extends JPanel {
         interestTXT.setSize((int)interestTXT.getPreferredSize().getWidth(), (int)interestTXT.getPreferredSize().getHeight());
         interests.add(interestTXT);
 
+        photoWallTXT.setFont(UnifiedFonts.font30B);
+        photoWallTXT.setText("PHOTOWALL:");
+        photoWallTXT.setLocation(0, 0);
+        photoWallTXT.setSize((int)photoWallTXT.getPreferredSize().getWidth(), (int)photoWallTXT.getPreferredSize().getHeight());
+        photoWall.add(photoWallTXT);
+
         /**
          * Add all the interests onto the interest panel
          */
         for(int i = 0; i < interestArray.length; i++){
-            singleInterest = new JButton();
+            singleInterest = new JLabel();
             singleInterest.setFont(UnifiedFonts.font20P);
             singleInterest.setText(interestArray[i]);
             singleInterest.setText(interestArray[i]);
+            singleInterest.setToolTipText("INTEREST TYPE");
             interestsGrid.add(singleInterest);
         }
         interestsGrid.setLocation(0, (int)interestTXT.getPreferredSize().getHeight());
-        interestsGrid.setSize(Constants.WIDTH - Constants.SCROLL_CONTROLLER_WIDTH, (int)singleInterest.getPreferredSize().getHeight());
+        interestsGrid.setSize(Constants.WIDTH - Constants.SCROLL_CONTROLLER_WIDTH, (int) singleInterest.getPreferredSize().getHeight());
         interests.add(interestsGrid);
 
         /**
@@ -158,9 +167,8 @@ public class UserInfoPanel extends JPanel {
      * @return
      */
     private int getCentreX(Double inside, Double outside){
-        Double doubleValue = outside/2 - inside/2;
-        int intValue = doubleValue.intValue();
-        return intValue;
+        double doubleValue = outside/2 - inside/2;
+        return (int)doubleValue;
     }
 
 }
