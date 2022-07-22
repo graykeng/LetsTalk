@@ -1,18 +1,21 @@
 package Panels;
 
+import Constants.State;
+
 import javax.swing.*;
 
-public class MainPanel extends JPanel implements Runnable {
-    private Thread screenThread;
+public class MainPanel extends JPanel{
 
+    private State state;
 
-    /**
-     * Loop which tells the UI to update every tick.
-     */
-    @Override
-    public void run(){
-        while(screenThread != null){
-
-        }
+    public MainPanel(){
+        state = State.LoginState;
     }
+
+    public void UpdateState(){
+
+    }
+
+
+
 }

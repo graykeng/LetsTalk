@@ -3,6 +3,7 @@ package Panels;
 import Constants.*;
 
 import javax.swing.*;
+import javax.swing.border.Border;
 import java.awt.*;
 
 public class UserInfoPanel extends JPanel {
@@ -132,6 +133,8 @@ public class UserInfoPanel extends JPanel {
          */
         for(int i = 0; i < interestArray.length; i++){
             singleInterest = new JLabel();
+            Border border = BorderFactory.createLineBorder(Color.GRAY, 3);
+            singleInterest.setBorder(border);
             singleInterest.setFont(UnifiedFonts.font20P);
             singleInterest.setText(interestArray[i]);
             singleInterest.setText(interestArray[i]);
