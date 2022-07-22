@@ -19,6 +19,10 @@ public class PopUpPanel extends JPanel {
     private JLabel userNameTXT;
     private JLabel uIDTXT;
     private JLabel infoTXT;
+    private JLabel sexTXT;
+    private JLabel birthdayTXT;
+    private JLabel ageTXT;
+
 
     public PopUpPanel(){
         prepareGUI();
@@ -35,6 +39,9 @@ public class PopUpPanel extends JPanel {
         userNameTXT = new JLabel();
         uIDTXT = new JLabel();
         infoTXT = new JLabel();
+        sexTXT = new JLabel();
+        birthdayTXT = new JLabel();
+        ageTXT = new JLabel();
 
 
         /**
@@ -80,6 +87,11 @@ public class PopUpPanel extends JPanel {
         infoTXT.setLocation(0, 0);
         infoTXT.setSize((int)infoTXT.getPreferredSize().getWidth(), (int)infoTXT.getPreferredSize().getHeight());
         information.add(infoTXT);
+
+        sexTXT.setFont(UnifiedFonts.font20P);
+        sexTXT.setText("SEX: M/F");
+        sexTXT.setLocation(0, (int)information.getPreferredSize().getHeight()/2);
+        //sexTXT.setSize((int)sexTXT.getPreferredSize().getWidth(), );
 
         /**
          * Add everything onto the scrollSection
