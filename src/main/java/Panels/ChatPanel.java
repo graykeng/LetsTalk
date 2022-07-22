@@ -1,5 +1,7 @@
 package Panels;
 
+import Constants.*;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -10,13 +12,13 @@ public class ChatPanel extends JPanel {
 
     public ChatPanel() {
         // Setting
-        this.setSize(250,600);
+        this.setSize(Constants.WIDTH/2, Constants.HEIGHT);
         BorderLayout layout = new BorderLayout();
         this.setLayout(layout);
 
         // Title panel
         Title = new JPanel();
-        Title.setSize(250,100);
+        Title.setSize(Constants.WIDTH/2,150);
         JLabel tileLabel = new JLabel("FriendName1");
         Title.add(tileLabel);
 
@@ -31,13 +33,13 @@ public class ChatPanel extends JPanel {
         jta.setBackground(new Color(238,238,238));
         jta.setText(strMsg1+strMsg2+strMsg3);
 
-        jta.setFont(new Font(null, Font.PLAIN, 15));
+        jta.setFont(UnifiedFonts.font15P);
         scrollPanel = new JScrollPane(
                 jta,
                 ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
                 ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER
         );
-        scrollPanel.setSize(250,400);
+        scrollPanel.setSize(Constants.WIDTH/2,Constants.HEIGHT);
 
         // msgPanel
         msgSendPanel = new JPanel();

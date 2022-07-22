@@ -1,4 +1,6 @@
 import Constants.Constants;
+import Panels.ChatPanel;
+import Panels.ChatSelectPanel;
 import Panels.MainPanel;
 import Panels.PopUpPanel;
 
@@ -23,6 +25,7 @@ public class Main {
 
         PopUpPanel popUpPanel = new PopUpPanel();
         window.add(popUpPanel);
+
 
         window.pack();
         window.setLocationRelativeTo(null);
