@@ -1,9 +1,5 @@
 import Constants.Constants;
-import Panels.ChatPanel;
-import Panels.ChatSelectPanel;
-import Panels.MainPanel;
-import Panels.PopUpPanel;
-import Panels.UserInfoPanel;
+import Panels.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -16,7 +12,7 @@ public class Main {
          */
         JFrame window = new JFrame();
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        window.setLayout(new BorderLayout());
+        window.setLayout(null);
         window.setPreferredSize(new Dimension(Constants.WIDTH, Constants.HEIGHT));
         window.setResizable(false);
         window.setTitle("LetsTalk");
@@ -24,16 +20,12 @@ public class Main {
         MainPanel mainPanel = new MainPanel();
         window.add(mainPanel);
 
-        UserInfoPanel userInfoPanel = new UserInfoPanel();
-        window.add(userInfoPanel);
-
-
         window.pack();
         window.setLocationRelativeTo(null);
         window.setVisible(true);
 
 
-        Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/letstalk", "root", "b130572645");
+        Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/letstalk", "root", "zhousibeiMV0629");
         Statement statement = con.createStatement();
         ResultSet resultSet = statement.executeQuery("select * from emoji");
         while (resultSet.next()){
