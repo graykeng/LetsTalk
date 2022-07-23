@@ -1,4 +1,6 @@
 package Panels;
 
-public class AddFriendPanel {
+import javax.swing.*;
+
+public class AddFriendPanel extends JPanel {
 }

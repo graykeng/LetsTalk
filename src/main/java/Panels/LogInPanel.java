@@ -1,4 +1,6 @@
 package Panels;
 
-public class LogInPanel {
+import javax.swing.*;
+
+public class LogInPanel extends JPanel {
 }
