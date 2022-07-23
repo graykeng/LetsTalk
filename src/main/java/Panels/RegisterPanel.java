@@ -1,4 +1,6 @@
 package Panels;
 
-public class RegisterPanel {
+import javax.swing.*;
+
+public class RegisterPanel extends JPanel {
 }

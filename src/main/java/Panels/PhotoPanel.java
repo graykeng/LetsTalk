@@ -1,4 +1,6 @@
 package Panels;
 
-public class PhotoPanel {
+import javax.swing.*;
+
+public class PhotoPanel extends JPanel {
 }

@@ -1,4 +1,6 @@
 package Panels;
 
-public class SidePanel {
+import javax.swing.*;
+
+public class SidePanel extends JPanel {
 }

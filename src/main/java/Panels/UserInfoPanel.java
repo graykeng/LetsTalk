@@ -59,23 +59,23 @@ public class UserInfoPanel extends JPanel {
          */
         scrollSection.setLayout(null);
         scrollSection.setLocation(0, 0);
-        scrollSection.setPreferredSize(new Dimension(Constants.WIDTH, Constants.HEIGHT*2));
+        scrollSection.setPreferredSize(new Dimension(Constants.USER_INFO_WIDTH, Constants.HEIGHT*2));
 
         profile.setLayout(null);
         profile.setLocation(0, 0);
-        profile.setSize(Constants.WIDTH, Constants.HEIGHT/3);
+        profile.setSize(Constants.USER_INFO_WIDTH, Constants.HEIGHT/3);
 
         information.setLayout(null);
         information.setLocation(0, (int)profile.getPreferredSize().getHeight());
-        information.setSize(Constants.WIDTH, Constants.HEIGHT/3);
+        information.setSize(Constants.USER_INFO_WIDTH, Constants.HEIGHT/3);
 
         interests.setLayout(null);
         interests.setLocation(0, (int)(profile.getPreferredSize().getHeight() + information.getPreferredSize().getHeight()));
-        interests.setSize(Constants.WIDTH, Constants.HEIGHT/6);
+        interests.setSize(Constants.USER_INFO_WIDTH, Constants.HEIGHT/6);
 
         photoWall.setLayout(null);
         photoWall.setLocation(0, (int)(profile.getPreferredSize().getHeight() + information.getPreferredSize().getHeight() + interests.getPreferredSize().getHeight()));
-        photoWall.setSize(Constants.WIDTH, Constants.HEIGHT);
+        photoWall.setSize(Constants.USER_INFO_WIDTH, Constants.HEIGHT);
 
         /**
          * Set the size, position, and content for Labels
@@ -142,7 +142,7 @@ public class UserInfoPanel extends JPanel {
             interestsGrid.add(singleInterest);
         }
         interestsGrid.setLocation(0, (int)interestTXT.getPreferredSize().getHeight());
-        interestsGrid.setSize(Constants.WIDTH - Constants.SCROLL_CONTROLLER_WIDTH, (int) singleInterest.getPreferredSize().getHeight());
+        interestsGrid.setSize(Constants.USER_INFO_WIDTH - Constants.SCROLL_CONTROLLER_WIDTH, (int) singleInterest.getPreferredSize().getHeight());
         interests.add(interestsGrid);
 
         /**
@@ -158,8 +158,9 @@ public class UserInfoPanel extends JPanel {
                 ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
                 ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER
         );
-        scrollPane.setPreferredSize(new Dimension(Constants.WIDTH,  Constants.HEIGHT));
+        scrollPane.setPreferredSize(new Dimension(Constants.USER_INFO_WIDTH,  Constants.HEIGHT));
 
+        this.setSize((int)this.getPreferredSize().getWidth(), (int)this.getPreferredSize().getHeight());
         this.add(scrollPane);
     }
 
