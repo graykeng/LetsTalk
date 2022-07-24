@@ -6,5 +6,6 @@ public enum State {
     ChatState,
     AddFriendState,
     AddGroupState,
-    UserInfoState
+    UserInfoState,
+    PhotoState
 }

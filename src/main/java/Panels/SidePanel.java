@@ -11,8 +11,11 @@ import java.awt.event.ActionListener;
 public class SidePanel extends JPanel{
     private JButton chatButton;
     private JButton photoButton;
+    private MainPanel beLongTo;
 
-    public SidePanel() {
+    public SidePanel(MainPanel mainPanel) {
+        beLongTo = mainPanel;
+
         this.setSize(Constants.SIDE_PANEL_WIDTH,Constants.HEIGHT);
         this.setLayout(new GridLayout(2,1));
         this.setLocation(0,0);
@@ -31,6 +34,7 @@ public class SidePanel extends JPanel{
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.out.println("Switch to chat panel");
+                beLongTo.UpdateState(State.ChatState);
             }
         });
 
@@ -43,6 +47,7 @@ public class SidePanel extends JPanel{
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.out.println("Switch to photos panel");
+                beLongTo.UpdateState(State.PhotoState);
             }
         });
 

@@ -5,7 +5,6 @@ import Constants.*;
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
-import java.util.ArrayList;
 
 public class ChatPanel extends JPanel {
     private JPanel Title;
@@ -15,7 +14,7 @@ public class ChatPanel extends JPanel {
     public ChatPanel() {
         // Setting
         this.setSize(Constants.CHAT_PANEL_WIDTH, Constants.HEIGHT);
-        this.setLocation(Constants.SIDE_PANEL_WIDTH+Constants.FRIEND_SELECT_PANEL_WIDTH, 0);
+        this.setLocation(Constants.SIDE_PANEL_WIDTH+Constants.SELECT_PANEL_WIDTH, 0);
         this.setLayout(null);
         Border blackline = BorderFactory.createLineBorder(Color.black);
 

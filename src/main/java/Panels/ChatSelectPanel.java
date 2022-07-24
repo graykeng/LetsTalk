@@ -12,17 +12,33 @@ import java.awt.event.MouseListener;
 public class ChatSelectPanel extends JPanel {
     private JPanel Title;
     private JScrollPane scrollPanel;
+    private MainPanel beLongTo;
 
-    public ChatSelectPanel(){
+    public ChatSelectPanel(MainPanel mainPanel){
         // Setting
-        this.setSize(Constants.FRIEND_SELECT_PANEL_WIDTH,Constants.HEIGHT);
+        beLongTo = mainPanel;
+
+        this.setSize(Constants.SELECT_PANEL_WIDTH,Constants.HEIGHT);
         this.setLocation(Constants.SIDE_PANEL_WIDTH, 0);
         this.setLayout(null);
 
         // Title panel
         Title = new JPanel();
         Title.setLayout(new BorderLayout());
-        Title.setSize(Constants.FRIEND_SELECT_PANEL_WIDTH,Constants.TITLE_HEIGHT);
+        Title.setSize(Constants.SELECT_PANEL_WIDTH,Constants.TITLE_HEIGHT);
+        JButton UserHeadShotButton = new JButton();
+        UserHeadShotButton.setIcon(new ImageIcon("src/main/java/Image/headshot.png"));
+        UserHeadShotButton.setPressedIcon(new ImageIcon("src/main/java/Image/headshot_click.png"));
+        UserHeadShotButton.setContentAreaFilled(false);
+        UserHeadShotButton.setFocusPainted(false);
+        UserHeadShotButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("Switch to userInfo panel");
+                beLongTo.UpdateState(State.UserInfoState);
+            }
+        });
+
         String User_Name = "UserName";
         String uid = "123456789";
 
@@ -36,7 +52,7 @@ public class ChatSelectPanel extends JPanel {
         addButton.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                showPopupMenu(e.getComponent(), e.getX(), e.getY());
+                showThePopupMenu(e.getComponent(), e.getX(), e.getY());
             }
 
             @Override
@@ -60,6 +76,7 @@ public class ChatSelectPanel extends JPanel {
             }
         });
 
+        Title.add(UserHeadShotButton, BorderLayout.WEST);
         Title.add(tileLabel, BorderLayout.CENTER);
         Title.add(addButton, BorderLayout.EAST);
 
@@ -74,14 +91,29 @@ public class ChatSelectPanel extends JPanel {
             FriendsPanel.add(showEmpty, BorderLayout.CENTER);
         }
         for (int i = 0; i < rows; i++) {
-            JPanel row = new JPanel(new FlowLayout());
-            row.setSize(380,75);
+            JPanel row = new JPanel(new BorderLayout());
+            row.setSize(Constants.SELECT_PANEL_WIDTH,75);
             row.setLocation(0,75*i);
             String str = friendsName[i];
+
             JLabel FriendLabel = new JLabel(str);
+            FriendLabel.setFont(UnifiedFonts.font20P);
 
+            JButton FriendHeadShotButton = new JButton();
+            FriendHeadShotButton.setIcon(new ImageIcon("src/main/java/Image/headshot.png"));
+            FriendHeadShotButton.setPressedIcon(new ImageIcon("src/main/java/Image/headshot_click.png"));
+            FriendHeadShotButton.setContentAreaFilled(false);
+            FriendHeadShotButton.setFocusPainted(false);
+            FriendHeadShotButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    System.out.println("Switch to userInfo panel");
+                    beLongTo.UpdateState(State.UserInfoState);
+                }
+            });
 
-            row.add(FriendLabel, BorderLayout.NORTH);
+            row.add(FriendHeadShotButton, BorderLayout.WEST);
+            row.add(FriendLabel, BorderLayout.CENTER);
 
             row.setBorder(BorderFactory.createTitledBorder(""));
             FriendsPanel.add(row);
@@ -92,7 +124,7 @@ public class ChatSelectPanel extends JPanel {
                 ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
                 ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER
         );
-        scrollPanel.setSize(Constants.FRIEND_SELECT_PANEL_WIDTH,Constants.HEIGHT-Constants.TEXT_FIELD_HEIGHT-38);
+        scrollPanel.setSize(Constants.SELECT_PANEL_WIDTH,Constants.HEIGHT-Constants.TEXT_FIELD_HEIGHT-38);
 
         Title.setLocation(0,0);
         this.add(Title);
@@ -100,33 +132,40 @@ public class ChatSelectPanel extends JPanel {
         this.add(scrollPanel);
     }
 
-    public static void showPopupMenu(Component invoker, int x, int y) {
+    private void showThePopupMenu(Component invoker, int x, int y) {
         JPopupMenu popupMenu = new JPopupMenu();
 
-        // 创建 一级菜单
         JMenuItem AddFriendMenuItem = new JMenuItem("Add new friend");
         JMenuItem AddGroupMenuItem = new JMenuItem("Add new group");
 
-        // 添加 一级菜单 到 弹出菜单
         popupMenu.add(AddFriendMenuItem);
         popupMenu.addSeparator();
         popupMenu.add(AddGroupMenuItem);
 
-        // 添加菜单项的点击监听器
         AddFriendMenuItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.out.println("Add a new friend");
+                changeToAddFriend();
             }
         });
         AddGroupMenuItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.out.println("Add a new group");
+                changeToAddGroup();
             }
         });
 
         popupMenu.show(invoker, x, y);
+    }
+
+    private void changeToAddFriend(){
+        beLongTo.UpdateState(State.AddFriendState);
+    }
+
+    private void changeToAddGroup(){
+        beLongTo.UpdateState(State.AddGroupState);
     }
 
 }

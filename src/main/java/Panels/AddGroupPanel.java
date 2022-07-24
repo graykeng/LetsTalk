@@ -8,12 +8,12 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class AddFriendPanel extends JPanel {
-    private JLabel addFriendLabel;
+public class AddGroupPanel extends JPanel {
+    private JLabel addGroupLabel;
     private JButton addButton;
     private JTextField textField;
 
-    public AddFriendPanel() {
+    public AddGroupPanel() {
         // Setting
         this.setSize(Constants.CHAT_PANEL_WIDTH,Constants.HEIGHT);
         this.setLayout(new BorderLayout());
@@ -22,8 +22,8 @@ public class AddFriendPanel extends JPanel {
         this.setBorder(blackLine);
 
         // Label
-        addFriendLabel = new JLabel("Add Friend");
-        addFriendLabel.setFont(UnifiedFonts.font30B);
+        addGroupLabel = new JLabel("Add Group");
+        addGroupLabel.setFont(UnifiedFonts.font30B);
 
         JPanel panel = new JPanel();
         panel.setLayout(new GridLayout(3,1));
@@ -31,14 +31,14 @@ public class AddFriendPanel extends JPanel {
         JPanel panel1 = new JPanel();
 
         // TextField
-        textField = new JTextField("(Input your friend's UID)");
+        textField = new JTextField("(Input the group's ID)");
 
         // Button
         addButton = new JButton("Add");
         addButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println("Add new friend: " + textField.getText());
+                System.out.println("Add new Group: " + textField.getText());
             }
         });
 
@@ -48,7 +48,7 @@ public class AddFriendPanel extends JPanel {
         panel.add(panel1);
         panel.add(new JPanel());
 
-        this.add(addFriendLabel, BorderLayout.NORTH);
+        this.add(addGroupLabel, BorderLayout.NORTH);
         this.add(panel, BorderLayout.CENTER);
     }
 }
