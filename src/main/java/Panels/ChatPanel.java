@@ -5,6 +5,8 @@ import Constants.*;
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class ChatPanel extends JPanel {
     private JPanel Title;
@@ -34,15 +36,15 @@ public class ChatPanel extends JPanel {
 
         String strAll = strMsg1+strMsg2+strMsg3+strMsg3+strMsg3;
 
-        JTextArea jta = new JTextArea();
-        jta.setLineWrap(true);
-        jta.setEditable(false);
-        jta.setBackground(new Color(238,238,238));
-        jta.setText(strAll);
+        JTextArea textFiled = new JTextArea();
+        textFiled.setLineWrap(true);
+        textFiled.setEditable(false);
+        textFiled.setBackground(new Color(238,238,238));
+        textFiled.setText(strAll);
 
-        jta.setFont(UnifiedFonts.font15P);
+        textFiled.setFont(UnifiedFonts.font15P);
         scrollPanel = new JScrollPane(
-                jta,
+                textFiled,
                 ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
                 ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER
         );
@@ -54,9 +56,42 @@ public class ChatPanel extends JPanel {
         msgSendPanel.setLayout(new BorderLayout());
         JTextArea textArea = new JTextArea();
         textArea.setLineWrap(true);
-        JButton addFileButton = new JButton("Send File");
+
+        JButton sendButton = new JButton("Send");
+        sendButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("Send: " + textArea.getText());
+            }
+        });
+
+        JButton addButton = new JButton();
+        addButton.setIcon(new ImageIcon("src/main/java/Image/AddButton_small.png"));
+        addButton.setSize(20,20);
+        addButton.setContentAreaFilled(false);
+        addButton.setFocusPainted(false);
+        addButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("Add File: ");
+                String filePath = "";
+                JFileChooser fileChooser = new JFileChooser();
+                fileChooser.setCurrentDirectory(fileChooser.getCurrentDirectory());
+                fileChooser.setDialogTitle("Open File");
+                fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+
+                int result = fileChooser.showOpenDialog(null);
+                if(JFileChooser.APPROVE_OPTION == result){
+                    filePath = fileChooser.getSelectedFile().getPath();
+                }
+                System.out.println(filePath);
+            }
+        });
+
         JPanel buttonPanel = new JPanel();
-        buttonPanel.add(addFileButton);
+        buttonPanel.add(sendButton);
+        buttonPanel.add(addButton);
+
         msgSendPanel.add(textArea,BorderLayout.CENTER);
         msgSendPanel.add(buttonPanel, BorderLayout.EAST);
 

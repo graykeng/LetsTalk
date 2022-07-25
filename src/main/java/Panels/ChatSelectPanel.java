@@ -94,8 +94,32 @@ public class ChatSelectPanel extends JPanel {
             JPanel row = new JPanel(new BorderLayout());
             row.setSize(Constants.SELECT_PANEL_WIDTH,75);
             row.setLocation(0,75*i);
-            String str = friendsName[i];
+            int num = i;
+            row.addMouseListener(new MouseListener() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    System.out.println("Change to "+ (num+1) +"th friend's message");
+                }
 
+                @Override
+                public void mousePressed(MouseEvent e) {
+                }
+
+                @Override
+                public void mouseReleased(MouseEvent e) {
+                }
+
+                @Override
+                public void mouseEntered(MouseEvent e) {
+                }
+
+                @Override
+                public void mouseExited(MouseEvent e) {
+                }
+            });
+
+            // Label
+            String str = friendsName[i];
             JLabel FriendLabel = new JLabel(str);
             FriendLabel.setFont(UnifiedFonts.font20P);
 
@@ -107,7 +131,7 @@ public class ChatSelectPanel extends JPanel {
             FriendHeadShotButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    System.out.println("Switch to userInfo panel");
+                    System.out.println("Switch to "+ (num+1) +"th friendInfo panel");
                     beLongTo.UpdateState(State.UserInfoState);
                 }
             });
