@@ -80,19 +80,19 @@ public class UserInfoPanel extends JPanel {
         /**
          * Set the size, position, and content for Labels
          */
-        userNameTXT.setFont(UnifiedFonts.font60B);
+        userNameTXT.setFont(UnifiedFonts.font25B);
         userNameTXT.setText("USERNAME");
         userNameTXT.setLocation(getCentreX(userNameTXT.getPreferredSize().getWidth(), scrollSection.getPreferredSize().getWidth()), Constants.HEIGHT/12);
         userNameTXT.setSize((int)userNameTXT.getPreferredSize().getWidth(), (int)userNameTXT.getPreferredSize().getHeight());
         profile.add(userNameTXT);
 
-        uIDTXT.setFont(UnifiedFonts.font30P);
+        uIDTXT.setFont(UnifiedFonts.font20P);
         uIDTXT.setText("USERID");
         uIDTXT.setLocation(getCentreX(userNameTXT.getPreferredSize().getWidth(), scrollSection.getPreferredSize().getWidth()), Constants.HEIGHT/12 + (int)userNameTXT.getPreferredSize().getHeight());
         uIDTXT.setSize((int)uIDTXT.getPreferredSize().getWidth(), (int)uIDTXT.getPreferredSize().getHeight());
         profile.add(uIDTXT);
 
-        infoTXT.setFont(UnifiedFonts.font30B);
+        infoTXT.setFont(UnifiedFonts.font20B);
         infoTXT.setText("INFORMATION:");
         infoTXT.setLocation(0, 0);
         infoTXT.setSize((int)infoTXT.getPreferredSize().getWidth(), (int)infoTXT.getPreferredSize().getHeight());
@@ -111,21 +111,21 @@ public class UserInfoPanel extends JPanel {
         information.add(birthdayTXT);
 
         ageTXT.setFont(UnifiedFonts.font20P);
-        ageTXT.setText("AGE: ");
+        ageTXT.setText("AGE: //");
         ageTXT.setLocation((int)(information.getPreferredSize().getWidth()-ageTXT.getPreferredSize().getWidth())-Constants.SCROLL_CONTROLLER_WIDTH, (int)information.getPreferredSize().getHeight()/2);
         ageTXT.setSize((int)ageTXT.getPreferredSize().getWidth(), (int)ageTXT.getPreferredSize().getHeight());
         information.add(ageTXT);
 
-        interestTXT.setFont(UnifiedFonts.font30B);
+        interestTXT.setFont(UnifiedFonts.font20B);
         interestTXT.setText("INTERESTS:");
         interestTXT.setLocation(0, 0);
         interestTXT.setSize((int)interestTXT.getPreferredSize().getWidth(), (int)interestTXT.getPreferredSize().getHeight());
         interests.add(interestTXT);
 
-        photoWallTXT.setFont(UnifiedFonts.font30B);
-        photoWallTXT.setText("PHOTOWALL:");
+        photoWallTXT.setFont(UnifiedFonts.font20B);
+        photoWallTXT.setText("PHOTO WALL:");
         photoWallTXT.setLocation(0, 0);
-        photoWallTXT.setSize((int)photoWallTXT.getPreferredSize().getWidth(), (int)photoWallTXT.getPreferredSize().getHeight());
+        photoWallTXT.setSize(photoWallTXT.getPreferredSize());
         photoWall.add(photoWallTXT);
 
         /**

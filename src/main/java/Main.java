@@ -1,7 +1,5 @@
 import Constants.*;
 import Panels.MainPanel;
-import Panels.SidePanel;
-import Panels.UserInfoPanel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -26,12 +24,17 @@ public class Main {
         window.setVisible(true);
 
 
-        Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/letstalk", "root", "zhousibeiMV0629");
+        Connection con = DriverManager.getConnection("jdbc:mysql://letstalk354.mysql.database.azure.com/letstalk", "letstalk", "Gray&Kerla&Lester");
         Statement statement = con.createStatement();
-        ResultSet resultSet = statement.executeQuery("select * from emoji");
+        ResultSet resultSet = statement.executeQuery("select * from user_birthday_and_age");
         while (resultSet.next()){
-            System.out.println(resultSet.getString("emoji_number"));
+            System.out.println(resultSet.getString("age"));
         }
+
+//        ResultSet resultSet2 = statement.executeQuery("select * from user");
+//        while (resultSet2.next()){
+//            System.out.println(resultSet.getString("name")+resultSet.getString("user_id"));
+//        }
         //mainWindow.startThread();
     }
 }
