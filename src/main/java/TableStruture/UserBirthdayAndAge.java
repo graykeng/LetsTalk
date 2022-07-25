@@ -4,6 +4,8 @@ public class UserBirthdayAndAge {
     private String birthday;
     private int age;
 
+    public UserBirthdayAndAge(){}
+
     public UserBirthdayAndAge(String birthday, int age) {
         this.birthday = birthday;
         this.age = age;

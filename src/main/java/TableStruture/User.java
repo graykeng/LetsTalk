@@ -10,6 +10,8 @@ public class User {
     private String gender;
     private String password;
 
+    public User(){}
+
     public User(String user_id, String name, Blob headshot, String birthday, String gender, String password) {
         this.user_id = user_id;
         this.name = name;

@@ -3,6 +3,8 @@ package TableStruture;
 public class Emoji {
     private String emoji_number;
 
+    public Emoji(){}
+
     public Emoji(String emoji_number) {
         this.emoji_number = emoji_number;
     }

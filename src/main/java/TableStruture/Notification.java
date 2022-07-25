@@ -8,6 +8,8 @@ public class Notification {
     private Blob sound;
     private Boolean visibility;
 
+    public Notification(){}
+
     public Notification(int nid, String status, Blob sound, Boolean visibility) {
         this.nid = nid;
         this.status = status;

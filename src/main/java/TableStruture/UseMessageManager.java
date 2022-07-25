@@ -5,6 +5,8 @@ public class UseMessageManager {
     private String user_id;
     private int number_of_message;
 
+    public UseMessageManager(){}
+
     public UseMessageManager(String manager_id, String user_id, int number_of_message) {
         this.manager_id = manager_id;
         this.user_id = user_id;

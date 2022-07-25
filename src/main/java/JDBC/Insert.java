@@ -194,6 +194,16 @@ public class Insert {
         insertStatement.executeUpdate();
     }
 
+    public void InsertMessage(Message message) throws SQLException{
+        PreparedStatement insertStatement = con.prepareStatement("INSERT INTO message (message_id, sender, receiver, read_or_unread, word_count) VALUES (?, ?, ?, ?, ?);");
+
+        insertStatement.setString(1, message.getMessage_id());
+        insertStatement.setString(2, message.getSender());
+        insertStatement.setString(3, message.getReceiver());
+        insertStatement.setBoolean(4, message.getRead_or_unread());
+        insertStatement.setInt(5, message.getWord_count());
+        insertStatement.executeUpdate();
+    }
 
     public FileInputStream imageToBi(String filePath) throws IOException{
         File file = new File(filePath);

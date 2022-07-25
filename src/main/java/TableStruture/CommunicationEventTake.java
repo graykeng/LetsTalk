@@ -4,6 +4,8 @@ public class CommunicationEventTake {
     private String user_id;
     private String event_number;
 
+    public CommunicationEventTake(){}
+
     public CommunicationEventTake(String user_id, String event_number) {
         this.user_id = user_id;
         this.event_number = event_number;

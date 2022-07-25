@@ -4,6 +4,8 @@ public class Interest {
     private String interest_name;
     private String type;
 
+    public Interest(){}
+
     public Interest(String interest_name, String type) {
         this.interest_name = interest_name;
         this.type = type;

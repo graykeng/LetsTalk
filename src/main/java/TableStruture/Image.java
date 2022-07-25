@@ -4,6 +4,8 @@ public class Image {
     private String message_id;
     private String format;
 
+    public Image(){}
+
     public Image(String message_id, String format) {
         this.message_id = message_id;
         this.format = format;

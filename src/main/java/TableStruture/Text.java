@@ -4,6 +4,8 @@ public class Text {
     private String message_id;
     private int word_count;
 
+    public Text(){}
+
     public Text(String message_id, int word_count) {
         this.message_id = message_id;
         this.word_count = word_count;

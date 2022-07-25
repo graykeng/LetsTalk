@@ -5,6 +5,8 @@ public class PhotoPost {
     private String photo_id;
     private String text;
 
+    public PhotoPost(){}
+
     public PhotoPost(String user_id, String photo_id, String text) {
         this.user_id = user_id;
         this.photo_id = photo_id;

@@ -4,6 +4,8 @@ public class Voice {
     private String message_id;
     private int length;
 
+    public Voice(){}
+
     public Voice(String message_id, int length) {
         this.message_id = message_id;
         this.length = length;

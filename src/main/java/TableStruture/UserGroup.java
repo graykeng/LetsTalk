@@ -6,6 +6,8 @@ public class UserGroup {
     private String group_manager;
     private int number_of_people;
 
+    public UserGroup(){}
+
     public UserGroup(String group_id, String name, String group_manager, int number_of_people) {
         this.group_id = group_id;
         this.name = name;

@@ -12,14 +12,14 @@ public class Update {
     }
 
     public void UpdateUser(String user_id, String name, Blob headshot, String birthday, String gender, String password) throws SQLException{
-        PreparedStatement insertStatement = con.prepareStatement("UPDATE user SET user_id = ?, name = ?, headshot = ?, birthday = ?, gender = ?, password = ?;");
+        PreparedStatement updateStatement = con.prepareStatement("UPDATE user SET user_id = ?, name = ?, headshot = ?, birthday = ?, gender = ?, password = ?;");
 
-        insertStatement.setString(1, user_id);
-        insertStatement.setString(2, name);
-        insertStatement.setBlob(3, headshot);
-        insertStatement.setString(4, birthday);
-        insertStatement.setString(5, gender);
-        insertStatement.setString(6, password);
-        insertStatement.executeUpdate();
+        updateStatement.setString(1, user_id);
+        updateStatement.setString(2, name);
+        updateStatement.setBlob(3, headshot);
+        updateStatement.setString(4, birthday);
+        updateStatement.setString(5, gender);
+        updateStatement.setString(6, password);
+        updateStatement.executeUpdate();
     }
 }

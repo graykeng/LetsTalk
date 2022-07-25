@@ -4,6 +4,8 @@ public class Own {
     private String user_id;
     private String emoji_number;
 
+    public Own(){}
+
     public Own(String user_id, String emoji_number) {
         this.user_id = user_id;
         this.emoji_number = emoji_number;

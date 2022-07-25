@@ -5,6 +5,8 @@ public class Edt {
     private String date;
     private String time;
 
+    public Edt(){}
+
     public Edt(String event_number, String date, String time) {
         this.event_number = event_number;
         this.date = date;
