@@ -1,7 +1,7 @@
 import Constants.*;
+import JDBC.Insert;
+import JDBC.JDBConnection;
 import Panels.MainPanel;
-import Panels.SidePanel;
-import Panels.UserInfoPanel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -25,13 +25,22 @@ public class Main {
         window.setLocationRelativeTo(null);
         window.setVisible(true);
 
+//        JDBConnection JDBConnection = new JDBConnection();
+//        Insert insert = new Insert(JDBConnection.returnCon());
+//        insert.InsertUserGroup("G000001", "CMPT354 group1", "U000001", 2);
+//        Statement statement = JDBConnection.returnCon().createStatement();
+//        ResultSet resultSet = statement.executeQuery("select * from usergroup");
+//        while (resultSet.next()){
+//            System.out.println(resultSet.getString("group_id"));
+//        }
 
-        Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/letstalk", "root", "zhousibeiMV0629");
-        Statement statement = con.createStatement();
-        ResultSet resultSet = statement.executeQuery("select * from emoji");
-        while (resultSet.next()){
-            System.out.println(resultSet.getString("emoji_number"));
-        }
+//        Connection con = DriverManager.getConnection("jdbc:mysql://letstalk354.mysql.database.azure.com/letstalk", "letstalk", "Gray&Kerla&Lester");
+//        Statement statement = con.createStatement();
+//        ResultSet resultSet = statement.executeQuery("select * from emoji");
+//        while (resultSet.next()){
+//            System.out.println(resultSet.getString("emoji_number"));
+//        }
         //mainWindow.startThread();
+        System.out.println("pop");
     }
 }

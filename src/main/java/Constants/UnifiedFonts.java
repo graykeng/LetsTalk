@@ -3,7 +3,7 @@ package Constants;
 import java.awt.*;
 
 public class UnifiedFonts {
-    static String fontName = "Monaco";
+    static String fontName = "Helvetica";
 
     public static Font font5P = new Font(fontName, Font.PLAIN, 5);
     public static Font font10P = new Font(fontName, Font.PLAIN, 10);
