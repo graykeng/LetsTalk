@@ -5,6 +5,8 @@ public class Include {
     private String user_id;
     private String event_number;
 
+    public Include(){}
+
     public Include(String message_id, String user_id, String event_number) {
         this.message_id = message_id;
         this.user_id = user_id;

@@ -4,6 +4,8 @@ public class PhotoAndTime {
     private String photo_id;
     private String time;
 
+    public PhotoAndTime(){}
+
     public PhotoAndTime(String photo_id, String time) {
         this.photo_id = photo_id;
         this.time = time;

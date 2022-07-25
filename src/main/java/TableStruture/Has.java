@@ -4,6 +4,8 @@ public class Has {
     private String user_id;
     private String interest_name;
 
+    public Has(){}
+
     public Has(String user_id, String interest_name) {
         this.user_id = user_id;
         this.interest_name = interest_name;

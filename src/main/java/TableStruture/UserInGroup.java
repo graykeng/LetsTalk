@@ -4,6 +4,8 @@ public class UserInGroup {
     private String group_id;
     private String user_id;
 
+    public UserInGroup(){}
+
     public UserInGroup(String group_id, String user_id) {
         this.group_id = group_id;
         this.user_id = user_id;

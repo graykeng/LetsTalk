@@ -7,6 +7,8 @@ public class Message {
     private Boolean read_or_unread;
     private int word_count;
 
+    public Message(){}
+
     public Message(String message_id, String sender, String receiver, Boolean read_or_unread, int word_count) {
         this.message_id = message_id;
         this.sender = sender;

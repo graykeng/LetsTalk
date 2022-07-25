@@ -5,6 +5,8 @@ public class Contain {
     private String user_id;
     private String event_number;
 
+    public Contain(){}
+
     public Contain(int nid, String user_id, String event_number) {
         this.nid = nid;
         this.user_id = user_id;

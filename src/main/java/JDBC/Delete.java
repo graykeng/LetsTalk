@@ -10,10 +10,10 @@ public class Delete {
         this.con = connection;
     }
     public void DeleteIsFriendOf(String user_id, String friend_id) throws SQLException {
-        PreparedStatement insertStatement = con.prepareStatement("DELETE FROM is_friend_of WHERE user_id = ? AND friend_id = ?;");
+        PreparedStatement deleteStatement = con.prepareStatement("DELETE FROM is_friend_of WHERE user_id = ? AND friend_id = ?;");
 
-        insertStatement.setString(1, user_id);
-        insertStatement.setString(2, friend_id);
-        insertStatement.executeUpdate();
+        deleteStatement.setString(1, user_id);
+        deleteStatement.setString(2, friend_id);
+        deleteStatement.executeUpdate();
     }
 }

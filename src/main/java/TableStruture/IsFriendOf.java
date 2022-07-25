@@ -4,6 +4,8 @@ public class IsFriendOf {
     private String user_id;
     private String friend_id;
 
+    public IsFriendOf(){}
+
     public IsFriendOf(String user_id, String friend_id) {
         this.user_id = user_id;
         this.friend_id = friend_id;
