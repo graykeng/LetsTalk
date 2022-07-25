@@ -1,5 +1,8 @@
 package JDBC;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.sql.*;
 
 public class Insert {
@@ -9,7 +12,7 @@ public class Insert {
     }
     public void InsertUserGroup(String group_id, String Name, String Group_manager, int Number_of_people) throws SQLException{
         System.out.println("Insert Group" + group_id);
-        PreparedStatement insertStatement = con.prepareStatement("INSERT INTO usergroup (group_id, Name, Group_manager, Number_of_people) VALUES (?, ?, ?, ?);");
+        PreparedStatement insertStatement = con.prepareStatement("INSERT INTO user_group (group_id, Name, Group_manager, Number_of_people) VALUES (?, ?, ?, ?);");
 
         insertStatement.setString(1, group_id);
         insertStatement.setString(2, Name);
@@ -35,12 +38,12 @@ public class Insert {
         insertStatement.executeUpdate();
     }
 
-    public void InsertUser(String user_id, String name, Blob headshot, String birthday, String gender, String password) throws SQLException{
+    public void InsertUser(String user_id, String name, String filePath, String birthday, String gender, String password) throws SQLException, IOException {
         PreparedStatement insertStatement = con.prepareStatement("INSERT INTO user (user_id, name, headshot, birthday, gender, password) VALUES (?, ?, ?, ?, ?, ?);");
 
         insertStatement.setString(1, user_id);
         insertStatement.setString(2, name);
-        insertStatement.setBlob(3, headshot);
+        insertStatement.setBinaryStream(3, imageToBi(filePath));
         insertStatement.setString(4, birthday);
         insertStatement.setString(5, gender);
         insertStatement.setString(6, password);
@@ -187,5 +190,11 @@ public class Insert {
         insertStatement.setString(1, message_id);
         insertStatement.setString(2, manager_id);
         insertStatement.executeUpdate();
+    }
+
+
+    public FileInputStream imageToBi(String filePath) throws IOException{
+        File file = new File(filePath);
+        return new FileInputStream(file);
     }
 }
