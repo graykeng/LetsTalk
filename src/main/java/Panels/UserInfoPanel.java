@@ -10,7 +10,7 @@ public class UserInfoPanel extends JPanel {
 
     private JScrollPane scrollPane;
 
-    private JPanel wholePanel;
+    private JPanel scrollSection;
     private JPanel profile;
     private JPanel information;
     private JPanel interests;
@@ -35,7 +35,7 @@ public class UserInfoPanel extends JPanel {
     }
 
     private void prepareGUI(){
-        wholePanel = new JPanel();
+        scrollSection = new JPanel();
         profile = new JPanel();
         information = new JPanel();
         interests = new JPanel();
@@ -57,9 +57,9 @@ public class UserInfoPanel extends JPanel {
         /**
          * Set the size and position for scrollPanel, information, interests, and photoWall
          */
-        wholePanel.setLayout(null);
-        wholePanel.setLocation(0, 0);
-        wholePanel.setPreferredSize(new Dimension(Constants.USER_INFO_WIDTH, Constants.HEIGHT));
+        scrollSection.setLayout(null);
+        scrollSection.setLocation(0, 0);
+        scrollSection.setPreferredSize(new Dimension(Constants.USER_INFO_WIDTH, Constants.HEIGHT*2));
 
         profile.setLayout(null);
         profile.setLocation(0, 0);
@@ -73,26 +73,26 @@ public class UserInfoPanel extends JPanel {
         interests.setLocation(0, (int)(profile.getPreferredSize().getHeight() + information.getPreferredSize().getHeight()));
         interests.setSize(Constants.USER_INFO_WIDTH, Constants.HEIGHT/6);
 
-//        photoWall.setLayout(null);
-//        photoWall.setLocation(0, (int)(profile.getPreferredSize().getHeight() + information.getPreferredSize().getHeight() + interests.getPreferredSize().getHeight()));
-//        photoWall.setSize(Constants.USER_INFO_WIDTH, Constants.HEIGHT);
+        photoWall.setLayout(null);
+        photoWall.setLocation(0, (int)(profile.getPreferredSize().getHeight() + information.getPreferredSize().getHeight() + interests.getPreferredSize().getHeight()));
+        photoWall.setSize(Constants.USER_INFO_WIDTH, Constants.HEIGHT);
 
         /**
          * Set the size, position, and content for Labels
          */
-        userNameTXT.setFont(UnifiedFonts.font60B);
+        userNameTXT.setFont(UnifiedFonts.font25B);
         userNameTXT.setText("USERNAME");
-        userNameTXT.setLocation(getCentreX(userNameTXT.getPreferredSize().getWidth(), wholePanel.getPreferredSize().getWidth()), Constants.HEIGHT/12);
+        userNameTXT.setLocation(getCentreX(userNameTXT.getPreferredSize().getWidth(), scrollSection.getPreferredSize().getWidth()), Constants.HEIGHT/12);
         userNameTXT.setSize((int)userNameTXT.getPreferredSize().getWidth(), (int)userNameTXT.getPreferredSize().getHeight());
         profile.add(userNameTXT);
 
-        uIDTXT.setFont(UnifiedFonts.font30P);
+        uIDTXT.setFont(UnifiedFonts.font20P);
         uIDTXT.setText("USERID");
-        uIDTXT.setLocation(getCentreX(userNameTXT.getPreferredSize().getWidth(), wholePanel.getPreferredSize().getWidth()), Constants.HEIGHT/12 + (int)userNameTXT.getPreferredSize().getHeight());
+        uIDTXT.setLocation(getCentreX(userNameTXT.getPreferredSize().getWidth(), scrollSection.getPreferredSize().getWidth()), Constants.HEIGHT/12 + (int)userNameTXT.getPreferredSize().getHeight());
         uIDTXT.setSize((int)uIDTXT.getPreferredSize().getWidth(), (int)uIDTXT.getPreferredSize().getHeight());
         profile.add(uIDTXT);
 
-        infoTXT.setFont(UnifiedFonts.font30B);
+        infoTXT.setFont(UnifiedFonts.font20B);
         infoTXT.setText("INFORMATION:");
         infoTXT.setLocation(0, 0);
         infoTXT.setSize((int)infoTXT.getPreferredSize().getWidth(), (int)infoTXT.getPreferredSize().getHeight());
@@ -111,22 +111,22 @@ public class UserInfoPanel extends JPanel {
         information.add(birthdayTXT);
 
         ageTXT.setFont(UnifiedFonts.font20P);
-        ageTXT.setText("AGE: ");
+        ageTXT.setText("AGE: //");
         ageTXT.setLocation((int)(information.getPreferredSize().getWidth()-ageTXT.getPreferredSize().getWidth())-Constants.SCROLL_CONTROLLER_WIDTH, (int)information.getPreferredSize().getHeight()/2);
         ageTXT.setSize((int)ageTXT.getPreferredSize().getWidth(), (int)ageTXT.getPreferredSize().getHeight());
         information.add(ageTXT);
 
-        interestTXT.setFont(UnifiedFonts.font30B);
+        interestTXT.setFont(UnifiedFonts.font20B);
         interestTXT.setText("INTERESTS:");
         interestTXT.setLocation(0, 0);
         interestTXT.setSize((int)interestTXT.getPreferredSize().getWidth(), (int)interestTXT.getPreferredSize().getHeight());
         interests.add(interestTXT);
 
-//        photoWallTXT.setFont(UnifiedFonts.font30B);
-//        photoWallTXT.setText("PHOTOWALL:");
-//        photoWallTXT.setLocation(0, 0);
-//        photoWallTXT.setSize((int)photoWallTXT.getPreferredSize().getWidth(), (int)photoWallTXT.getPreferredSize().getHeight());
-//        photoWall.add(photoWallTXT);
+        photoWallTXT.setFont(UnifiedFonts.font20B);
+        photoWallTXT.setText("PHOTO WALL:");
+        photoWallTXT.setLocation(0, 0);
+        photoWallTXT.setSize(photoWallTXT.getPreferredSize());
+        photoWall.add(photoWallTXT);
 
         /**
          * Add all the interests onto the interest panel
@@ -148,20 +148,20 @@ public class UserInfoPanel extends JPanel {
         /**
          * Add everything onto the scrollSection
          */
-        wholePanel.add(profile);
-        wholePanel.add(information);
-        wholePanel.add(interests);
-//        scrollSection.add(photoWall);
+        scrollSection.add(profile);
+        scrollSection.add(information);
+        scrollSection.add(interests);
+        scrollSection.add(photoWall);
 
-//        scrollPane = new JScrollPane(
-//                wholePanel,
-//                ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
-//                ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER
-//        );
-//        scrollPane.setPreferredSize(new Dimension(Constants.USER_INFO_WIDTH,  Constants.HEIGHT));
+        scrollPane = new JScrollPane(
+                scrollSection,
+                ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
+                ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER
+        );
+        scrollPane.setPreferredSize(new Dimension(Constants.USER_INFO_WIDTH,  Constants.HEIGHT));
 
         this.setSize((int)this.getPreferredSize().getWidth(), (int)this.getPreferredSize().getHeight());
-        this.add(wholePanel);
+        this.add(scrollPane);
     }
 
     /**
