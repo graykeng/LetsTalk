@@ -6,6 +6,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.*;
+import java.time.LocalDate;
+import java.time.Period;
+import java.time.format.DateTimeFormatter;
 
 public class Insert {
     private Connection con;
@@ -42,6 +45,12 @@ public class Insert {
 
     public void InsertUser(User user) throws SQLException, IOException {
         PreparedStatement insertStatement = con.prepareStatement("INSERT INTO user (user_id, name, headshot, birthday, gender, password) VALUES (?, ?, ?, ?, ?, ?);");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/MM/yyyy");
+        LocalDate localDate = LocalDate.parse(user.getBirthday(), formatter);
+        int age = calculateAge(localDate, LocalDate.now());
+
+        UserBirthdayAndAge userBirthdayAndAge = new UserBirthdayAndAge(user.getBirthday(), age);
+        InsertUserBirthdayAndAge(userBirthdayAndAge);
 
         insertStatement.setString(1, user.getUser_id());
         insertStatement.setString(2, user.getName());
@@ -208,5 +217,13 @@ public class Insert {
     public FileInputStream imageToBi(String filePath) throws IOException{
         File file = new File(filePath);
         return new FileInputStream(file);
+    }
+
+    public int calculateAge(LocalDate birthDate, LocalDate currentDate) {
+        if ((birthDate != null) && (currentDate != null)) {
+            return Period.between(birthDate, currentDate).getYears();
+        } else {
+            return 0;
+        }
     }
 }
