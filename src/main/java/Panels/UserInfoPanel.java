@@ -91,43 +91,43 @@ public class UserInfoPanel extends JPanel {
         userNameTXT.setFont(UnifiedFonts.font25B);
         userNameTXT.setText(user.getName());
         userNameTXT.setLocation(getCentreX(userNameTXT.getPreferredSize().getWidth(), wholePanel.getPreferredSize().getWidth()), Constants.HEIGHT/12);
-        userNameTXT.setSize((int)userNameTXT.getPreferredSize().getWidth(), (int)userNameTXT.getPreferredSize().getHeight());
+        userNameTXT.setSize((int)userNameTXT.getPreferredSize().getWidth()+10, (int)userNameTXT.getPreferredSize().getHeight());
         profile.add(userNameTXT);
 
         uIDTXT.setFont(UnifiedFonts.font20P);
         uIDTXT.setText(user.getUser_id());
         uIDTXT.setLocation(getCentreX(userNameTXT.getPreferredSize().getWidth(), wholePanel.getPreferredSize().getWidth()), Constants.HEIGHT/12 + (int)userNameTXT.getPreferredSize().getHeight());
-        uIDTXT.setSize((int)uIDTXT.getPreferredSize().getWidth(), (int)uIDTXT.getPreferredSize().getHeight());
+        uIDTXT.setSize((int)uIDTXT.getPreferredSize().getWidth()+10, (int)uIDTXT.getPreferredSize().getHeight());
         profile.add(uIDTXT);
 
         infoTXT.setFont(UnifiedFonts.font20B);
         infoTXT.setText("INFORMATION:");
         infoTXT.setLocation(0, 0);
-        infoTXT.setSize((int)infoTXT.getPreferredSize().getWidth(), (int)infoTXT.getPreferredSize().getHeight());
+        infoTXT.setSize((int)infoTXT.getPreferredSize().getWidth()+10, (int)infoTXT.getPreferredSize().getHeight());
         information.add(infoTXT);
 
         sexTXT.setFont(UnifiedFonts.font20P);
         sexTXT.setText("GENDER: " + user.getGender());
         sexTXT.setLocation(0, (int)(information.getPreferredSize().getHeight()/2 - infoTXT.getPreferredSize().getHeight()));
-        sexTXT.setSize((int)sexTXT.getPreferredSize().getWidth(), (int)sexTXT.getPreferredSize().getWidth());
+        sexTXT.setSize((int)sexTXT.getPreferredSize().getWidth()+10, (int)sexTXT.getPreferredSize().getWidth());
         genderBirthdayAge.add(sexTXT);
 
         birthdayTXT.setFont(UnifiedFonts.font20P);
         birthdayTXT.setText("BIRTHDAY: " + user.getBirthday());
         birthdayTXT.setLocation(getCentreX(birthdayTXT.getPreferredSize().getWidth(), information.getPreferredSize().getWidth()), (int)information.getPreferredSize().getHeight()/2);
-        birthdayTXT.setSize((int)birthdayTXT.getPreferredSize().getWidth(), (int)birthdayTXT.getPreferredSize().getHeight());
+        birthdayTXT.setSize((int)birthdayTXT.getPreferredSize().getWidth()+10, (int)birthdayTXT.getPreferredSize().getHeight());
         genderBirthdayAge.add(birthdayTXT);
 
         ageTXT.setFont(UnifiedFonts.font20P);
         ageTXT.setText("AGE: " + user.getAge() + "     ");
         ageTXT.setLocation((int)(information.getPreferredSize().getWidth()-ageTXT.getPreferredSize().getWidth())-Constants.SCROLL_CONTROLLER_WIDTH, (int)information.getPreferredSize().getHeight()/2);
-        ageTXT.setSize((int)ageTXT.getPreferredSize().getWidth(), (int)ageTXT.getPreferredSize().getHeight());
+        ageTXT.setSize((int)ageTXT.getPreferredSize().getWidth()+10, (int)ageTXT.getPreferredSize().getHeight());
         genderBirthdayAge.add(ageTXT);
 
         interestTXT.setFont(UnifiedFonts.font20B);
         interestTXT.setText("INTERESTS:");
         interestTXT.setLocation(0, 0);
-        interestTXT.setSize((int)interestTXT.getPreferredSize().getWidth(), (int)interestTXT.getPreferredSize().getHeight());
+        interestTXT.setSize((int)interestTXT.getPreferredSize().getWidth()+10, (int)interestTXT.getPreferredSize().getHeight());
         interests.add(interestTXT);
 
 //        photoWallTXT.setFont(UnifiedFonts.font20B);
