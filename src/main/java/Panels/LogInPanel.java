@@ -2,10 +2,13 @@ package Panels;
 
 import javax.swing.*;
 import Constants.*;
+import JDBC.Read;
+import TableStruture.*;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 
 public class LogInPanel extends JPanel {
     private JButton loginButton=new JButton("Login");
@@ -19,6 +22,8 @@ public class LogInPanel extends JPanel {
     private JPanel down1= new JPanel();
     private JPanel down2=new JPanel();
     private MainPanel belongTo;
+    private User user;
+
     public LogInPanel(MainPanel mainPanel){
         belongTo= mainPanel;
         this.setSize(Constants.WIDTH,Constants.HEIGHT);
@@ -27,9 +32,15 @@ public class LogInPanel extends JPanel {
         loginButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                try {
+                    user = new Read(belongTo.getConnection()).UserLogin(userIDtext.getText(), passwordtext.getText());
+                    belongTo.UpdateState(State.UserInfoState);
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                    JOptionPane jOptionPane = new JOptionPane();
+                    jOptionPane.showMessageDialog(belongTo, "Wrong User ID or Password!", "ERROR", JOptionPane.INFORMATION_MESSAGE);
+                }
 
-                System.out.println("Send: " + userIDtext.getText()  );
-                System.out.println("Send: " + passwordtext.getText() );
             }
         });
 

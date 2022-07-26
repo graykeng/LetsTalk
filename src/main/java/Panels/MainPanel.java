@@ -2,9 +2,12 @@ package Panels;
 
 import Constants.Constants;
 import Constants.State;
+import JDBC.JDBConnection;
 
 import javax.swing.*;
 import java.awt.*;
+import java.sql.Connection;
+import java.sql.SQLException;
 
 public class MainPanel extends JPanel{
 
@@ -16,12 +19,18 @@ public class MainPanel extends JPanel{
     private JPanel AddGroupStatePanel;
     private JPanel UserInfoStatePanel;
     private JPanel PhotoStatePanel;
+    private Connection connection;
 
-    public MainPanel(){
+    public MainPanel() throws SQLException {
         this.setLayout(null);
         initialAllPanels();
+        connection = new JDBConnection().returnCon();
 
         UpdateState(State.LoginState);
+    }
+
+    public Connection getConnection(){
+        return this.connection;
     }
 
     private void initialAllPanels(){
@@ -78,7 +87,7 @@ public class MainPanel extends JPanel{
         LogInPanel logInPanel = new LogInPanel(this);
         PhotoPanel photoPanel = new PhotoPanel();
         PopUpPanel popUpPanel = new PopUpPanel();
-        RegisterPanel registerPanel = new RegisterPanel();
+        RegisterPanel registerPanel = new RegisterPanel(this);
         UserInfoPanel userInfoPanel = new UserInfoPanel();
 
         /**

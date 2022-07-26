@@ -1,22 +1,40 @@
 package Panels;
 
+import javax.sql.rowset.serial.SerialBlob;
+import javax.sql.rowset.serial.SerialException;
 import javax.swing.*;
 import Constants.*;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.sql.Blob;
+import java.sql.SQLException;
+
+import JDBC.Insert;
+import JDBC.Read;
+import TableStruture.User;
+import org.apache.commons.io.FileUtils;
+
 public class RegisterPanel extends JPanel {
 
-    JPanel p1 =new JPanel();
-    JPanel p2 =new JPanel();
-    JPanel p3 =new JPanel();
-    JPanel p4 =new JPanel();
-    JPanel p5 =new JPanel();
-    JPanel p6 =new JPanel();
-    JPanel p7 =new JPanel();
-    JPanel p8 =new JPanel();
-    JPanel p9 =new JPanel();
+    private JPanel p1 =new JPanel();
+    private JPanel p2 =new JPanel();
+    private JPanel p3 =new JPanel();
+    // private JPanel p4 =new JPanel();
+    private JPanel p5 =new JPanel();
+    private JPanel p6 =new JPanel();
+    private JPanel p7 =new JPanel();
+    private JPanel p8 =new JPanel();
+    private JPanel p9 =new JPanel();
+
+    private Blob blob;
+    private User user;
+    private MainPanel beLongTo;
+
     JLabel RegisterNewUser = new JLabel("Register New User");
     JLabel InputYourInformation = new JLabel("Input Your Information: ");
     JLabel Name = new JLabel("Name:");
@@ -25,7 +43,7 @@ public class RegisterPanel extends JPanel {
     JTextField Agetext= new JTextField(10);
     JLabel HeadShot = new JLabel("HeadShot:");
     JButton ChooseFile = new JButton("Choose File");
-    JLabel Birthday = new JLabel("Birthday:");
+    JLabel Birthday = new JLabel("Birthday: (DD/MM/YYYY)");
     JTextField BirthdayText= new JTextField(10);
     JLabel Gender = new JLabel("Gender:");
     JTextField GenderText= new JTextField(10);
@@ -33,7 +51,8 @@ public class RegisterPanel extends JPanel {
     JTextField PasswordText= new JTextField(10);
     JButton Submit= new JButton("Submit");
 
-    public RegisterPanel(){
+    public RegisterPanel(MainPanel mainPanel){
+        beLongTo = mainPanel;
         this.setSize(Constants.WIDTH,Constants.HEIGHT);
         this.setLocation(0, 0);
         this.setLayout(new BorderLayout());
@@ -41,13 +60,25 @@ public class RegisterPanel extends JPanel {
         Submit.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                String uid = "";
+                Read read = new Read(beLongTo.getConnection());
+                Insert insert = new Insert(beLongTo.getConnection());
+                try {
+                    uid = "U" + String.format("%06d", read.CountUser());
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
 
-                System.out.println("Send: " + Nametext.getText()  );
-                System.out.println("Send: " + Agetext.getText()  );
-                System.out.println("Send: " + BirthdayText.getText() );
-                System.out.println("Send: " + GenderText.getText()  );
-                System.out.println("Send: " + PasswordText.getText() );
+                user = new User(uid, Nametext.getText(), blob, BirthdayText.getText(), GenderText.getText(), PasswordText.getText());
+                try {
+                    insert.InsertUser(user);
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
 
+                beLongTo.UpdateState(State.LoginState);
             }
         });
 
@@ -65,8 +96,16 @@ public class RegisterPanel extends JPanel {
                 int result = fileChooser.showOpenDialog(null);
                 if(JFileChooser.APPROVE_OPTION == result){
                     filePath = fileChooser.getSelectedFile().getPath();
+                    try {
+                        blob = new SerialBlob(convertFileContentToBlob(filePath));
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                    } catch (SerialException ex) {
+                        ex.printStackTrace();
+                    } catch (SQLException ex) {
+                        ex.printStackTrace();
+                    }
                 }
-                System.out.println(filePath);
             }
         });
 
@@ -78,8 +117,8 @@ public class RegisterPanel extends JPanel {
         p2.add(InputYourInformation);
         p3.add(Name);
         p3.add(Nametext);
-        p4.add(Age);
-        p4.add(Agetext);
+        //p4.add(Age);
+        //p4.add(Agetext);
         p5.add(HeadShot);
         p5.add(ChooseFile);
         p6.add(Birthday);
@@ -93,7 +132,7 @@ public class RegisterPanel extends JPanel {
         JPanel panel29 =new JPanel(new GridLayout(8,1));
         panel29.add(p2);
         panel29.add(p3);
-        panel29.add(p4);
+        //panel29.add(p4);
         panel29.add(p5);
         panel29.add(p6);
         panel29.add(p7);
@@ -104,6 +143,17 @@ public class RegisterPanel extends JPanel {
         this.add(panel29,BorderLayout.CENTER);
 
 
+    }
+
+    public static byte[] convertFileContentToBlob(String filePath) throws IOException {
+        byte[] fileContent = null;
+        try {
+            fileContent = FileUtils.readFileToByteArray(new File(filePath));
+        } catch (IOException e) {
+            throw new IOException("Unable to convert file to byte array. " +
+                    e.getMessage());
+        }
+        return fileContent;
     }
 
 }
