@@ -13,8 +13,42 @@ public class Read {
         this.con = connection;
     }
 
-    public UserGroup ReadUserGroup(Connection connection) throws SQLException{
-        PreparedStatement readStatement = connection.prepareStatement("SELECT * FROM user_group");
+    public int CountUser() throws SQLException{
+        Statement statement = con.createStatement();
+        ResultSet resultSet = statement.executeQuery("SELECT count(*) FROM user");
+        int i = 0;
+        while (resultSet.next()) {
+            i = resultSet.getInt("count(*)");
+        }
+        return i;
+    }
+
+    public User UserLogin(String UID, String PWD) throws SQLException{
+        PreparedStatement statement = con.prepareStatement("SELECT * FROM user WHERE user_id = ? AND password = ?;");
+
+        User user = null;
+        statement.setString(1, UID);
+        statement.setString(2, PWD);
+
+        ResultSet resultSet = statement.executeQuery();
+        if (resultSet.next()) {
+            user = new User(
+                    resultSet.getString("user_id"),
+                    resultSet.getString("name"),
+                    resultSet.getBlob("headshot"),
+                    resultSet.getString("birthday"),
+                    resultSet.getString("gender"),
+                    resultSet.getString("password")
+            );
+        }
+        else{
+            throw new SQLException();
+        }
+        return user;
+    }
+
+    public UserGroup ReadUserGroup() throws SQLException{
+        PreparedStatement readStatement = con.prepareStatement("SELECT * FROM user_group");
         ResultSet resultSet = readStatement.executeQuery();
 
         if (!resultSet.next()){
