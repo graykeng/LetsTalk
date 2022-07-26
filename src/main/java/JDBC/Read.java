@@ -44,7 +44,23 @@ public class Read {
         else{
             throw new SQLException();
         }
+
+        int age = ReadAge(user.getBirthday());
+        user.setAge(age);
         return user;
+    }
+
+    public int ReadAge(String birthday) throws SQLException{
+        PreparedStatement statement = con.prepareStatement("SELECT * FROM user_birthday_and_age WHERE birthday = ?;");
+
+        statement.setString(1, birthday);
+
+        ResultSet resultSet = statement.executeQuery();
+        int age = -1;
+        if (resultSet.next()){
+            age = resultSet.getInt("age");
+        }
+        return age;
     }
 
     public UserGroup ReadUserGroup() throws SQLException{
