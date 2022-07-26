@@ -1,6 +1,7 @@
 package Panels;
 
 import Constants.*;
+import TableStruture.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -8,15 +9,24 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.ArrayList;
 
 public class ChatSelectPanel extends JPanel {
     private JPanel Title;
     private JScrollPane scrollPanel;
     private MainPanel beLongTo;
+    private User user;
+    private ArrayList<User> friends;
+
+    public ChatSelectPanel() {
+
+    }
 
     public ChatSelectPanel(MainPanel mainPanel){
         // Setting
         beLongTo = mainPanel;
+        user = beLongTo.getUser();
+        friends = beLongTo.getFriends();
 
         this.setSize(Constants.SELECT_PANEL_WIDTH,Constants.HEIGHT);
         this.setLocation(Constants.SIDE_PANEL_WIDTH, 0);
@@ -27,6 +37,8 @@ public class ChatSelectPanel extends JPanel {
         Title.setLayout(new BorderLayout());
         Title.setSize(Constants.SELECT_PANEL_WIDTH,Constants.TITLE_HEIGHT);
         JButton UserHeadShotButton = new JButton();
+
+        // UserHeadShot (!)
         UserHeadShotButton.setIcon(new ImageIcon("src/main/java/Image/headshot.png"));
         UserHeadShotButton.setPressedIcon(new ImageIcon("src/main/java/Image/headshot_click.png"));
         UserHeadShotButton.setContentAreaFilled(false);
@@ -35,12 +47,13 @@ public class ChatSelectPanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.out.println("Switch to userInfo panel");
+                beLongTo.setCurrUser(beLongTo.getUser());
                 beLongTo.UpdateState(State.UserInfoState);
             }
         });
 
-        String User_Name = "UserName";
-        String uid = "123456789";
+        String User_Name = user.getName();
+        String uid = "(uid: "+user.getUser_id()+")";
 
         JLabel tileLabel = new JLabel("<html>"+User_Name+"<br>"+"(uid:"+uid+")</html>");
         tileLabel.setFont(UnifiedFonts.font20B);
@@ -81,14 +94,13 @@ public class ChatSelectPanel extends JPanel {
         Title.add(addButton, BorderLayout.EAST);
 
         // scrollPanel
-        int rows = 10;
-        String friendsName[] = {"Gray", "Lester", "Kerla","Austin","Gray", "Lester", "Kerla","Austin","Gray", "Lester"};
+        int rows = friends.size();
         JPanel FriendsPanel = new JPanel(null);
         FriendsPanel.setPreferredSize(new Dimension(380,75*rows));
         if (rows == 0) {
             String empty = "You have no friend, add your friend now!";
             JLabel showEmpty = new JLabel(empty);
-            FriendsPanel.add(showEmpty, BorderLayout.CENTER);
+            FriendsPanel.add(showEmpty, BorderLayout.NORTH);
         }
         for (int i = 0; i < rows; i++) {
             JPanel row = new JPanel(new BorderLayout());
@@ -119,7 +131,7 @@ public class ChatSelectPanel extends JPanel {
             });
 
             // Label
-            String str = friendsName[i];
+            String str = friends.get(i).getName();
             JLabel FriendLabel = new JLabel(str);
             FriendLabel.setFont(UnifiedFonts.font20P);
 
@@ -132,6 +144,7 @@ public class ChatSelectPanel extends JPanel {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     System.out.println("Switch to "+ (num+1) +"th friendInfo panel");
+                    beLongTo.setCurrUser(friends.get(num));
                     beLongTo.UpdateState(State.UserInfoState);
                 }
             });
@@ -190,6 +203,10 @@ public class ChatSelectPanel extends JPanel {
 
     private void changeToAddGroup(){
         beLongTo.UpdateState(State.AddGroupState);
+    }
+
+    public void updateFriends(){
+
     }
 
 }

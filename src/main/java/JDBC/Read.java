@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.*;
+import java.util.ArrayList;
 
 public class Read {
     private Connection con;
@@ -16,6 +17,16 @@ public class Read {
     public int CountUser() throws SQLException{
         Statement statement = con.createStatement();
         ResultSet resultSet = statement.executeQuery("SELECT count(*) FROM user");
+        int i = 0;
+        while (resultSet.next()) {
+            i = resultSet.getInt("count(*)");
+        }
+        return i;
+    }
+
+    public int CountGroup() throws SQLException{
+        Statement statement = con.createStatement();
+        ResultSet resultSet = statement.executeQuery("SELECT count(*) FROM user_group");
         int i = 0;
         while (resultSet.next()) {
             i = resultSet.getInt("count(*)");
@@ -50,6 +61,49 @@ public class Read {
         return user;
     }
 
+    public User ReadUser(String UID) throws SQLException{
+        PreparedStatement statement = con.prepareStatement("SELECT * FROM user WHERE user_id = ?;");
+
+        User user = null;
+        statement.setString(1, UID);
+
+        ResultSet resultSet = statement.executeQuery();
+        if (resultSet.next()) {
+            user = new User(
+                    resultSet.getString("user_id"),
+                    resultSet.getString("name"),
+                    resultSet.getBlob("headshot"),
+                    resultSet.getString("birthday"),
+                    resultSet.getString("gender"),
+                    resultSet.getString("password")
+            );
+        }
+        else{
+            throw new SQLException();
+        }
+
+        int age = ReadAge(user.getBirthday());
+        user.setAge(age);
+        return user;
+    }
+
+
+    public ArrayList<User> ReadFriendInfo (String uid)throws SQLException{
+        ArrayList<User> friends = new ArrayList<>();
+        PreparedStatement statement = con.prepareStatement("SELECT * FROM is_friend_of WHERE user_id = ?;");
+
+        statement.setString(1, uid);
+
+        ResultSet resultSet = statement.executeQuery();
+        while(resultSet.next()) {
+            String friend_id = resultSet.getString("friend_id");
+            User friend = ReadUser(friend_id);
+            friends.add(friend);
+        }
+
+        return friends;
+    }
+
     public int ReadAge(String birthday) throws SQLException{
         PreparedStatement statement = con.prepareStatement("SELECT * FROM user_birthday_and_age WHERE birthday = ?;");
 
@@ -63,89 +117,52 @@ public class Read {
         return age;
     }
 
-    public UserGroup ReadUserGroup() throws SQLException{
-        PreparedStatement readStatement = con.prepareStatement("SELECT * FROM user_group");
+    public UserGroup ReadUserGroup(String gid) throws SQLException{
+        UserGroup userGroup = null;
+        PreparedStatement readStatement = con.prepareStatement("SELECT * FROM user_group WHERE group_id = ?;");
+        readStatement.setString(1, gid);
+
         ResultSet resultSet = readStatement.executeQuery();
 
-        if (!resultSet.next()){
-            System.out.println("no result");
+        if (resultSet.next()){
+            userGroup = new UserGroup();
+            userGroup.setGroup_id(resultSet.getString("group_id"));
+            userGroup.setName(resultSet.getString("name"));
+            userGroup.setGroup_manager(resultSet.getString("group_manager"));
+            userGroup.setNumber_of_people(resultSet.getInt("number_of_people"));
+        }
+        else{
+            System.out.println("there are no group with git = " + gid);
             return null;
         }
-
-        UserGroup userGroup = new UserGroup();
-        userGroup.setGroup_id(resultSet.getString("group_id"));
-        userGroup.setName(resultSet.getString("name"));
-        userGroup.setGroup_manager(resultSet.getString("group_manager"));
-        userGroup.setNumber_of_people(resultSet.getInt("number_of_people"));
-        readStatement.executeUpdate();
         return userGroup;
     }
 
-    public void ReadUserInGroup(UserInGroup userInGroup) throws SQLException{
-        PreparedStatement readStatement = con.prepareStatement("Read INTO user_in_group (group_id, user_id) VALUES (?, ?);");
+    public ArrayList<String> ReadUserInGroup_byGroupID(String gid) throws SQLException{
+        ArrayList<String> users_id = new ArrayList<>();
+        PreparedStatement readStatement = con.prepareStatement("SELECT * FROM user_in_group WHERE group_id = ?;");
 
-        readStatement.setString(1, userInGroup.getGroup_id());
-        readStatement.setString(2, userInGroup.getUser_id());
-        readStatement.executeUpdate();
+        readStatement.setString(1, gid);
+
+        ResultSet resultSet = readStatement.executeQuery();
+        while (resultSet.next()){
+            String user_id = resultSet.getString("user_id");
+            users_id.add(user_id);
+        }
+        return users_id;
     }
 
-    public void ReadUserBirthdayAndAge(UserBirthdayAndAge userBirthdayAndAge) throws SQLException{
-        PreparedStatement readStatement = con.prepareStatement("Read INTO user_birthday_and_age (birthday, age) VALUES (?, ?);");
-
-        readStatement.setString(1, userBirthdayAndAge.getBirthday());
-        readStatement.setInt(2, userBirthdayAndAge.getAge());
-        readStatement.executeUpdate();
-    }
-
-    public void ReadUser(User user) throws SQLException, IOException {
-        PreparedStatement readStatement = con.prepareStatement("Read INTO user (user_id, name, headshot, birthday, gender, password) VALUES (?, ?, ?, ?, ?, ?);");
-
-        readStatement.setString(1, user.getUser_id());
-        readStatement.setString(2, user.getName());
-        readStatement.setBlob(3, user.getHeadshot());
-        readStatement.setString(4, user.getBirthday());
-        readStatement.setString(5, user.getGender());
-        readStatement.setString(6, user.getPassword());
-        readStatement.executeUpdate();
-    }
-
-    public void ReadOwn(Own own) throws SQLException{
-        PreparedStatement readStatement = con.prepareStatement("Read INTO own (user_id, emoji_number) VALUES (?, ?);");
-
-        readStatement.setString(1, own.getUser_id());
-        readStatement.setString(2, own.getEmoji_number());
-        readStatement.executeUpdate();
-    }
-
-    public void ReadEmoji(Emoji emoji) throws SQLException{
-        PreparedStatement readStatement = con.prepareStatement("Read INTO emoji (emoji_number) VALUES (?);");
-
-        readStatement.setString(1, emoji.getEmoji_number());
-        readStatement.executeUpdate();
-    }
-
-    public void ReadInterest(Interest interest) throws SQLException{
-        PreparedStatement readStatement = con.prepareStatement("Read INTO interest (interest_name, type) VALUES (?, ?);");
-
-        readStatement.setString(1, interest.getInterest_name());
-        readStatement.setString(2, interest.getType());
-        readStatement.executeUpdate();
-    }
-
-    public void ReadHas(Has has) throws SQLException{
-        PreparedStatement readStatement = con.prepareStatement("Read INTO has (user_id, interest_name) VALUES (?, ?);");
-
-        readStatement.setString(1, has.getUser_id());
-        readStatement.setString(2, has.getInterest_name());
-        readStatement.executeUpdate();
-    }
-
-    public void ReadIsFriendOf(IsFriendOf isFriendOf) throws SQLException{
-        PreparedStatement readStatement = con.prepareStatement("Read INTO is_friend_of (user_id, friend_id) VALUES (?, ?);");
+    public boolean CheckIsFriendOf(IsFriendOf isFriendOf) throws SQLException{
+        PreparedStatement readStatement = con.prepareStatement("SELECT * FROM is_friend_of WHERE user_id = ? AND friend_id = ?;");
 
         readStatement.setString(1, isFriendOf.getUser_id());
         readStatement.setString(2, isFriendOf.getFriend_id());
-        readStatement.executeUpdate();
+
+        ResultSet resultSet = readStatement.executeQuery();
+        if (resultSet.next()){
+            return true;
+        }
+        return false;
     }
 
     public void ReadPhotoAndTime(PhotoAndTime photoAndTime) throws SQLException{

@@ -9,6 +9,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class LogInPanel extends JPanel {
     private JButton loginButton=new JButton("Login");
@@ -23,6 +24,7 @@ public class LogInPanel extends JPanel {
     private JPanel down2=new JPanel();
     private MainPanel belongTo;
     private User user;
+    private ArrayList<User> friends;
 
     public LogInPanel(MainPanel mainPanel){
         belongTo= mainPanel;
@@ -33,8 +35,12 @@ public class LogInPanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    user = new Read(belongTo.getConnection()).UserLogin(userIDtext.getText(), passwordtext.getText());
+                    Read read = new Read(belongTo.getConnection());
+                    user = read.UserLogin(userIDtext.getText(), passwordtext.getText());
+                    friends = read.ReadFriendInfo(user.getUser_id());
                     belongTo.setUser(user);
+                    belongTo.setCurrUser(user);
+                    belongTo.setFriends(friends);
                     belongTo.UpdateState(State.UserInfoState);
                 } catch (SQLException ex) {
                     ex.printStackTrace();

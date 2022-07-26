@@ -9,6 +9,7 @@ import java.sql.*;
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 
 public class Insert {
     private Connection con;
@@ -26,7 +27,45 @@ public class Insert {
         insertStatement.executeUpdate();
     }
 
-    public void InsertUserInGroup(UserInGroup userInGroup) throws SQLException{
+    public void InsertUserInGroup(UserInGroup userInGroup) throws SQLException {
+        Read read = new Read(con);
+        UserGroup group;
+        try{
+            // Find if the group is exited
+            group = read.ReadUserGroup(userInGroup.getGroup_id());
+            if(group != null){
+                // If it is
+                ArrayList<String> users_uid = read.ReadUserInGroup_byGroupID(group.getGroup_id());
+
+                // Add them as user's friend
+                System.out.println("Add "+users_uid.size()+" friends in group!");
+                for(int i = 0; i < users_uid.size(); i++){
+                    String uid = users_uid.get(i);
+                    IsFriendOf isFriendOf = new IsFriendOf(userInGroup.getUser_id(),uid);
+                    IsFriendOf isFriendOf2 = new IsFriendOf(uid,userInGroup.getUser_id());
+
+                    if(!read.CheckIsFriendOf(isFriendOf)){
+                        InsertIsFriendOf(isFriendOf);
+                        InsertIsFriendOf(isFriendOf2);
+                    }
+                }
+            }
+            else{
+                // If not, insert a new group
+                System.out.println("Create a new group");
+                group = new UserGroup();
+                group.setGroup_id(userInGroup.getGroup_id());
+                group.setName("Group #" + (read.CountGroup()+1));
+                group.setGroup_manager(userInGroup.getUser_id());
+                group.setNumber_of_people(1);
+
+                InsertUserGroup(group);
+            }
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+
+        // Insert the relation
         System.out.println("Insert User " + userInGroup.getUser_id() + " in Group " + userInGroup.getGroup_id());
         PreparedStatement insertStatement = con.prepareStatement("INSERT INTO user_in_group (group_id, user_id) VALUES (?, ?);");
 

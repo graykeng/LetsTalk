@@ -9,23 +9,33 @@ import javax.swing.*;
 import java.awt.*;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class MainPanel extends JPanel{
-
-    private State state;
-    private JPanel LoginStatePanel;
-    private JPanel RegisterStatePanel;
-    private JPanel ChatStatePanel;
-    private JPanel AddFriendStatePanel;
-    private JPanel AddGroupStatePanel;
-    private JPanel UserInfoStatePanel;
-    private JPanel PhotoStatePanel;
     private Connection connection;
+    private State state;
+
+    // Actual Panels
+    private JPanel UserInfoStatePanel;
+    private AddFriendPanel addFriendPanel;
+    private AddGroupPanel addGroupPanel;
+    private ChatPanel chatPanel;
+    private ChatSelectPanel chatSelectPanel;
+    private SidePanel sidePanel;
+    private LogInPanel logInPanel;
+    private PhotoPanel photoPanel;
+    private PopUpPanel popUpPanel;
+    private RegisterPanel registerPanel;
+    private UserInfoPanel userInfoPanel;
 
     private User user;
+    private ArrayList<User> friends;
+    private User currUser;
 
     public MainPanel() throws SQLException {
+        this.setSize(Constants.WIDTH, Constants.HEIGHT);
         this.setLayout(null);
+        this.setLocation(0,0);
         initialAllPanels();
         connection = new JDBConnection().returnCon();
 
@@ -38,103 +48,38 @@ public class MainPanel extends JPanel{
 
     private void initialAllPanels(){
         /**
-         * Initialize all the StatePanel
+         * Initialize the StatePanel
          */
-        LoginStatePanel = new JPanel();
-        LoginStatePanel.setSize(Constants.WIDTH, Constants.HEIGHT);
-        LoginStatePanel.setLayout(null);
-        LoginStatePanel.setLocation(0,0);
-
-        RegisterStatePanel = new JPanel();
-        RegisterStatePanel.setSize(Constants.WIDTH, Constants.HEIGHT);
-        RegisterStatePanel.setLayout(null);
-        RegisterStatePanel.setLocation(0,0);
-
-        ChatStatePanel = new JPanel();
-        ChatStatePanel.setSize(Constants.WIDTH, Constants.HEIGHT);
-        ChatStatePanel.setLayout(null);
-        ChatStatePanel.setLocation(0,0);
-
-        AddFriendStatePanel = new JPanel();
-        AddFriendStatePanel.setSize(Constants.WIDTH, Constants.HEIGHT);
-        AddFriendStatePanel.setLayout(null);
-        AddFriendStatePanel.setLocation(0,0);
-
-        AddGroupStatePanel = new JPanel();
-        AddGroupStatePanel.setSize(Constants.WIDTH, Constants.HEIGHT);
-        AddGroupStatePanel.setLayout(null);
-        AddGroupStatePanel.setLocation(0,0);
-
         UserInfoStatePanel = new JPanel();
         UserInfoStatePanel.setSize(Constants.WIDTH, Constants.HEIGHT);
         UserInfoStatePanel.setLayout(new BorderLayout());
         UserInfoStatePanel.setLocation(0,0);
 
-        PhotoStatePanel = new JPanel();
-        PhotoStatePanel.setSize(Constants.WIDTH, Constants.HEIGHT);
-        PhotoStatePanel.setLayout(null);
-        PhotoStatePanel.setLocation(0,0);
-
         /**
          * Initialize all actual Panels
          */
-        AddFriendPanel addFriendPanel = new AddFriendPanel();
-        AddGroupPanel addGroupPanel = new AddGroupPanel();
-        ChatPanel chatPanel = new ChatPanel();
-        ChatSelectPanel chatSelectPanel = new ChatSelectPanel(this);
-        ChatSelectPanel chatSelectPanel2 = new ChatSelectPanel(this);
-        ChatSelectPanel chatSelectPanel3 = new ChatSelectPanel(this);
-        SidePanel sidePanel = new SidePanel(this);
-        SidePanel sidePanel2 = new SidePanel(this);
-        SidePanel sidePanel3 = new SidePanel(this);
-        LogInPanel logInPanel = new LogInPanel(this);
-        PhotoPanel photoPanel = new PhotoPanel();
-        PopUpPanel popUpPanel = new PopUpPanel();
-        RegisterPanel registerPanel = new RegisterPanel(this);
-        UserInfoPanel userInfoPanel = new UserInfoPanel();
-
-        /**
-         * Add ACTUAL panels to the panel that we add to the frame
-         */
-        // Login
-        LoginStatePanel.add(logInPanel);
-
-        // Register
-        RegisterStatePanel.add(registerPanel);
-
-        // Chat
-        ChatStatePanel.add(sidePanel);
-        ChatStatePanel.add(chatSelectPanel);
-        ChatStatePanel.add(chatPanel);
-
-        // User Info
-        UserInfoStatePanel.add(sidePanel2, BorderLayout.WEST);
-        UserInfoStatePanel.add(userInfoPanel, BorderLayout.EAST);
-
-        // Photo
-        PhotoStatePanel.add(sidePanel3);
-        PhotoStatePanel.add(photoPanel);
-
-        // Add Friend
-        AddFriendStatePanel.add(new SidePanel(this));
-        AddFriendStatePanel.add(chatSelectPanel2);
-        AddFriendStatePanel.add(addFriendPanel);
-
-        // Add Group
-        AddGroupStatePanel.add(new SidePanel(this));
-        AddGroupStatePanel.add(chatSelectPanel3);
-        AddGroupStatePanel.add(addGroupPanel);
+        addFriendPanel = new AddFriendPanel(this);
+        addGroupPanel = new AddGroupPanel(this);
+        chatPanel = new ChatPanel();
+        chatSelectPanel = new ChatSelectPanel();
+        sidePanel = new SidePanel(this);
+        logInPanel = new LogInPanel(this);
+        photoPanel = new PhotoPanel();
+        popUpPanel = new PopUpPanel();
+        registerPanel = new RegisterPanel(this);
+        userInfoPanel = new UserInfoPanel();
     }
 
     public void UpdateState(State changeToState){
         System.out.println("Update");
+        SidePanel sidePanel = new SidePanel(this);
         state = changeToState;
         switch (this.state){
             case LoginState:
                 System.out.println("LoginState");
                 this.removeAll();
                 this.repaint();
-                this.add(LoginStatePanel);
+                UpdateLoginStatePanel();
                 this.revalidate();
                 break;
 
@@ -142,7 +87,7 @@ public class MainPanel extends JPanel{
                 System.out.println("ResisterState");
                 this.removeAll();
                 this.repaint();
-                this.add(RegisterStatePanel);
+                UpdateRegisterStatePanel();
                 this.revalidate();
                 break;
 
@@ -150,7 +95,11 @@ public class MainPanel extends JPanel{
                 System.out.println("ChatState");
                 this.removeAll();
                 this.repaint();
-                this.add(ChatStatePanel);
+
+                chatSelectPanel = new ChatSelectPanel(this);
+                chatPanel = new ChatPanel();
+
+                UpdateChatStatePanel();
                 this.revalidate();
                 break;
 
@@ -158,7 +107,7 @@ public class MainPanel extends JPanel{
                 System.out.println("AddFriendState");
                 this.removeAll();
                 this.repaint();
-                this.add(AddFriendStatePanel);
+                UpdateAddFriendStatePanel();
                 this.revalidate();
                 break;
 
@@ -166,7 +115,7 @@ public class MainPanel extends JPanel{
                 System.out.println("AddGroupState");
                 this.removeAll();
                 this.repaint();
-                this.add(AddGroupStatePanel);
+                UpdateAddGroupStatePanel();
                 this.revalidate();
                 break;
 
@@ -176,8 +125,7 @@ public class MainPanel extends JPanel{
                 this.repaint();
                 UserInfoStatePanel.removeAll();
                 UserInfoStatePanel.repaint();
-                UserInfoPanel userInfoPanel = new UserInfoPanel(user);
-                SidePanel sidePanel = new SidePanel(this);
+                UserInfoPanel userInfoPanel = new UserInfoPanel(currUser);
                 UserInfoStatePanel.add(sidePanel, BorderLayout.WEST);
                 UserInfoStatePanel.add(userInfoPanel, BorderLayout.EAST);
                 UserInfoStatePanel.revalidate();
@@ -189,13 +137,91 @@ public class MainPanel extends JPanel{
                 System.out.println("PhotoState");
                 this.removeAll();
                 this.repaint();
-                this.add(PhotoStatePanel);
+                UpdatePhotoStatePanel();
                 this.revalidate();
                 break;
         }
     }
 
+    /**
+     * Add ACTUAL panels to the LoginStatePanel that we add to the frame
+     */
+    public void UpdateLoginStatePanel(){
+        this.add(logInPanel);
+    }
+
+    /**
+     * Add ACTUAL panels to the RegisterStatePanel that we add to the frame
+     */
+    public void UpdateRegisterStatePanel(){
+        this.add(registerPanel);
+    }
+
+    /**
+     * Add ACTUAL panels to the ChatStatePanel that we add to the frame
+     */
+    public void UpdateChatStatePanel(){
+        this.add(sidePanel);
+        this.add(chatSelectPanel);
+        this.add(chatPanel);
+    }
+
+    /**
+     * Add ACTUAL panels to the InfoStatePanel that we add to the frame
+     */
+    public void UpdateUserInfoStatePanel(){
+        UserInfoStatePanel.add(sidePanel, BorderLayout.WEST);
+        UserInfoStatePanel.add(userInfoPanel, BorderLayout.EAST);
+        this.add(UserInfoStatePanel);
+    }
+
+    /**
+     * Add ACTUAL panels to the PhotoStatePanel that we add to the frame
+     */
+    public void UpdatePhotoStatePanel(){
+        this.add(sidePanel);
+        this.add(photoPanel);
+    }
+
+    /**
+     * Add ACTUAL panels to the AddFriendStatePanel that we add to the frame
+     */
+    public void UpdateAddFriendStatePanel(){
+        this.add(new SidePanel(this));
+        this.add(chatSelectPanel);
+        this.add(addFriendPanel);
+    }
+
+    /**
+     * Add ACTUAL panels to the AddFriendStatePanel that we add to the frame
+     */
+    public void UpdateAddGroupStatePanel(){
+        this.add(new SidePanel(this));
+        this.add(chatSelectPanel);
+        this.add(addGroupPanel);
+    }
+
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public ArrayList<User> getFriends() {
+        return friends;
+    }
+
+    public void setFriends(ArrayList<User> friends) {
+        this.friends = friends;
+    }
+
+    public User getCurrUser() {
+        return currUser;
+    }
+
+    public void setCurrUser(User currUser) {
+        this.currUser = currUser;
     }
 }
