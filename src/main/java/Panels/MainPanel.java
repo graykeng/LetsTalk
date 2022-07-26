@@ -3,6 +3,7 @@ package Panels;
 import Constants.Constants;
 import Constants.State;
 import JDBC.JDBConnection;
+import TableStruture.User;
 
 import javax.swing.*;
 import java.awt.*;
@@ -20,6 +21,8 @@ public class MainPanel extends JPanel{
     private JPanel UserInfoStatePanel;
     private JPanel PhotoStatePanel;
     private Connection connection;
+
+    private User user;
 
     public MainPanel() throws SQLException {
         this.setLayout(null);
@@ -158,6 +161,7 @@ public class MainPanel extends JPanel{
                 this.add(AddFriendStatePanel);
                 this.revalidate();
                 break;
+
             case AddGroupState:
                 System.out.println("AddGroupState");
                 this.removeAll();
@@ -165,13 +169,22 @@ public class MainPanel extends JPanel{
                 this.add(AddGroupStatePanel);
                 this.revalidate();
                 break;
+
             case UserInfoState:
                 System.out.println("UserInfoState");
                 this.removeAll();
                 this.repaint();
+                UserInfoStatePanel.removeAll();
+                UserInfoStatePanel.repaint();
+                UserInfoPanel userInfoPanel = new UserInfoPanel(user);
+                SidePanel sidePanel = new SidePanel(this);
+                UserInfoStatePanel.add(sidePanel, BorderLayout.WEST);
+                UserInfoStatePanel.add(userInfoPanel, BorderLayout.EAST);
+                UserInfoStatePanel.revalidate();
                 this.add(UserInfoStatePanel);
                 this.revalidate();
                 break;
+
             case PhotoState:
                 System.out.println("PhotoState");
                 this.removeAll();
@@ -180,5 +193,9 @@ public class MainPanel extends JPanel{
                 this.revalidate();
                 break;
         }
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

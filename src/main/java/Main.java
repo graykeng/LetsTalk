@@ -26,28 +26,8 @@ public class Main {
         MainPanel mainPanel = new MainPanel();
         window.add(mainPanel);
 
-
-
         window.pack();
         window.setLocationRelativeTo(null);
         window.setVisible(true);
-
-
-
-        JDBConnection JDBConnection = new JDBConnection();
-        Insert insert = new Insert(JDBConnection.returnCon());
-        //insert.InsertUserBirthdayAndAge("2000/06/30", 22);
-//        while (resultSet.next()){
-//            System.out.println(resultSet.getString("group_id"));
-//        }
-
-//        Connection con = DriverManager.getConnection("jdbc:mysql://letstalk354.mysql.database.azure.com/letstalk", "letstalk", "Gray&Kerla&Lester");
-//        Statement statement = con.createStatement();
-//        ResultSet resultSet = statement.executeQuery("select * from emoji");
-//        while (resultSet.next()){
-//            System.out.println(resultSet.getString("emoji_number"));
-//        }
-        //mainWindow.startThread();
-        System.out.println("pop");
     }
 }
