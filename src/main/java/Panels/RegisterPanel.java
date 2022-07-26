@@ -30,6 +30,7 @@ public class RegisterPanel extends JPanel {
     private JPanel p7 =new JPanel();
     private JPanel p8 =new JPanel();
     private JPanel p9 =new JPanel();
+    private JPanel panel29;
 
     private Blob blob;
     private User user;
@@ -51,11 +52,13 @@ public class RegisterPanel extends JPanel {
     JTextField PasswordText= new JTextField(10);
     JButton Submit= new JButton("Submit");
 
+
     public RegisterPanel(MainPanel mainPanel){
         beLongTo = mainPanel;
         this.setSize(Constants.WIDTH,Constants.HEIGHT);
         this.setLocation(0, 0);
         this.setLayout(new BorderLayout());
+        panel29 = new JPanel(new GridLayout(8,1));
 
         Submit.addActionListener(new ActionListener() {
             @Override
@@ -77,6 +80,8 @@ public class RegisterPanel extends JPanel {
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 }
+                JOptionPane jOptionPane = new JOptionPane();
+                jOptionPane.showMessageDialog(panel29, "Your User ID is: " + user.getUser_id(), "Welcome", JOptionPane.INFORMATION_MESSAGE);
 
                 beLongTo.UpdateState(State.LoginState);
             }
@@ -129,7 +134,6 @@ public class RegisterPanel extends JPanel {
         p8.add(PasswordText);
         p9.add(Submit);
 
-        JPanel panel29 =new JPanel(new GridLayout(8,1));
         panel29.add(p2);
         panel29.add(p3);
         //panel29.add(p4);

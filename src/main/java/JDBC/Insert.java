@@ -49,8 +49,11 @@ public class Insert {
         LocalDate localDate = LocalDate.parse(user.getBirthday(), formatter);
         int age = calculateAge(localDate, LocalDate.now());
 
-        UserBirthdayAndAge userBirthdayAndAge = new UserBirthdayAndAge(user.getBirthday(), age);
-        InsertUserBirthdayAndAge(userBirthdayAndAge);
+        Read read = new Read(con);
+        if (read.ReadAge(user.getBirthday()) == -1){
+            UserBirthdayAndAge userBirthdayAndAge = new UserBirthdayAndAge(user.getBirthday(), age);
+            InsertUserBirthdayAndAge(userBirthdayAndAge);
+        }
 
         insertStatement.setString(1, user.getUser_id());
         insertStatement.setString(2, user.getName());

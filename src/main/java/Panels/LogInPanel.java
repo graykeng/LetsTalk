@@ -34,13 +34,13 @@ public class LogInPanel extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 try {
                     user = new Read(belongTo.getConnection()).UserLogin(userIDtext.getText(), passwordtext.getText());
+                    belongTo.setUser(user);
                     belongTo.UpdateState(State.UserInfoState);
                 } catch (SQLException ex) {
                     ex.printStackTrace();
                     JOptionPane jOptionPane = new JOptionPane();
                     jOptionPane.showMessageDialog(belongTo, "Wrong User ID or Password!", "ERROR", JOptionPane.INFORMATION_MESSAGE);
                 }
-
             }
         });
 
