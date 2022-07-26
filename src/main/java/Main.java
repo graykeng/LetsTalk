@@ -1,6 +1,7 @@
 import Constants.*;
 import JDBC.Insert;
 import JDBC.JDBConnection;
+import Panels.LogInPanel;
 import Panels.MainPanel;
 
 import javax.swing.*;
@@ -25,6 +26,8 @@ public class Main {
         MainPanel mainPanel = new MainPanel();
         window.add(mainPanel);
 
+
+
         window.pack();
         window.setLocationRelativeTo(null);
         window.setVisible(true);
@@ -34,8 +37,6 @@ public class Main {
         JDBConnection JDBConnection = new JDBConnection();
         Insert insert = new Insert(JDBConnection.returnCon());
         //insert.InsertUserBirthdayAndAge("2000/06/30", 22);
-        insert.InsertUser("U000001", "Gray", "src/main/java/Image/headshot.png", "2000/06/30", "Male", "b130572645");
-
 //        while (resultSet.next()){
 //            System.out.println(resultSet.getString("group_id"));
 //        }

@@ -21,7 +21,7 @@ public class MainPanel extends JPanel{
         this.setLayout(null);
         initialAllPanels();
 
-        UpdateState(State.ChatState);
+        UpdateState(State.LoginState);
     }
 
     private void initialAllPanels(){
@@ -75,7 +75,7 @@ public class MainPanel extends JPanel{
         SidePanel sidePanel = new SidePanel(this);
         SidePanel sidePanel2 = new SidePanel(this);
         SidePanel sidePanel3 = new SidePanel(this);
-        LogInPanel logInPanel = new LogInPanel();
+        LogInPanel logInPanel = new LogInPanel(this);
         PhotoPanel photoPanel = new PhotoPanel();
         PopUpPanel popUpPanel = new PopUpPanel();
         RegisterPanel registerPanel = new RegisterPanel();
@@ -86,6 +86,9 @@ public class MainPanel extends JPanel{
          */
         // Login
         LoginStatePanel.add(logInPanel);
+
+        // Register
+        RegisterStatePanel.add(registerPanel);
 
         // Chat
         ChatStatePanel.add(sidePanel);
