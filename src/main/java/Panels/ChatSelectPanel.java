@@ -9,6 +9,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.image.BufferedImage;
+import java.io.BufferedInputStream;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import javax.imageio.ImageIO;
+import java.nio.ByteBuffer;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class ChatSelectPanel extends JPanel {
@@ -17,6 +25,7 @@ public class ChatSelectPanel extends JPanel {
     private MainPanel beLongTo;
     private User user;
     private ArrayList<User> friends;
+    private Icon icon;
 
     public ChatSelectPanel() {
 
@@ -39,7 +48,21 @@ public class ChatSelectPanel extends JPanel {
         JButton UserHeadShotButton = new JButton();
 
         // UserHeadShot (!)
-        UserHeadShotButton.setIcon(new ImageIcon("src/main/java/Image/headshot.png"));
+        icon = new ImageIcon();
+        try{
+            byte[] imageByte = user.getHeadshot().getBytes(1, (int)user.getHeadshot().length());
+            ByteArrayInputStream in = new ByteArrayInputStream(imageByte);
+            try{
+            BufferedImage imag = ImageIO.read(in);
+            icon = new ImageIcon(imag);
+            }catch(IOException ex){
+                ex.printStackTrace();
+            }
+        }catch(SQLException ex){
+            ex.printStackTrace();
+        }
+
+        UserHeadShotButton.setIcon(icon);
         UserHeadShotButton.setPressedIcon(new ImageIcon("src/main/java/Image/headshot_click.png"));
         UserHeadShotButton.setContentAreaFilled(false);
         UserHeadShotButton.setFocusPainted(false);
