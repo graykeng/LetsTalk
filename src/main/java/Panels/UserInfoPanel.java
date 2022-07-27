@@ -1,7 +1,10 @@
 package Panels;
 
 import Constants.*;
+import JDBC.Delete;
+import JDBC.Insert;
 import JDBC.Read;
+import TableStruture.IsFriendOf;
 import TableStruture.User;
 
 import javax.swing.*;
@@ -9,11 +12,11 @@ import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 
 public class UserInfoPanel extends JPanel {
 
-    private JButton Change;
-    private JPanel Changepanel;
+    private JButton ChangeOrDelete;
     private JPanel wholePanel;
     private JPanel profile;
     private JPanel information;
@@ -22,7 +25,6 @@ public class UserInfoPanel extends JPanel {
     private JPanel photoWall;
     private JPanel genderBirthdayAge;
 
-    private JLabel image;
     private JLabel userNameTXT;
     private JLabel uIDTXT;
     private JLabel infoTXT;
@@ -30,7 +32,6 @@ public class UserInfoPanel extends JPanel {
     private JLabel birthdayTXT;
     private JLabel ageTXT;
     private JLabel interestTXT;
-    private JLabel photoWallTXT;
     private JLabel singleInterest;
 
     private User user;
@@ -49,7 +50,14 @@ public class UserInfoPanel extends JPanel {
     }
 
     private void prepareGUI(){
-        Change = new JButton("Change");
+        ChangeOrDelete = new JButton();
+
+        if(belongTo.getUser() == user){
+            ChangeOrDelete.setText("Change");
+        }
+        else {
+            ChangeOrDelete.setText("Delete");
+        }
         wholePanel = new JPanel();
         profile = new JPanel();
         information = new JPanel();
@@ -58,7 +66,6 @@ public class UserInfoPanel extends JPanel {
         photoWall = new JPanel();
         genderBirthdayAge = new JPanel(new GridLayout(1, 3));
 
-        image = new JLabel();
         userNameTXT = new JLabel();
         uIDTXT = new JLabel();
         infoTXT = new JLabel();
@@ -66,18 +73,39 @@ public class UserInfoPanel extends JPanel {
         birthdayTXT = new JLabel();
         ageTXT = new JLabel();
         interestTXT = new JLabel();
-        photoWallTXT = new JLabel();
-        Changepanel = new JPanel();
 
         interestArray = new String[]{"Basketball", "LOL", "WOW", "COOK"};
 
         /**
          * Set the size and position for scrollPanel, information, interests, and photoWall
          */
-        Change.addActionListener(new ActionListener() {
+        ChangeOrDelete.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                belongTo.UpdateState(State.ChangeButtonClickedState);
+                if(belongTo.getUser()==user){
+                    belongTo.UpdateState(State.ChangeButtonClickedState);
+                }
+                else{
+                    System.out.println("Delete friend: " + user.getUser_id());
+                    Delete delete = new Delete(belongTo.getConnection());
+                    try {
+                        // Delete Friend
+                        delete.DeleteIsFriendOf(belongTo.getUser().getUser_id(),user.getUser_id());
+                        delete.DeleteIsFriendOf(user.getUser_id(),belongTo.getUser().getUser_id());
+
+                        // Update
+                        belongTo.setFriends(new Read(belongTo.getConnection()).ReadFriendInfo(belongTo.getUser().getUser_id()));
+                        JOptionPane jOptionPane = new JOptionPane();
+                        JPanel parentPanel = belongTo;
+                        jOptionPane.showMessageDialog(parentPanel, "Friend is deleted!", "Message", JOptionPane.INFORMATION_MESSAGE);
+                        belongTo.UpdateState(State.ChatState);
+                    } catch (SQLException ex) {
+                        ex.printStackTrace();
+                        JOptionPane jOptionPane = new JOptionPane();
+                        JPanel parentPanel = belongTo;
+                        jOptionPane.showMessageDialog(parentPanel, "Wrong User ID for your Friend!", "ERROR", JOptionPane.INFORMATION_MESSAGE);
+                    }
+                }
             }
         });
 
@@ -113,9 +141,9 @@ public class UserInfoPanel extends JPanel {
         userNameTXT.setLocation(getCentreX(userNameTXT.getPreferredSize().getWidth(), wholePanel.getPreferredSize().getWidth()), Constants.HEIGHT/12);
         userNameTXT.setSize((int)userNameTXT.getPreferredSize().getWidth()+10, (int)userNameTXT.getPreferredSize().getHeight());
 
-        Change.setLocation(0,50);
-        Change.setSize(80,30);
-        profile.add(Change);
+        ChangeOrDelete.setLocation(0,50);
+        ChangeOrDelete.setSize(80,30);
+        profile.add(ChangeOrDelete);
 
         profile.add(userNameTXT);
 
