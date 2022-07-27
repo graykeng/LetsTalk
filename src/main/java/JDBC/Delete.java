@@ -16,4 +16,32 @@ public class Delete {
         deleteStatement.setString(2, friend_id);
         deleteStatement.executeUpdate();
     }
+
+    public void DeleteUser(String user_id) throws SQLException {
+        PreparedStatement deleteStatement = con.prepareStatement("DELETE FROM user WHERE user_id = ?;");
+
+        deleteStatement.setString(1, user_id);
+        deleteStatement.executeUpdate();
+    }
+
+    public void DeletePhoto_Post_photo_and_time(String Photo_id) throws SQLException {
+        PreparedStatement deleteStatement = con.prepareStatement("DELETE FROM photo_post_photo_and_time WHERE Photo_id = ?;");
+
+        deleteStatement.setString(1, Photo_id);
+        deleteStatement.executeUpdate();
+    }
+
+    public void DeleteEmoji(String Emoji_number) throws SQLException {
+        PreparedStatement deleteStatement = con.prepareStatement("DELETE FROM emoji WHERE Emoji_number = ?;");
+
+        deleteStatement.setString(1, Emoji_number);
+        deleteStatement.executeUpdate();
+    }
+
+    public void DeleteEDT(String event_number) throws SQLException {
+        PreparedStatement deleteStatement = con.prepareStatement("DELETE FROM edt WHERE event_number = ?;");
+
+        deleteStatement.setString(1, event_number);
+        deleteStatement.executeUpdate();
+    }
 }
