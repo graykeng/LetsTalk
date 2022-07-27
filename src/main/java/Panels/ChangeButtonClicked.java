@@ -8,21 +8,21 @@ import Constants.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.sql.Blob;
 import java.sql.SQLException;
 
-import Helper.*;
+import Helper.CopeImageUtil;
 import JDBC.Insert;
 import JDBC.Read;
+import JDBC.Update;
 import TableStruture.User;
 import org.apache.commons.io.FileUtils;
 
-public class RegisterPanel extends JPanel {
+public class ChangeButtonClicked extends JPanel {
 
-    private JPanel p1 =new JPanel();
+    private CopeImageUtil copeImageUtil = new CopeImageUtil();
     private JPanel p2 =new JPanel();
     private JPanel p3 =new JPanel();
     // private JPanel p4 =new JPanel();
@@ -34,11 +34,9 @@ public class RegisterPanel extends JPanel {
     private JPanel panel29;
 
     private Blob blob;
-    private User user;
+    private User user1;
     private MainPanel beLongTo;
-    private CopeImageUtil copeImageUtil = new CopeImageUtil();
 
-    JLabel RegisterNewUser = new JLabel("Register New User");
     JLabel InputYourInformation = new JLabel("Input Your Information: ");
     JLabel Name = new JLabel("Name:");
     JTextField Nametext= new JTextField(10);
@@ -54,8 +52,7 @@ public class RegisterPanel extends JPanel {
     JTextField PasswordText= new JTextField(10);
     JButton Submit= new JButton("Submit");
 
-
-    public RegisterPanel(MainPanel mainPanel){
+    public ChangeButtonClicked(MainPanel mainPanel){
         beLongTo = mainPanel;
         this.setSize(Constants.WIDTH,Constants.HEIGHT);
         this.setLocation(0, 0);
@@ -78,22 +75,15 @@ public class RegisterPanel extends JPanel {
                 String uid = "";
                 Read read = new Read(beLongTo.getConnection());
                 Insert insert = new Insert(beLongTo.getConnection());
-                try {
-                    uid = "U" + String.format("%06d", read.CountUser());
-                } catch (SQLException ex) {
-                    ex.printStackTrace();
-                }
+                Update update= new Update(beLongTo.getConnection());
+                uid = user1.getUser_id();
 
-                user = new User(uid, Nametext.getText(), blob, BirthdayText.getText(), GenderText.getText(), PasswordText.getText());
+                user1 = new User(uid, Nametext.getText(), blob, user1.getBirthday(), GenderText.getText(), PasswordText.getText());
                 try {
-                    insert.InsertUser(user);
+                    update.UpdateUser(user1);
                 } catch (SQLException ex) {
                     ex.printStackTrace();
-                } catch (IOException ex) {
-                    ex.printStackTrace();
                 }
-                JOptionPane jOptionPane = new JOptionPane();
-                jOptionPane.showMessageDialog(panel29, "Your User ID is: " + user.getUser_id(), "Welcome", JOptionPane.INFORMATION_MESSAGE);
 
                 beLongTo.UpdateState(State.LoginState);
             }
@@ -103,12 +93,11 @@ public class RegisterPanel extends JPanel {
         ChooseFile.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                System.out.println("Choose File: ");
                 createHeadShot();
             }
         });
 
-        RegisterNewUser.setFont(UnifiedFonts.font30B);
-        p1.add(RegisterNewUser);
         p2.add(InputYourInformation);
         p3.add(Name);
         p3.add(Nametext);
@@ -116,8 +105,7 @@ public class RegisterPanel extends JPanel {
         //p4.add(Agetext);
         p5.add(HeadShot);
         p5.add(ChooseFile);
-        p6.add(Birthday);
-        p6.add(BirthdayText);
+
         p7.add(Gender);
         p7.add(GenderText);
         p8.add(Password);
@@ -133,11 +121,11 @@ public class RegisterPanel extends JPanel {
         panel29.add(p8);
         panel29.add(p9);
 
-        this.add(p1,BorderLayout.NORTH);
         this.add(panel29,BorderLayout.CENTER);
 
 
     }
+
 
     public static byte[] convertFileContentToBlob(String filePath) throws IOException {
         byte[] fileContent = null;
@@ -148,6 +136,14 @@ public class RegisterPanel extends JPanel {
                     e.getMessage());
         }
         return fileContent;
+    }
+
+    public User getUser1() {
+        return user1;
+    }
+
+    public void setUser1(User user1) {
+        this.user1 = user1;
     }
 
     public void createHeadShot(){

@@ -7,9 +7,13 @@ import TableStruture.User;
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class UserInfoPanel extends JPanel {
 
+    private JButton Change;
+    private JPanel Changepanel;
     private JPanel wholePanel;
     private JPanel profile;
     private JPanel information;
@@ -26,21 +30,26 @@ public class UserInfoPanel extends JPanel {
     private JLabel birthdayTXT;
     private JLabel ageTXT;
     private JLabel interestTXT;
+    private JLabel photoWallTXT;
     private JLabel singleInterest;
 
     private User user;
     private String[] interestArray;
 
+    private MainPanel belongTo;
+
     public UserInfoPanel() {
 
     }
 
-    public UserInfoPanel(User user){
+    public UserInfoPanel(User user,MainPanel main){
+        this.belongTo=main;
         this.user = user;
         prepareGUI();
     }
 
     private void prepareGUI(){
+        Change = new JButton("Change");
         wholePanel = new JPanel();
         profile = new JPanel();
         information = new JPanel();
@@ -57,12 +66,22 @@ public class UserInfoPanel extends JPanel {
         birthdayTXT = new JLabel();
         ageTXT = new JLabel();
         interestTXT = new JLabel();
+        photoWallTXT = new JLabel();
+        Changepanel = new JPanel();
 
         interestArray = new String[]{"Basketball", "LOL", "WOW", "COOK"};
 
         /**
          * Set the size and position for scrollPanel, information, interests, and photoWall
          */
+        Change.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                belongTo.UpdateState(State.ChangeButtonClickedState);
+            }
+        });
+
+
         wholePanel.setLayout(null);
         wholePanel.setLocation(0, 0);
         wholePanel.setPreferredSize(new Dimension(Constants.USER_INFO_WIDTH, Constants.HEIGHT*2));
@@ -86,10 +105,18 @@ public class UserInfoPanel extends JPanel {
         /**
          * Set the size, position, and content for Labels
          */
+        //Add Change button
+
+
         userNameTXT.setFont(UnifiedFonts.font25B);
         userNameTXT.setText(user.getName());
         userNameTXT.setLocation(getCentreX(userNameTXT.getPreferredSize().getWidth(), wholePanel.getPreferredSize().getWidth()), Constants.HEIGHT/12);
         userNameTXT.setSize((int)userNameTXT.getPreferredSize().getWidth()+10, (int)userNameTXT.getPreferredSize().getHeight());
+
+        Change.setLocation(0,50);
+        Change.setSize(80,30);
+        profile.add(Change);
+
         profile.add(userNameTXT);
 
         uIDTXT.setFont(UnifiedFonts.font20P);
@@ -127,6 +154,12 @@ public class UserInfoPanel extends JPanel {
         interestTXT.setLocation(0, 0);
         interestTXT.setSize((int)interestTXT.getPreferredSize().getWidth()+10, (int)interestTXT.getPreferredSize().getHeight());
         interests.add(interestTXT);
+
+//        photoWallTXT.setFont(UnifiedFonts.font20B);
+//        photoWallTXT.setText("PHOTO WALL:");
+//        photoWallTXT.setLocation(0, 0);
+//        photoWallTXT.setSize(photoWallTXT.getPreferredSize());
+//        photoWall.add(photoWallTXT);
 
         genderBirthdayAge.setLocation(0, (int)information.getPreferredSize().getHeight()/2);
         genderBirthdayAge.setSize(Constants.WIDTH - Constants.SIDE_PANEL_WIDTH, (int)sexTXT.getPreferredSize().getHeight());
