@@ -8,12 +8,13 @@ import Constants.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.Blob;
 import java.sql.SQLException;
 
+import Helper.*;
 import JDBC.Insert;
 import JDBC.Read;
 import TableStruture.User;
@@ -35,6 +36,7 @@ public class RegisterPanel extends JPanel {
     private Blob blob;
     private User user;
     private MainPanel beLongTo;
+    private CopeImageUtil copeImageUtil = new CopeImageUtil();
 
     JLabel RegisterNewUser = new JLabel("Register New User");
     JLabel InputYourInformation = new JLabel("Input Your Information: ");
@@ -72,6 +74,16 @@ public class RegisterPanel extends JPanel {
                     ex.printStackTrace();
                 }
 
+                try {
+                    blob = new SerialBlob(convertFileContentToBlob("src/main/java/Image/headshot.png"));
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                } catch (SerialException ex) {
+                    ex.printStackTrace();
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+
                 user = new User(uid, Nametext.getText(), blob, BirthdayText.getText(), GenderText.getText(), PasswordText.getText());
                 try {
                     insert.InsertUser(user);
@@ -91,31 +103,9 @@ public class RegisterPanel extends JPanel {
         ChooseFile.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println("Choose File: ");
-                String filePath = "";
-                JFileChooser fileChooser = new JFileChooser();
-                fileChooser.setCurrentDirectory(fileChooser.getCurrentDirectory());
-                fileChooser.setDialogTitle("Open File");
-                fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-
-                int result = fileChooser.showOpenDialog(null);
-                if(JFileChooser.APPROVE_OPTION == result){
-                    filePath = fileChooser.getSelectedFile().getPath();
-                    try {
-                        blob = new SerialBlob(convertFileContentToBlob(filePath));
-                    } catch (IOException ex) {
-                        ex.printStackTrace();
-                    } catch (SerialException ex) {
-                        ex.printStackTrace();
-                    } catch (SQLException ex) {
-                        ex.printStackTrace();
-                    }
-                }
+                createHeadShot();
             }
         });
-
-
-
 
         RegisterNewUser.setFont(UnifiedFonts.font30B);
         p1.add(RegisterNewUser);
@@ -160,4 +150,26 @@ public class RegisterPanel extends JPanel {
         return fileContent;
     }
 
+    public void createHeadShot(){
+        String filePath;
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setCurrentDirectory(fileChooser.getCurrentDirectory());
+        fileChooser.setDialogTitle("Open File");
+        fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+
+        int result = fileChooser.showOpenDialog(null);
+        if(JFileChooser.APPROVE_OPTION == result){
+            filePath = fileChooser.getSelectedFile().getPath();
+            copeImageUtil.cutHeadImages(filePath, "src/main/java/Image/newHeadShot.png");
+            try {
+                blob = new SerialBlob(convertFileContentToBlob("src/main/java/Image/newHeadShot.png"));
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            } catch (SerialException ex) {
+                ex.printStackTrace();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+    }
 }

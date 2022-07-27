@@ -3,6 +3,7 @@ import JDBC.Insert;
 import JDBC.JDBConnection;
 import Panels.LogInPanel;
 import Panels.MainPanel;
+import Panels.RegisterPanel;
 
 import javax.swing.*;
 import java.awt.*;
