@@ -1,11 +1,12 @@
 package Helper;
 import javax.imageio.ImageIO;
+import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.Ellipse2D;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.OutputStream;
+import java.io.*;
+import java.sql.Blob;
+import java.sql.SQLException;
 
 public class CopeImageUtil {
     public CopeImageUtil() {
@@ -43,6 +44,22 @@ public class CopeImageUtil {
             ImageIO.write(formatAvatarImage, "PNG", os);
             return formatAvatarImage;
         } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public Icon blobToIcon(Blob headshot){
+        try{
+            byte[] imageByte = headshot.getBytes(1, (int)headshot.length());
+            ByteArrayInputStream in = new ByteArrayInputStream(imageByte);
+            try{
+                BufferedImage bImage = ImageIO.read(in);
+                return new ImageIcon(bImage);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         return null;

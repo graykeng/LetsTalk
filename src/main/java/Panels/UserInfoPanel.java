@@ -26,7 +26,6 @@ public class UserInfoPanel extends JPanel {
     private JLabel birthdayTXT;
     private JLabel ageTXT;
     private JLabel interestTXT;
-    private JLabel photoWallTXT;
     private JLabel singleInterest;
 
     private User user;
@@ -58,7 +57,6 @@ public class UserInfoPanel extends JPanel {
         birthdayTXT = new JLabel();
         ageTXT = new JLabel();
         interestTXT = new JLabel();
-        photoWallTXT = new JLabel();
 
         interestArray = new String[]{"Basketball", "LOL", "WOW", "COOK"};
 
@@ -129,12 +127,6 @@ public class UserInfoPanel extends JPanel {
         interestTXT.setLocation(0, 0);
         interestTXT.setSize((int)interestTXT.getPreferredSize().getWidth()+10, (int)interestTXT.getPreferredSize().getHeight());
         interests.add(interestTXT);
-
-//        photoWallTXT.setFont(UnifiedFonts.font20B);
-//        photoWallTXT.setText("PHOTO WALL:");
-//        photoWallTXT.setLocation(0, 0);
-//        photoWallTXT.setSize(photoWallTXT.getPreferredSize());
-//        photoWall.add(photoWallTXT);
 
         genderBirthdayAge.setLocation(0, (int)information.getPreferredSize().getHeight()/2);
         genderBirthdayAge.setSize(Constants.WIDTH - Constants.SIDE_PANEL_WIDTH, (int)sexTXT.getPreferredSize().getHeight());

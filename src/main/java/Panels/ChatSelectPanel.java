@@ -1,6 +1,7 @@
 package Panels;
 
 import Constants.*;
+import Helper.CopeImageUtil;
 import TableStruture.*;
 
 import javax.swing.*;
@@ -22,7 +23,7 @@ public class ChatSelectPanel extends JPanel {
     private MainPanel beLongTo;
     private User user;
     private ArrayList<User> friends;
-    private Icon UserIcon;
+    private CopeImageUtil copeImageUtil;
 
     public ChatSelectPanel() {
 
@@ -45,21 +46,22 @@ public class ChatSelectPanel extends JPanel {
         JButton UserHeadShotButton = new JButton();
 
         // UserHeadShot (!)
-        UserIcon = new ImageIcon();
-        try{
-            byte[] imageByte = user.getHeadshot().getBytes(1, (int)user.getHeadshot().length());
-            ByteArrayInputStream in = new ByteArrayInputStream(imageByte);
-            try{
-            BufferedImage imag = ImageIO.read(in);
-            UserIcon = new ImageIcon(imag);
-            }catch(IOException ex){
-                ex.printStackTrace();
-            }
-        }catch(SQLException ex){
-            ex.printStackTrace();
-        }
+//        UserIcon = new ImageIcon();
+//        try{
+//            byte[] imageByte = user.getHeadshot().getBytes(1, (int)user.getHeadshot().length());
+//            ByteArrayInputStream in = new ByteArrayInputStream(imageByte);
+//            try{
+//                BufferedImage imag = ImageIO.read(in);
+//                UserIcon = new ImageIcon(imag);
+//            }catch(IOException ex){
+//                ex.printStackTrace();
+//            }
+//        }catch(SQLException ex){
+//            ex.printStackTrace();
+//        }
+        copeImageUtil = new CopeImageUtil();
 
-        UserHeadShotButton.setIcon(UserIcon);
+        UserHeadShotButton.setIcon(copeImageUtil.blobToIcon(user.getHeadshot()));
         UserHeadShotButton.setContentAreaFilled(false);
         UserHeadShotButton.setFocusPainted(false);
         UserHeadShotButton.addActionListener(new ActionListener() {
