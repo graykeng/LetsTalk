@@ -7,11 +7,17 @@ import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 public class ChatPanel extends JPanel {
     private JPanel Title;
     private JPanel msgSendPanel;
     private JScrollPane scrollPanel;
+    private JTextArea textFiled = new JTextArea();
+    private JTextArea textArea = new JTextArea();
+    private JButton sendButton = new JButton("Send");
+    private JButton addButton = new JButton();
 
     public ChatPanel() {
         // Setting
@@ -36,7 +42,6 @@ public class ChatPanel extends JPanel {
 
         String strAll = strMsg1+strMsg2+strMsg3+strMsg3+strMsg3;
 
-        JTextArea textFiled = new JTextArea();
         textFiled.setLineWrap(true);
         textFiled.setEditable(false);
         textFiled.setBackground(new Color(238,238,238));
@@ -54,10 +59,8 @@ public class ChatPanel extends JPanel {
         msgSendPanel = new JPanel();
         msgSendPanel.setSize(Constants.CHAT_PANEL_WIDTH,Constants.TEXT_FIELD_HEIGHT-38);
         msgSendPanel.setLayout(new BorderLayout());
-        JTextArea textArea = new JTextArea();
         textArea.setLineWrap(true);
 
-        JButton sendButton = new JButton("Send");
         sendButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -65,26 +68,34 @@ public class ChatPanel extends JPanel {
             }
         });
 
-        JButton addButton = new JButton();
         addButton.setIcon(new ImageIcon("src/main/java/Image/AddButton_small.png"));
         addButton.setSize(20,20);
         addButton.setContentAreaFilled(false);
         addButton.setFocusPainted(false);
-        addButton.addActionListener(new ActionListener() {
+        addButton.addMouseListener(new MouseListener() {
             @Override
-            public void actionPerformed(ActionEvent e) {
-                System.out.println("Add File: ");
-                String filePath = "";
-                JFileChooser fileChooser = new JFileChooser();
-                fileChooser.setCurrentDirectory(fileChooser.getCurrentDirectory());
-                fileChooser.setDialogTitle("Open File");
-                fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+            public void mouseClicked(MouseEvent e) {
+                showThePopupMenu(e.getComponent(), e.getX(), e.getY());
+            }
 
-                int result = fileChooser.showOpenDialog(null);
-                if(JFileChooser.APPROVE_OPTION == result){
-                    filePath = fileChooser.getSelectedFile().getPath();
-                }
-                System.out.println(filePath);
+            @Override
+            public void mousePressed(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+
             }
         });
 
@@ -106,5 +117,67 @@ public class ChatPanel extends JPanel {
         msgSendPanel.setLocation(0,Constants.HEIGHT-Constants.TEXT_FIELD_HEIGHT);
         msgSendPanel.setBorder(blackline);
         this.add(msgSendPanel);
+    }
+
+    private void showThePopupMenu(Component invoker, int x, int y) {
+        JPopupMenu popupMenu = new JPopupMenu();
+
+        JMenuItem send_emoji = new JMenuItem("Send Emoji");
+        JMenuItem send_file = new JMenuItem("Send File");
+
+        popupMenu.add(send_emoji);
+        popupMenu.addSeparator();
+        popupMenu.add(send_file);
+
+        send_emoji.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                SendEmoji();
+            }
+        });
+        send_file.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                SendFile();
+            }
+        });
+
+        popupMenu.show(invoker, x, y);
+    }
+
+    private void SendEmoji(){
+        System.out.println("Send emoji");
+        // 选项按钮
+        Object[] options = new Object[]{"\uD83D\uDE00", "\uD83D\uDE04", "\uD83D\uDE01","\uD83D\uDE06","\uD83D\uDE05","\uD83D\uDE02","\uD83D\uDE0A","\uD83D\uDE1C","\uD83D\uDE1F","\uD83D\uDE18","\uD83D\uDE35","\uD83D\uDE22","\uD83D\uDE30","\uD83D\uDE28","\uD83D\uDE20","\uD83D\uDE08","\uD83D\uDE37","\uD83D\uDE11","\uD83D\uDE0E"};
+
+        int optionSelected = JOptionPane.showOptionDialog(
+                this,
+                "Choose the emoji that you want to send",
+                "Emoji",
+                JOptionPane.YES_NO_CANCEL_OPTION,
+                JOptionPane.PLAIN_MESSAGE,
+                null,
+                options,
+                options[0]
+        );
+
+        if (optionSelected >= 0) {
+            textArea.setText(textArea.getText()+options[optionSelected]);
+        }
+    }
+
+    private void SendFile(){
+        System.out.println("Send File");
+        String filePath = "";
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setCurrentDirectory(fileChooser.getCurrentDirectory());
+        fileChooser.setDialogTitle("Open File");
+        fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+
+        int result = fileChooser.showOpenDialog(null);
+        if(JFileChooser.APPROVE_OPTION == result){
+            filePath = fileChooser.getSelectedFile().getPath();
+        }
+        System.out.println(filePath);
     }
 }
