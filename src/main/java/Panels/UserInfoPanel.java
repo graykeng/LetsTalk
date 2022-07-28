@@ -33,6 +33,7 @@ public class UserInfoPanel extends JPanel {
     private JLabel ageTXT;
     private JLabel interestTXT;
     private JLabel singleInterest;
+    private JButton interestEditButton;
 
     private User user;
     private String[] interestArray;
@@ -50,14 +51,7 @@ public class UserInfoPanel extends JPanel {
     }
 
     private void prepareGUI(){
-        ChangeOrDelete = new JButton();
 
-        if(belongTo.getUser() == user){
-            ChangeOrDelete.setText("Change");
-        }
-        else {
-            ChangeOrDelete.setText("Delete");
-        }
         wholePanel = new JPanel();
         profile = new JPanel();
         information = new JPanel();
@@ -73,43 +67,14 @@ public class UserInfoPanel extends JPanel {
         birthdayTXT = new JLabel();
         ageTXT = new JLabel();
         interestTXT = new JLabel();
+        interestEditButton = new JButton();
+        ChangeOrDelete = new JButton();
 
         interestArray = new String[]{"Basketball", "LOL", "WOW", "COOK"};
 
         /**
          * Set the size and position for scrollPanel, information, interests, and photoWall
          */
-        ChangeOrDelete.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(belongTo.getUser()==user){
-                    belongTo.UpdateState(State.ChangeButtonClickedState);
-                }
-                else{
-                    System.out.println("Delete friend: " + user.getUser_id());
-                    Delete delete = new Delete(belongTo.getConnection());
-                    try {
-                        // Delete Friend
-                        delete.DeleteIsFriendOf(belongTo.getUser().getUser_id(),user.getUser_id());
-                        delete.DeleteIsFriendOf(user.getUser_id(),belongTo.getUser().getUser_id());
-
-                        // Update
-                        belongTo.setFriends(new Read(belongTo.getConnection()).ReadFriendInfo(belongTo.getUser().getUser_id()));
-                        JOptionPane jOptionPane = new JOptionPane();
-                        JPanel parentPanel = belongTo;
-                        jOptionPane.showMessageDialog(parentPanel, "Friend is deleted!", "Message", JOptionPane.INFORMATION_MESSAGE);
-                        belongTo.UpdateState(State.ChatState);
-                    } catch (SQLException ex) {
-                        ex.printStackTrace();
-                        JOptionPane jOptionPane = new JOptionPane();
-                        JPanel parentPanel = belongTo;
-                        jOptionPane.showMessageDialog(parentPanel, "Wrong User ID for your Friend!", "ERROR", JOptionPane.INFORMATION_MESSAGE);
-                    }
-                }
-            }
-        });
-
-
         wholePanel.setLayout(null);
         wholePanel.setLocation(0, 0);
         wholePanel.setPreferredSize(new Dimension(Constants.USER_INFO_WIDTH, Constants.HEIGHT*2));
@@ -140,11 +105,6 @@ public class UserInfoPanel extends JPanel {
         userNameTXT.setText(user.getName());
         userNameTXT.setLocation(getCentreX(userNameTXT.getPreferredSize().getWidth(), wholePanel.getPreferredSize().getWidth()), Constants.HEIGHT/12);
         userNameTXT.setSize((int)userNameTXT.getPreferredSize().getWidth()+10, (int)userNameTXT.getPreferredSize().getHeight());
-
-        ChangeOrDelete.setLocation(0,50);
-        ChangeOrDelete.setSize(80,30);
-        profile.add(ChangeOrDelete);
-
         profile.add(userNameTXT);
 
         uIDTXT.setFont(UnifiedFonts.font20P);
@@ -152,6 +112,42 @@ public class UserInfoPanel extends JPanel {
         uIDTXT.setLocation(getCentreX(userNameTXT.getPreferredSize().getWidth(), wholePanel.getPreferredSize().getWidth()), Constants.HEIGHT/12 + (int)userNameTXT.getPreferredSize().getHeight());
         uIDTXT.setSize((int)uIDTXT.getPreferredSize().getWidth()+10, (int)uIDTXT.getPreferredSize().getHeight());
         profile.add(uIDTXT);
+
+        ChangeOrDelete.setFont(UnifiedFonts.font15P);
+        if(belongTo.getUser() == user){ ChangeOrDelete.setText("Edit Profile"); }
+        else { ChangeOrDelete.setText("Delete"); }
+        ChangeOrDelete.setLocation(Constants.USER_INFO_WIDTH/10, Constants.HEIGHT/10);
+        ChangeOrDelete.setSize((int)ChangeOrDelete.getPreferredSize().getWidth()+5,20);
+        ChangeOrDelete.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(belongTo.getUser()==user){
+                    belongTo.UpdateState(State.ChangeButtonClickedState);
+                }
+                else{
+                    System.out.println("Delete friend: " + user.getUser_id());
+                    Delete delete = new Delete(belongTo.getConnection());
+                    try {
+                        // Delete Friend
+                        delete.DeleteIsFriendOf(belongTo.getUser().getUser_id(),user.getUser_id());
+                        delete.DeleteIsFriendOf(user.getUser_id(),belongTo.getUser().getUser_id());
+
+                        // Update
+                        belongTo.setFriends(new Read(belongTo.getConnection()).ReadFriendInfo(belongTo.getUser().getUser_id()));
+                        JOptionPane jOptionPane = new JOptionPane();
+                        JPanel parentPanel = belongTo;
+                        jOptionPane.showMessageDialog(parentPanel, "Friend is deleted!", "Message", JOptionPane.INFORMATION_MESSAGE);
+                        belongTo.UpdateState(State.ChatState);
+                    } catch (SQLException ex) {
+                        ex.printStackTrace();
+                        JOptionPane jOptionPane = new JOptionPane();
+                        JPanel parentPanel = belongTo;
+                        jOptionPane.showMessageDialog(parentPanel, "Wrong User ID for your Friend!", "ERROR", JOptionPane.INFORMATION_MESSAGE);
+                    }
+                }
+            }
+        });
+        profile.add(ChangeOrDelete);
 
         infoTXT.setFont(UnifiedFonts.font20B);
         infoTXT.setText("INFORMATION:");
@@ -183,6 +179,22 @@ public class UserInfoPanel extends JPanel {
         interestTXT.setSize((int)interestTXT.getPreferredSize().getWidth()+10, (int)interestTXT.getPreferredSize().getHeight());
         interests.add(interestTXT);
 
+        interestEditButton.setFont(UnifiedFonts.font15P);
+        interestEditButton.setText("Edit");
+        interestEditButton.setLocation((int)interestTXT.getPreferredSize().getWidth()+10, 0);
+        interestEditButton.setSize((int)interestEditButton.getPreferredSize().getWidth()+5, (int)interestEditButton.getPreferredSize().getHeight());
+        ChangeOrDelete.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String inputInterest = JOptionPane.showInputDialog(
+                        null,
+                        "Input Your Interest:"
+                );
+
+            }
+        });
+        interests.add(interestEditButton);
+
 //        photoWallTXT.setFont(UnifiedFonts.font20B);
 //        photoWallTXT.setText("PHOTO WALL:");
 //        photoWallTXT.setLocation(0, 0);
@@ -206,7 +218,7 @@ public class UserInfoPanel extends JPanel {
             singleInterest.setToolTipText("INTEREST TYPE");
             interestsGrid.add(singleInterest);
         }
-        interestsGrid.setLocation(0, (int)interestTXT.getPreferredSize().getHeight());
+        interestsGrid.setLocation(0, (int)interestTXT.getPreferredSize().getHeight()+20);
         interestsGrid.setSize(Constants.USER_INFO_WIDTH - Constants.SCROLL_CONTROLLER_WIDTH, (int) singleInterest.getPreferredSize().getHeight());
         interests.add(interestsGrid);
 
