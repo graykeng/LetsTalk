@@ -23,7 +23,7 @@ public class ChatSelectPanel extends JPanel {
     private MainPanel beLongTo;
     private User user;
     private ArrayList<User> friends;
-    private CopeImageUtil copeImageUtil;
+    private CopeImageUtil copeImageUtil = new CopeImageUtil();
 
     public ChatSelectPanel() {
 
@@ -45,22 +45,6 @@ public class ChatSelectPanel extends JPanel {
         Title.setSize(Constants.SELECT_PANEL_WIDTH,Constants.TITLE_HEIGHT);
         JButton UserHeadShotButton = new JButton();
 
-        // UserHeadShot (!)
-//        UserIcon = new ImageIcon();
-//        try{
-//            byte[] imageByte = user.getHeadshot().getBytes(1, (int)user.getHeadshot().length());
-//            ByteArrayInputStream in = new ByteArrayInputStream(imageByte);
-//            try{
-//                BufferedImage imag = ImageIO.read(in);
-//                UserIcon = new ImageIcon(imag);
-//            }catch(IOException ex){
-//                ex.printStackTrace();
-//            }
-//        }catch(SQLException ex){
-//            ex.printStackTrace();
-//        }
-        copeImageUtil = new CopeImageUtil();
-
         UserHeadShotButton.setIcon(copeImageUtil.blobToIcon(user.getHeadshot()));
         UserHeadShotButton.setContentAreaFilled(false);
         UserHeadShotButton.setFocusPainted(false);
@@ -74,7 +58,7 @@ public class ChatSelectPanel extends JPanel {
         });
 
         String User_Name = user.getName();
-        String uid = "(uid: "+user.getUser_id()+")";
+        String uid = user.getUser_id();
 
         JLabel tileLabel = new JLabel("<html>"+User_Name+"<br>"+"(uid:"+uid+")</html>");
         tileLabel.setFont(UnifiedFonts.font20B);

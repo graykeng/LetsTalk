@@ -10,6 +10,7 @@ import java.sql.SQLException;
 
 public class CopeImageUtil {
     public CopeImageUtil() {
+
     }
 
     public BufferedImage cutHeadImages(String filePath, String outputPath) {
@@ -56,6 +57,22 @@ public class CopeImageUtil {
             try{
                 BufferedImage bImage = ImageIO.read(in);
                 return new ImageIcon(bImage);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public BufferedImage blobToBufferedImage(Blob headshot){
+        try{
+            byte[] imageByte = headshot.getBytes(1, (int)headshot.length());
+            ByteArrayInputStream in = new ByteArrayInputStream(imageByte);
+            try{
+                BufferedImage bImage = ImageIO.read(in);
+                return bImage;
             } catch (IOException e) {
                 e.printStackTrace();
             }
