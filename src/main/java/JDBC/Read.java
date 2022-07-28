@@ -14,6 +14,13 @@ public class Read {
         this.con = connection;
     }
 
+    public Message ReadMessage() throws SQLException{
+        PreparedStatement statement = con.prepareStatement("SELECT * FROM message WHERE sender = ? AND receiver = ?;");
+
+        Message message = null;
+        return message;
+    }
+
     public int CountUser() throws SQLException{
         Statement statement = con.createStatement();
         ResultSet resultSet = statement.executeQuery("SELECT count(*) FROM user");
