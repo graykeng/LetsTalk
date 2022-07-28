@@ -165,9 +165,31 @@ public class Read {
         return false;
     }
 
-    public FileInputStream imageToBi(String filePath) throws IOException{
-        File file = new File(filePath);
-        return new FileInputStream(file);
+    public ArrayList<Emoji> ReadEmoji() throws SQLException {
+        ArrayList<Emoji> emojis = new ArrayList<>();
+        Statement statement = con.createStatement();
+        ResultSet resultSet = statement.executeQuery("SELECT * FROM emoji");
+        while (resultSet.next()) {
+            Emoji emoji = new Emoji();
+            emoji.setEmoji_number(resultSet.getString("emoji_number"));
+
+            emojis.add(emoji);
+        }
+        return emojis;
+    }
+
+    public ArrayList<String> ReadUserOwnEmoji(String uid) throws SQLException{
+        ArrayList<String> emojis_number = new ArrayList<>();
+        PreparedStatement readStatement = con.prepareStatement("SELECT * FROM own WHERE user_id = ?;");
+
+        readStatement.setString(1, uid);
+
+        ResultSet resultSet = readStatement.executeQuery();
+        while (resultSet.next()){
+            String emoji_number = resultSet.getString("emoji_number");
+            emojis_number.add(emoji_number);
+        }
+        return emojis_number;
     }
 
 }

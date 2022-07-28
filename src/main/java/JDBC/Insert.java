@@ -101,6 +101,9 @@ public class Insert {
         insertStatement.setString(5, user.getGender());
         insertStatement.setString(6, user.getPassword());
         insertStatement.executeUpdate();
+
+        // Insert all emoji for user
+        InsertAllOwn_byUID(user.getUser_id());
     }
 
     public void InsertOwn(Own own) throws SQLException{
@@ -109,6 +112,15 @@ public class Insert {
         insertStatement.setString(1, own.getUser_id());
         insertStatement.setString(2, own.getEmoji_number());
         insertStatement.executeUpdate();
+    }
+
+    public void InsertAllOwn_byUID(String uid) throws SQLException{
+        Read read = new Read(con);
+        ArrayList<Emoji> emojis = read.ReadEmoji();
+        for(int i = 0; i < emojis.size(); i++){
+            Own own = new Own(uid,emojis.get(i).getEmoji_number());
+            InsertOwn(own);
+        }
     }
 
     public void InsertEmoji(Emoji emoji) throws SQLException{

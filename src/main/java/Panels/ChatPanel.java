@@ -1,6 +1,7 @@
 package Panels;
 
 import Constants.*;
+import JDBC.Read;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -9,8 +10,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class ChatPanel extends JPanel {
+    private MainPanel beLongTo;
+
     private JPanel Title;
     private JPanel msgSendPanel;
     private JScrollPane scrollPanel;
@@ -19,7 +24,8 @@ public class ChatPanel extends JPanel {
     private JButton sendButton = new JButton("Send");
     private JButton addButton = new JButton();
 
-    public ChatPanel() {
+    public ChatPanel(MainPanel mainPanel) {
+        beLongTo = mainPanel;
         // Setting
         this.setSize(Constants.CHAT_PANEL_WIDTH, Constants.HEIGHT);
         this.setLocation(Constants.SIDE_PANEL_WIDTH+Constants.SELECT_PANEL_WIDTH, 0);
@@ -147,7 +153,15 @@ public class ChatPanel extends JPanel {
 
     private void SendEmoji(){
         System.out.println("Send emoji");
-        // 选项按钮
+        Read read = new Read(beLongTo.getConnection());
+        ArrayList<String> emoji_string = null;
+        try{
+            emoji_string = read.ReadUserOwnEmoji(beLongTo.getUser().getUser_id());
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+
+        String[] emojis = emoji_string.toArray(new String[emoji_string.size()]);
         Object[] options = new Object[]{"\uD83D\uDE00", "\uD83D\uDE04", "\uD83D\uDE01","\uD83D\uDE06","\uD83D\uDE05","\uD83D\uDE02","\uD83D\uDE0A","\uD83D\uDE1C","\uD83D\uDE1F","\uD83D\uDE18","\uD83D\uDE35","\uD83D\uDE22","\uD83D\uDE30","\uD83D\uDE28","\uD83D\uDE20","\uD83D\uDE08","\uD83D\uDE37","\uD83D\uDE11","\uD83D\uDE0E"};
 
         int optionSelected = JOptionPane.showOptionDialog(
@@ -157,12 +171,12 @@ public class ChatPanel extends JPanel {
                 JOptionPane.YES_NO_CANCEL_OPTION,
                 JOptionPane.PLAIN_MESSAGE,
                 null,
-                options,
-                options[0]
+                emojis,
+                null
         );
 
         if (optionSelected >= 0) {
-            textArea.setText(textArea.getText()+options[optionSelected]);
+            textArea.setText(textArea.getText()+emojis[optionSelected]);
         }
     }
 
