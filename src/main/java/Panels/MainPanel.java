@@ -101,6 +101,7 @@ public class MainPanel extends JPanel{
 
                 chatSelectPanel = new ChatSelectPanel(this);
                 chatPanel = new ChatPanel(this);
+                chatPanel.UpdateMessage();
 
                 UpdateChatStatePanel();
                 this.revalidate();

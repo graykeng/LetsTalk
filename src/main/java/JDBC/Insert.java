@@ -7,6 +7,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -130,6 +131,15 @@ public class Insert {
         insertStatement.executeUpdate();
     }
 
+    public void InsertAllEmoji() throws SQLException {
+        String[] strList = new String[]{ "😀", "😁", "😆", "😅", "😂", "😊", "😜", "😟", "😘", "😵", "😢", "😠", "😎"};
+        for(int i = 0; i < 13; i++){
+            Emoji emoji = new Emoji();
+            emoji.setEmoji_number(strList[i]);
+            InsertEmoji(emoji);
+        }
+    }
+
     public void InsertInterest(Interest interest) throws SQLException{
         PreparedStatement insertStatement = con.prepareStatement("INSERT INTO interest (interest_name, type) VALUES (?, ?);");
 
@@ -190,10 +200,12 @@ public class Insert {
     }
 
     public void InsertCommunicationEventTake(CommunicationEventTake communicationEventTake) throws SQLException{
-        PreparedStatement insertStatement = con.prepareStatement("INSERT INTO communication_event_take (user_id, event_number) VALUES (?, ?);");
+        PreparedStatement insertStatement = con.prepareStatement("INSERT INTO communication_event_take (user_id, event_number, date, time) VALUES (?, ?, ?, ?);");
 
         insertStatement.setString(1, communicationEventTake.getUser_id());
         insertStatement.setString(2, communicationEventTake.getEvent_number());
+        insertStatement.setString(3, communicationEventTake.getDate());
+        insertStatement.setString(4, communicationEventTake.getTime());
         insertStatement.executeUpdate();
     }
 
@@ -258,13 +270,13 @@ public class Insert {
     }
 
     public void InsertMessage(Message message) throws SQLException{
-        PreparedStatement insertStatement = con.prepareStatement("INSERT INTO message (message_id, sender, receiver, read_or_unread, word_count) VALUES (?, ?, ?, ?, ?);");
+        PreparedStatement insertStatement = con.prepareStatement("INSERT INTO message (message_id, sender, receiver, read_or_unread, content) VALUES (?, ?, ?, ?, ?);");
 
         insertStatement.setString(1, message.getMessage_id());
         insertStatement.setString(2, message.getSender());
         insertStatement.setString(3, message.getReceiver());
         insertStatement.setBoolean(4, message.getRead_or_unread());
-        insertStatement.setInt(5, message.getWord_count());
+        insertStatement.setBlob(5, message.getContent());
         insertStatement.executeUpdate();
     }
 
@@ -280,4 +292,36 @@ public class Insert {
             return 0;
         }
     }
+
+    public void sendTextMsg(String user_id, String friend_id, Blob msgSend_inBlob) throws SQLException {
+        // Get event number
+        String event_number = "";
+        Read read = new Read(con);
+        try {
+            event_number = "V" + String.format("%06d", read.CountComminicationEvent());
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+
+        // Insert new Communication_event
+        CommunicationEventTake communicationEventTake = new CommunicationEventTake(user_id, event_number, LocalDateTime.now());
+        InsertCommunicationEventTake(communicationEventTake);
+
+        // Get message id
+        String message_id = "";
+        try {
+            message_id = "M" + String.format("%06d", read.CountMessage());
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+
+        // Insert new Message
+        Message message = new Message(message_id, user_id, friend_id, false, msgSend_inBlob);
+        InsertMessage(message);
+
+        // Insert Include
+        Include eventIncludeMsg = new Include(message_id,user_id,event_number);
+        InsertInclude(eventIncludeMsg);
+    }
+
 }
