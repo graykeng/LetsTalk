@@ -4,6 +4,7 @@ import Constants.*;
 import JDBC.Delete;
 import JDBC.Insert;
 import JDBC.Read;
+import TableStruture.Interest;
 import TableStruture.IsFriendOf;
 import TableStruture.User;
 
@@ -69,6 +70,7 @@ public class UserInfoPanel extends JPanel {
         interestTXT = new JLabel();
         interestEditButton = new JButton();
         ChangeOrDelete = new JButton();
+        Insert insert = new Insert(belongTo.getConnection());
 
         interestArray = new String[]{"Basketball", "LOL", "WOW", "COOK"};
 
@@ -183,14 +185,27 @@ public class UserInfoPanel extends JPanel {
         interestEditButton.setText("Edit");
         interestEditButton.setLocation((int)interestTXT.getPreferredSize().getWidth()+10, 0);
         interestEditButton.setSize((int)interestEditButton.getPreferredSize().getWidth()+5, (int)interestEditButton.getPreferredSize().getHeight());
-        ChangeOrDelete.addActionListener(new ActionListener() {
+        interestEditButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                Interest interest = new Interest();
                 String inputInterest = JOptionPane.showInputDialog(
                         null,
                         "Input Your Interest:"
                 );
+                interest.setInterest_name(inputInterest);
 
+                String inputInterestType = JOptionPane.showInputDialog(
+                        null,
+                        "Input Your Interest's Type:"
+                );
+                interest.setType(inputInterestType);
+
+                try {
+                    insert.InsertInterest(interest);
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
             }
         });
         interests.add(interestEditButton);
@@ -208,6 +223,9 @@ public class UserInfoPanel extends JPanel {
         /**
          * Add all the interests onto the interest panel
          */
+
+        // READ FIRST
+
         for(int i = 0; i < interestArray.length; i++){
             singleInterest = new JLabel();
             Border border = BorderFactory.createLineBorder(Color.GRAY, 3);

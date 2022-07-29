@@ -14,6 +14,14 @@ public class Read {
         this.con = connection;
     }
 
+    public Interest ReadInterestDup(Interest interest) throws SQLException{
+        PreparedStatement statement = con.prepareStatement("SELECT * FROM interest WHERE interest_name = ?;");
+
+
+        Interest interestw = null;
+        return interestw;
+    }
+
     public Message ReadMessage() throws SQLException{
         PreparedStatement statement = con.prepareStatement("SELECT * FROM message WHERE sender = ? AND receiver = ?;");
 
