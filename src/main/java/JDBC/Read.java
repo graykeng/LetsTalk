@@ -34,6 +34,16 @@ public class Read {
         return i;
     }
 
+    public int CountEmoji() throws SQLException {
+        Statement statement = con.createStatement();
+        ResultSet resultSet = statement.executeQuery("SELECT count(*) FROM emoji");
+        int i = 0;
+        while (resultSet.next()) {
+            i = resultSet.getInt("count(*)");
+        }
+        return i;
+    }
+
     public int CountMessage() throws SQLException{
         Statement statement = con.createStatement();
         ResultSet resultSet = statement.executeQuery("SELECT count(*) FROM message");

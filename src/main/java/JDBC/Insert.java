@@ -132,11 +132,15 @@ public class Insert {
     }
 
     public void InsertAllEmoji() throws SQLException {
-        String[] strList = new String[]{ "😀", "😁", "😆", "😅", "😂", "😊", "😜", "😟", "😘", "😵", "😢", "😠", "😎"};
-        for(int i = 0; i < 13; i++){
-            Emoji emoji = new Emoji();
-            emoji.setEmoji_number(strList[i]);
-            InsertEmoji(emoji);
+        Read read = new Read(con);
+        int numberOfEmoji = read.CountEmoji();
+        if(numberOfEmoji == 0){
+            String[] strList = new String[]{ "😀", "😁", "😆", "😅", "😂", "😊", "😜", "😟", "😘", "😵", "😢", "😠", "😎"};
+            for(int i = 0; i < 13; i++){
+                Emoji emoji = new Emoji();
+                emoji.setEmoji_number(strList[i]);
+                InsertEmoji(emoji);
+            }
         }
     }
 
