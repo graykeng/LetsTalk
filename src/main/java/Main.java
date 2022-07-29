@@ -1,6 +1,7 @@
 import Constants.*;
 import JDBC.Insert;
 import JDBC.JDBConnection;
+import JDBC.Read;
 import Panels.LogInPanel;
 import Panels.MainPanel;
 import Panels.RegisterPanel;
@@ -26,6 +27,9 @@ public class Main {
 
         MainPanel mainPanel = new MainPanel();
         window.add(mainPanel);
+
+        Insert insert = new Insert(mainPanel.getConnection());
+        insert.InsertAllEmoji();
 
         window.pack();
         window.setLocationRelativeTo(null);

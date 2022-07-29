@@ -115,7 +115,9 @@ public class ChatSelectPanel extends JPanel {
             row.addMouseListener(new MouseListener() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
-                    System.out.println("Change to "+ (num+1) +"th friend's message");
+                    System.out.println("Change to talk with "+ (num+1) +"th friend");
+                    beLongTo.setCurrUser(friends.get(num));
+                    beLongTo.UpdateState(State.ChatState);
                 }
 
                 @Override

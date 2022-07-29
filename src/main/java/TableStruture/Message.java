@@ -1,20 +1,22 @@
 package TableStruture;
 
+import java.sql.Blob;
+
 public class Message {
     private String message_id;
     private String sender;
     private String receiver;
     private Boolean read_or_unread;
-    private int word_count;
+    private Blob content;
 
     public Message(){}
 
-    public Message(String message_id, String sender, String receiver, Boolean read_or_unread, int word_count) {
+    public Message(String message_id, String sender, String receiver, Boolean read_or_unread, Blob content) {
         this.message_id = message_id;
         this.sender = sender;
         this.receiver = receiver;
         this.read_or_unread = read_or_unread;
-        this.word_count = word_count;
+        this.content = content;
     }
 
     public String getMessage_id() {
@@ -49,11 +51,11 @@ public class Message {
         this.read_or_unread = read_or_unread;
     }
 
-    public int getWord_count() {
-        return word_count;
+    public Blob getContent() {
+        return content;
     }
 
-    public void setWord_count(int word_count) {
-        this.word_count = word_count;
+    public void setContent(Blob content) {
+        this.content = content;
     }
 }

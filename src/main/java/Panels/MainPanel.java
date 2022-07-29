@@ -62,7 +62,7 @@ public class MainPanel extends JPanel{
          */
         addFriendPanel = new AddFriendPanel(this);
         addGroupPanel = new AddGroupPanel(this);
-        chatPanel = new ChatPanel();
+        chatPanel = new ChatPanel(this);
         chatSelectPanel = new ChatSelectPanel();
         sidePanel = new SidePanel(this);
         logInPanel = new LogInPanel(this);
@@ -100,7 +100,8 @@ public class MainPanel extends JPanel{
                 this.repaint();
 
                 chatSelectPanel = new ChatSelectPanel(this);
-                chatPanel = new ChatPanel();
+                chatPanel = new ChatPanel(this);
+                chatPanel.UpdateMessage();
 
                 UpdateChatStatePanel();
                 this.revalidate();
