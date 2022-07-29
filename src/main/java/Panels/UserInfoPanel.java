@@ -1,9 +1,11 @@
 package Panels;
 
 import Constants.*;
+import Helper.CopeImageUtil;
 import JDBC.Delete;
 import JDBC.Insert;
 import JDBC.Read;
+import TableStruture.Has;
 import TableStruture.Interest;
 import TableStruture.IsFriendOf;
 import TableStruture.User;
@@ -14,6 +16,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class UserInfoPanel extends JPanel {
 
@@ -23,10 +26,10 @@ public class UserInfoPanel extends JPanel {
     private JPanel information;
     private JPanel interests;
     private JPanel interestsGrid;
-    private JPanel photoWall;
     private JPanel genderBirthdayAge;
 
     private JLabel userNameTXT;
+    private JLabel image;
     private JLabel uIDTXT;
     private JLabel infoTXT;
     private JLabel sexTXT;
@@ -37,7 +40,6 @@ public class UserInfoPanel extends JPanel {
     private JButton interestEditButton;
 
     private User user;
-    private String[] interestArray;
 
     private MainPanel belongTo;
 
@@ -51,17 +53,17 @@ public class UserInfoPanel extends JPanel {
         prepareGUI();
     }
 
-    private void prepareGUI(){
+    private void prepareGUI() {
 
         wholePanel = new JPanel();
         profile = new JPanel();
         information = new JPanel();
         interests = new JPanel();
-        interestsGrid = new JPanel(new GridLayout(1, 4));
-        photoWall = new JPanel();
+        interestsGrid = new JPanel();
         genderBirthdayAge = new JPanel(new GridLayout(1, 3));
 
         userNameTXT = new JLabel();
+        image = new JLabel();
         uIDTXT = new JLabel();
         infoTXT = new JLabel();
         sexTXT = new JLabel();
@@ -71,8 +73,6 @@ public class UserInfoPanel extends JPanel {
         interestEditButton = new JButton();
         ChangeOrDelete = new JButton();
         Insert insert = new Insert(belongTo.getConnection());
-
-        interestArray = new String[]{"Basketball", "LOL", "WOW", "COOK"};
 
         /**
          * Set the size and position for scrollPanel, information, interests, and photoWall
@@ -93,21 +93,21 @@ public class UserInfoPanel extends JPanel {
         interests.setLocation(0, (int)(profile.getPreferredSize().getHeight() + information.getPreferredSize().getHeight()));
         interests.setSize(Constants.USER_INFO_WIDTH, Constants.HEIGHT/6);
 
-        photoWall.setLayout(null);
-        photoWall.setLocation(0, (int)(profile.getPreferredSize().getHeight() + information.getPreferredSize().getHeight() + interests.getPreferredSize().getHeight()));
-        photoWall.setSize(Constants.USER_INFO_WIDTH, Constants.HEIGHT);
-
         /**
          * Set the size, position, and content for Labels
          */
-        //Add Change button
-
 
         userNameTXT.setFont(UnifiedFonts.font25B);
         userNameTXT.setText(user.getName());
         userNameTXT.setLocation(getCentreX(userNameTXT.getPreferredSize().getWidth(), wholePanel.getPreferredSize().getWidth()), Constants.HEIGHT/12);
         userNameTXT.setSize((int)userNameTXT.getPreferredSize().getWidth()+10, (int)userNameTXT.getPreferredSize().getHeight());
         profile.add(userNameTXT);
+
+        CopeImageUtil copeImageUtil = new CopeImageUtil();
+        image.setIcon(copeImageUtil.blobToIcon(user.getHeadshot()));
+        image.setLocation(userNameTXT.getX()-100, userNameTXT.getY());
+        image.setSize((int)image.getPreferredSize().getWidth(), (int)image.getPreferredSize().getHeight());
+        profile.add(image);
 
         uIDTXT.setFont(UnifiedFonts.font20P);
         uIDTXT.setText(user.getUser_id());
@@ -189,6 +189,7 @@ public class UserInfoPanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Interest interest = new Interest();
+                Has has = new Has();
                 String inputInterest = JOptionPane.showInputDialog(
                         null,
                         "Input Your Interest:"
@@ -201,20 +202,28 @@ public class UserInfoPanel extends JPanel {
                 );
                 interest.setType(inputInterestType);
 
+                String iid = "";
+                Read read = new Read(belongTo.getConnection());
+                try {
+                    iid = "I" + String.format("%06d", read.CountInterest());
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+                interest.setInterest_id(iid);
+
+                has.setInterest_id(iid);
+                has.setUser_id(user.getUser_id());
+
                 try {
                     insert.InsertInterest(interest);
+                    insert.InsertHas(has);
+                    belongTo.UpdateState(State.UserInfoState);
                 } catch (SQLException ex) {
                     ex.printStackTrace();
                 }
             }
         });
         interests.add(interestEditButton);
-
-//        photoWallTXT.setFont(UnifiedFonts.font20B);
-//        photoWallTXT.setText("PHOTO WALL:");
-//        photoWallTXT.setLocation(0, 0);
-//        photoWallTXT.setSize(photoWallTXT.getPreferredSize());
-//        photoWall.add(photoWallTXT);
 
         genderBirthdayAge.setLocation(0, (int)information.getPreferredSize().getHeight()/2);
         genderBirthdayAge.setSize(Constants.WIDTH - Constants.SIDE_PANEL_WIDTH, (int)sexTXT.getPreferredSize().getHeight());
@@ -225,20 +234,28 @@ public class UserInfoPanel extends JPanel {
          */
 
         // READ FIRST
-
-        for(int i = 0; i < interestArray.length; i++){
+        Read read = new Read(belongTo.getConnection());
+        ArrayList<Interest> allInterest = new ArrayList<>();
+        try {
+            allInterest = read.ReadAllInterest(user);
+        } catch (SQLException e){
+            e.printStackTrace();
+        }
+        for(int i = 0; i < allInterest.size(); i++){
             singleInterest = new JLabel();
-            Border border = BorderFactory.createLineBorder(Color.GRAY, 3);
+            Border border = BorderFactory.createLineBorder(Color.GRAY, 2);
             singleInterest.setBorder(border);
             singleInterest.setFont(UnifiedFonts.font20P);
-            singleInterest.setText(interestArray[i]);
-            singleInterest.setText(interestArray[i]);
-            singleInterest.setToolTipText("INTEREST TYPE");
+            singleInterest.setText(allInterest.get(i).getInterest_name());
+            singleInterest.setToolTipText(allInterest.get(i).getType());
+
             interestsGrid.add(singleInterest);
         }
-        interestsGrid.setLocation(0, (int)interestTXT.getPreferredSize().getHeight()+20);
-        interestsGrid.setSize(Constants.USER_INFO_WIDTH - Constants.SCROLL_CONTROLLER_WIDTH, (int) singleInterest.getPreferredSize().getHeight());
-        interests.add(interestsGrid);
+        if (allInterest.size()!= 0) {
+            interestsGrid.setLocation(0, (int) interestTXT.getPreferredSize().getHeight() + 20);
+            interestsGrid.setSize(Constants.USER_INFO_WIDTH - Constants.SCROLL_CONTROLLER_WIDTH, (int) singleInterest.getPreferredSize().getHeight()+10);
+            interests.add(interestsGrid);
+        }
 
         /**
          * Add everything onto the scrollSection
@@ -246,7 +263,6 @@ public class UserInfoPanel extends JPanel {
         wholePanel.add(profile);
         wholePanel.add(information);
         wholePanel.add(interests);
-        wholePanel.add(photoWall);
 
         this.setSize((int)this.getPreferredSize().getWidth(), (int)this.getPreferredSize().getHeight());
         this.add(wholePanel);

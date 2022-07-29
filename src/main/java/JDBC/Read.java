@@ -1,5 +1,6 @@
 package JDBC;
 
+import Constants.State;
 import TableStruture.*;
 
 import java.io.File;
@@ -7,6 +8,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class Read {
     private Connection con;
@@ -14,26 +16,21 @@ public class Read {
         this.con = connection;
     }
 
-    public Interest ReadInterestDup(Interest interest) throws SQLException{
-        PreparedStatement statement = con.prepareStatement("SELECT * FROM interest WHERE interest_name = ?;");
-
-
-        Interest interestw = null;
-        return interestw;
-    }
-
-    public Message ReadMessage() throws SQLException{
-        PreparedStatement statement = con.prepareStatement("SELECT * FROM message WHERE sender = ? AND receiver = ?;");
-
-        Message message = null;
-        return message;
-    }
-
     public int CountUser() throws SQLException{
         Statement statement = con.createStatement();
         ResultSet resultSet = statement.executeQuery("SELECT count(*) FROM user");
         int i = 0;
         while (resultSet.next()) {
+            i = resultSet.getInt("count(*)");
+        }
+        return i;
+    }
+
+    public int CountInterest() throws SQLException{
+        Statement statement = con.createStatement();
+        ResultSet resultSet = statement.executeQuery("SELECT count(*) FROM interest");
+        int i = 0;
+        while (resultSet.next()){
             i = resultSet.getInt("count(*)");
         }
         return i;
@@ -293,5 +290,24 @@ public class Read {
             return event_number;
         }
         return null;
+    }
+
+    public ArrayList<Interest> ReadAllInterest(User user) throws SQLException{
+        ArrayList<Interest> returnList = new ArrayList<>();
+        PreparedStatement readStatement = con.prepareStatement("SELECT * FROM has INNER JOIN interest ON has.interest_id = interest.interest_id;");
+
+        ResultSet resultSet = readStatement.executeQuery();
+
+        while(resultSet.next()) {
+            if (Objects.equals(resultSet.getString("user_id"), user.getUser_id())){
+                Interest interest = new Interest();
+                interest.setInterest_id(resultSet.getString("interest_id"));
+                interest.setInterest_name(resultSet.getString("interest_name"));
+                interest.setType(resultSet.getString("type"));
+                returnList.add(interest);
+            }
+        }
+        return returnList;
+
     }
 }

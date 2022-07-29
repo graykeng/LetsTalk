@@ -145,18 +145,19 @@ public class Insert {
     }
 
     public void InsertInterest(Interest interest) throws SQLException{
-        PreparedStatement insertStatement = con.prepareStatement("INSERT INTO interest (interest_name, type) VALUES (?, ?);");
+        PreparedStatement insertStatement = con.prepareStatement("INSERT INTO interest (interest_id, interest_name, type) VALUES (?, ?, ?);");
 
-        insertStatement.setString(1, interest.getInterest_name());
-        insertStatement.setString(2, interest.getType());
+        insertStatement.setString(1, interest.getInterest_id());
+        insertStatement.setString(2, interest.getInterest_name());
+        insertStatement.setString(3, interest.getType());
         insertStatement.executeUpdate();
     }
 
     public void InsertHas(Has has) throws SQLException{
-        PreparedStatement insertStatement = con.prepareStatement("INSERT INTO has (user_id, interest_name) VALUES (?, ?);");
+        PreparedStatement insertStatement = con.prepareStatement("INSERT INTO has (user_id, interest_id) VALUES (?, ?);");
 
         insertStatement.setString(1, has.getUser_id());
-        insertStatement.setString(2, has.getInterest_name());
+        insertStatement.setString(2, has.getInterest_id());
         insertStatement.executeUpdate();
     }
 
