@@ -54,10 +54,6 @@ public class PhotoPanel extends JPanel {
         this.add(scroll_panel);
     }
 
-
-
-
-
     public void getPhotoFromUser(){
         this.remove(scroll_panel);
         this.repaint();
@@ -110,8 +106,4 @@ public class PhotoPanel extends JPanel {
         this.add(scroll_panel);
         this.revalidate();
     }
-
-
-
-
 }

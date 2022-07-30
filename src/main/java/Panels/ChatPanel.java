@@ -99,7 +99,7 @@ public class ChatPanel extends JPanel {
             }
         });
 
-        addButton.setIcon(new ImageIcon("src/main/java/Image/AddButton_small.png"));
+        addButton.setIcon(new ImageIcon("src/main/resources/Image/AddButton_small.png"));
         addButton.setSize(20,20);
         addButton.setContentAreaFilled(false);
         addButton.setFocusPainted(false);

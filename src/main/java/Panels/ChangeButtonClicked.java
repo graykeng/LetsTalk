@@ -60,7 +60,7 @@ public class ChangeButtonClicked extends JPanel {
         panel29 = new JPanel(new GridLayout(8,1));
 
         try {
-            blob = new SerialBlob(convertFileContentToBlob("src/main/java/Image/headshot.png"));
+            blob = new SerialBlob(convertFileContentToBlob("src/main/resources/Image/headshot.png"));
         } catch (IOException ex) {
             ex.printStackTrace();
         } catch (SerialException ex) {
@@ -156,9 +156,9 @@ public class ChangeButtonClicked extends JPanel {
         int result = fileChooser.showOpenDialog(null);
         if(JFileChooser.APPROVE_OPTION == result){
             filePath = fileChooser.getSelectedFile().getPath();
-            copeImageUtil.cutHeadImages(filePath, "src/main/java/Image/newHeadShot.png");
+            copeImageUtil.cutHeadImages(filePath, "src/main/resources/Image/newHeadShot.png");
             try {
-                blob = new SerialBlob(convertFileContentToBlob("src/main/java/Image/newHeadShot.png"));
+                blob = new SerialBlob(convertFileContentToBlob("src/main/resources/Image/newHeadShot.png"));
             } catch (IOException ex) {
                 ex.printStackTrace();
             } catch (SerialException ex) {

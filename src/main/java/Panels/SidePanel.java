@@ -26,8 +26,8 @@ public class SidePanel extends JPanel{
         photoButton = new JButton();
 
         chatButton.setSize(20,20);
-        chatButton.setIcon(new ImageIcon("src/main/java/Image/ChatButton.png"));
-        chatButton.setPressedIcon(new ImageIcon("src/main/java/Image/ChatButton_click.png"));
+        chatButton.setIcon(new ImageIcon("src/main/resources/Image/ChatButton.png"));
+        chatButton.setPressedIcon(new ImageIcon("src/main/resources/Image/ChatButton_click.png"));
         chatButton.setContentAreaFilled(false);
         chatButton.setFocusPainted(false);
         chatButton.addActionListener(new ActionListener() {
@@ -39,8 +39,8 @@ public class SidePanel extends JPanel{
         });
 
         photoButton.setSize(20,20);
-        photoButton.setIcon(new ImageIcon("src/main/java/Image/PhotosButton.png"));
-        photoButton.setPressedIcon(new ImageIcon("src/main/java/Image/PhotosButton_click.png"));
+        photoButton.setIcon(new ImageIcon("src/main/resources/Image/PhotosButton.png"));
+        photoButton.setPressedIcon(new ImageIcon("src/main/resources/Image/PhotosButton_click.png"));
         photoButton.setContentAreaFilled(false);
         photoButton.setFocusPainted(false);
         photoButton.addActionListener(new ActionListener() {

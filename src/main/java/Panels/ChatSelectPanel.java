@@ -64,7 +64,7 @@ public class ChatSelectPanel extends JPanel {
         tileLabel.setFont(UnifiedFonts.font20B);
 
         JButton addButton = new JButton();
-        addButton.setIcon(new ImageIcon("src/main/java/Image/AddButton.png"));
+        addButton.setIcon(new ImageIcon("src/main/resources/Image/AddButton.png"));
         addButton.setContentAreaFilled(false);
         addButton.setFocusPainted(false);
         addButton.addMouseListener(new MouseListener() {

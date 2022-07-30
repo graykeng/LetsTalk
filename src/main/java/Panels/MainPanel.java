@@ -155,6 +155,7 @@ public class MainPanel extends JPanel{
                 UpdateChangeButtonClickedPanel();
                 this.revalidate();
                 break;
+
             case PhotoAddPanelState:
                 System.out.println("PhotoAddPanelState");
                 this.removeAll();
