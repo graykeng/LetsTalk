@@ -30,6 +30,8 @@ public class MainPanel extends JPanel{
 
     private ChangeButtonClicked ChangePanel;
 
+    private PhotoAddPanel photoAddPanel;
+
     private User user;
     private ArrayList<User> friends;
     private User currUser;
@@ -66,11 +68,12 @@ public class MainPanel extends JPanel{
         chatSelectPanel = new ChatSelectPanel();
         sidePanel = new SidePanel(this);
         logInPanel = new LogInPanel(this);
-        photoPanel = new PhotoPanel();
+        photoPanel = new PhotoPanel(this);
         popUpPanel = new PopUpPanel();
         registerPanel = new RegisterPanel(this);
         userInfoPanel = new UserInfoPanel();
         ChangePanel = new ChangeButtonClicked(this);
+        photoAddPanel = new PhotoAddPanel(this);
     }
 
     public void UpdateState(State changeToState){
@@ -145,12 +148,18 @@ public class MainPanel extends JPanel{
                 this.revalidate();
                 break;
 
-
             case ChangeButtonClickedState:
                 System.out.println("ChangeButtonClickedState");
                 this.removeAll();
                 this.repaint();
                 UpdateChangeButtonClickedPanel();
+                this.revalidate();
+                break;
+            case PhotoAddPanelState:
+                System.out.println("PhotoAddPanelState");
+                this.removeAll();
+                this.repaint();
+                UpdatePhotoAddPanel();
                 this.revalidate();
                 break;
         }
@@ -163,6 +172,11 @@ public class MainPanel extends JPanel{
         ChangePanel.setUser1(user);
         this.add(ChangePanel);
     }
+
+    public void UpdatePhotoAddPanel(){
+        this.add(photoAddPanel);
+    }
+
     public void UpdateLoginStatePanel(){
         this.add(logInPanel);
     }
@@ -196,6 +210,7 @@ public class MainPanel extends JPanel{
      * Add ACTUAL panels to the PhotoStatePanel that we add to the frame
      */
     public void UpdatePhotoStatePanel(){
+        photoPanel.getPhotoFromUser();
         this.add(sidePanel);
         this.add(photoPanel);
     }

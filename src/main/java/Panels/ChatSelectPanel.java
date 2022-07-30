@@ -103,9 +103,12 @@ public class ChatSelectPanel extends JPanel {
         JPanel FriendsPanel = new JPanel(null);
         FriendsPanel.setPreferredSize(new Dimension(380,75*rows));
         if (rows == 0) {
-            String empty = "You have no friend, add your friend now!";
+            String empty = "You have no friend,\uD83D\uDE05 \uD83D\uDE05 \uD83D\uDE05";
             JLabel showEmpty = new JLabel(empty);
-            FriendsPanel.add(showEmpty, BorderLayout.NORTH);
+            showEmpty.setLocation(0,200);
+            showEmpty.setSize(Constants.SELECT_PANEL_WIDTH,50);
+            showEmpty.setFont(UnifiedFonts.font25B);
+            FriendsPanel.add(showEmpty);
         }
         for (int i = 0; i < rows; i++) {
             JPanel row = new JPanel(new BorderLayout());

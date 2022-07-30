@@ -8,5 +8,6 @@ public enum State {
     AddGroupState,
     UserInfoState,
     PhotoState,
-    ChangeButtonClickedState
+    ChangeButtonClickedState,
+    PhotoAddPanelState
 }

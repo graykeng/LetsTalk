@@ -177,15 +177,6 @@ public class Insert {
         insertStatement.executeUpdate();
     }
 
-    public void InsertPhotoPost(PhotoPost photoPost) throws SQLException{
-        PreparedStatement insertStatement = con.prepareStatement("INSERT INTO photo_post (user_id, photo_id, text) VALUES (?, ?, ?);");
-
-        insertStatement.setString(1, photoPost.getUser_id());
-        insertStatement.setString(2, photoPost.getPhoto_id());
-        insertStatement.setString(3, photoPost.getText());
-        insertStatement.executeUpdate();
-    }
-
     public void InsertEDT(Edt edt) throws SQLException{
         PreparedStatement insertStatement = con.prepareStatement("INSERT INTO edt (event_number, date, time) VALUES (?, ?, ?);");
 
@@ -327,6 +318,17 @@ public class Insert {
         // Insert Include
         Include eventIncludeMsg = new Include(message_id,user_id,event_number);
         InsertInclude(eventIncludeMsg);
+    }
+
+    public void InsertPhotoPost(PhotoPost photoPost) throws SQLException{
+        PreparedStatement insertStatement = con.prepareStatement("INSERT INTO photo_post (user_id, photo_id, text, time, content) VALUES (?, ?, ?, ?, ?);");
+
+        insertStatement.setString(1, photoPost.getUser_id());
+        insertStatement.setString(2, photoPost.getPhoto_id());
+        insertStatement.setString(3, photoPost.getText());
+        insertStatement.setString(4, photoPost.getDate_time_str());
+        insertStatement.setBlob(5,photoPost.getContent());
+        insertStatement.executeUpdate();
     }
 
 }

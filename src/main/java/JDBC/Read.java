@@ -7,6 +7,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -69,6 +71,16 @@ public class Read {
     public int CountGroup() throws SQLException{
         Statement statement = con.createStatement();
         ResultSet resultSet = statement.executeQuery("SELECT count(*) FROM user_group");
+        int i = 0;
+        while (resultSet.next()) {
+            i = resultSet.getInt("count(*)");
+        }
+        return i;
+    }
+
+    public int CountPhoto() throws SQLException{
+        Statement statement = con.createStatement();
+        ResultSet resultSet = statement.executeQuery("SELECT count(*) FROM photo_post");
         int i = 0;
         while (resultSet.next()) {
             i = resultSet.getInt("count(*)");
@@ -308,6 +320,32 @@ public class Read {
             }
         }
         return returnList;
+
+    }
+
+    public ArrayList<PhotoPost> PhotoPostByUser(String userid) throws SQLException {
+        con = new JDBConnection().returnCon();
+        PreparedStatement readStatement = con.prepareStatement("SELECT * FROM photo_post WHERE user_id = ?;");
+
+        readStatement.setString(1, userid);
+        ArrayList<PhotoPost> photo_list= new ArrayList<>();
+
+        ResultSet resultSet = readStatement.executeQuery();
+        while(resultSet.next()){
+
+            String user_id =resultSet.getString("user_id");
+            String photo_id = resultSet.getString("photo_id");
+            String text=resultSet.getString("text");
+            Blob content= resultSet.getBlob("content");
+            String time = resultSet.getString("time");
+
+            DateTimeFormatter dateFormat1 = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            LocalDateTime date = LocalDateTime.parse(time,dateFormat1);
+
+            PhotoPost photo = new PhotoPost(user_id,photo_id,text,date,content);
+            photo_list.add(photo);
+        }
+        return photo_list;
 
     }
 }

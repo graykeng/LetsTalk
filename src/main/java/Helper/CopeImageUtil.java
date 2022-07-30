@@ -82,7 +82,7 @@ public class CopeImageUtil {
         return null;
     }
 
-    private BufferedImage scaleByPercentage(BufferedImage inputImage, int newWidth, int newHeight){
+    public BufferedImage scaleByPercentage(BufferedImage inputImage, int newWidth, int newHeight){
         try {
             int type = inputImage.getColorModel().getTransparency();
             int width = inputImage.getWidth();
