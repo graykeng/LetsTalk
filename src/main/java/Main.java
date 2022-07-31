@@ -26,6 +26,7 @@ public class Main {
         window.setTitle("LetsTalk");
 
         MainPanel mainPanel = new MainPanel();
+        mainPanel.setOwner(window);
         window.add(mainPanel);
 
         Insert insert = new Insert(mainPanel.getConnection());

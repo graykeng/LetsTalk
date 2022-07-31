@@ -154,6 +154,69 @@ public class Read {
         return user;
     }
 
+    public Object[][] ReadUserID_Name() throws SQLException {
+        int count = CountUser();
+        Object[][] id_name = new Object[count][2];
+        PreparedStatement statement = con.prepareStatement("SELECT user_id, name FROM user;");
+        ResultSet resultSet = statement.executeQuery();
+        int i = 0;
+        while (resultSet.next()) {
+            String uid = resultSet.getString("user_id");
+            String name = resultSet.getString("name");
+            id_name[i][0] = uid;
+            id_name[i][1] = name;
+            i++;
+        }
+
+        return id_name;
+    }
+
+//    public double ReadAvgAge() throws SQLException {
+//        ArrayList<Integer> ages = new ArrayList<Integer>();
+//        int sum = 0;
+//        double avgAge = 0;
+//        Statement statement = con.createStatement();
+//        ResultSet resultSet = statement.executeQuery("SELECT * FROM user_birthday_and_age");
+//        while (resultSet.next()) {
+//            int age = resultSet.getInt("age");
+//            ages.add(age);
+//        }
+//
+//        for(int i = 0; i < ages.size(); i++){
+//            sum += ages.get(i);
+//        }
+//        avgAge = sum/ages.size();
+//        return avgAge;
+//    }
+//
+//    public ArrayList<User> ReadUserOverAvg() throws SQLException{
+//        ArrayList<User> users = new ArrayList<>();
+//        double avgAge = ReadAvgAge();
+//        Statement statement = con.createStatement();
+//        ResultSet resultSet = statement.executeQuery("SELECT * FROM user_birthday_and_age WHERE age > " + avgAge);
+//        int i = 0;
+//        while (resultSet.next()) {
+//            String birthday = resultSet.getString("birthday");
+//        }
+//        return i;
+//    }
+//
+//    public Object[][] ReadUserIDNameOverAvg() throws SQLException {
+//        int count = CountUserOverAvg();
+//        Object[][] id_name = new Object[count][2];
+//        PreparedStatement statement = con.prepareStatement("SELECT user_id, name FROM user;");
+//        ResultSet resultSet = statement.executeQuery();
+//        int i = 0;
+//        while (resultSet.next()) {
+//            String uid = resultSet.getString("user_id");
+//            String name = resultSet.getString("name");
+//            id_name[i][0] = uid;
+//            id_name[i][1] = name;
+//            i++;
+//        }
+//
+//        return id_name;
+//    }
 
     public ArrayList<User> ReadFriendInfo (String uid)throws SQLException{
         ArrayList<User> friends = new ArrayList<>();

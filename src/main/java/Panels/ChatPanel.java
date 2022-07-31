@@ -381,6 +381,12 @@ public class ChatPanel extends JPanel {
                 ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
                 ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER
         );
+        scrollPanel.doLayout();
+
+        JScrollBar jscrollBar = scrollPanel.getVerticalScrollBar();
+        if (jscrollBar != null)
+            jscrollBar.setValue(jscrollBar.getMaximum());
+
         scrollPanel.setSize(Constants.CHAT_PANEL_WIDTH,Constants.CHAT_FIELD_HEIGHT);
         scrollPanel.setLocation(0,Constants.TITLE_HEIGHT);
         scrollPanel.setBorder(blackLine);

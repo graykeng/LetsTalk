@@ -14,6 +14,7 @@ import java.util.ArrayList;
 public class MainPanel extends JPanel{
     private Connection connection;
     private State state;
+    private JFrame owner;
 
     // Actual Panels
     private JPanel UserInfoStatePanel;
@@ -258,7 +259,11 @@ public class MainPanel extends JPanel{
         this.currUser = currUser;
     }
 
-    public State getState(){
-        return state;
+    public void setOwner(JFrame window) {
+        owner = window;
+    }
+
+    public JFrame getOwner() {
+        return owner;
     }
 }
