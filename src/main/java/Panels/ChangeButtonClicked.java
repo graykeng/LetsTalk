@@ -46,7 +46,7 @@ public class ChangeButtonClicked extends JPanel {
     JButton ChooseFile = new JButton("Choose File");
     JLabel Birthday = new JLabel("Birthday: (DD/MM/YYYY)");
     JTextField BirthdayText= new JTextField(10);
-    JLabel Gender = new JLabel("Gender:");
+    JLabel Gender = new JLabel("Gender: (M/F)");
     JTextField GenderText= new JTextField(10);
     JLabel Password = new JLabel("Password:");
     JTextField PasswordText= new JTextField(10);

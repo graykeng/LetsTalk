@@ -241,34 +241,6 @@ public class UserInfoPanel extends JPanel {
         });
         interests.add(interestAddButton);
 
-//        interestDeleteButton.setFont(UnifiedFonts.font15P);
-//        interestDeleteButton.setText("Delete");
-//        interestDeleteButton.setLocation(
-//                (int)interestTXT.getPreferredSize().getWidth() + (int)interestEditButton.getPreferredSize().getWidth() + 10,
-//                0
-//        );
-//        interestDeleteButton.setSize((int)interestDeleteButton.getPreferredSize().getWidth()+5, (int)interestDeleteButton.getPreferredSize().getHeight());
-//        interestDeleteButton.addActionListener(new ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//                try {
-//                    if (read.CountUserInterest(user.getUser_id()) > 0){
-//                        Object[] selectionValues;
-//                    }
-//                    else{
-//                        JOptionPane.showMessageDialog(
-//                                null,
-//                                "You're already too boring since you have no interest.\n Seek one interest before you delete!",
-//                                "Warning",
-//                                JOptionPane.WARNING_MESSAGE
-//                        );
-//                    }
-//                } catch (SQLException ex) {
-//                    ex.printStackTrace();
-//                }
-//            }
-//        });
-
         genderBirthdayAge.setLocation(0, (int)information.getPreferredSize().getHeight()/2);
         genderBirthdayAge.setSize(Constants.WIDTH - Constants.SIDE_PANEL_WIDTH, (int)sexTXT.getPreferredSize().getHeight());
         information.add(genderBirthdayAge);
