@@ -154,11 +154,13 @@ public class Insert {
     }
 
     public void InsertHas(Has has) throws SQLException{
+
         PreparedStatement insertStatement = con.prepareStatement("INSERT INTO has (user_id, interest_id) VALUES (?, ?);");
 
         insertStatement.setString(1, has.getUser_id());
         insertStatement.setString(2, has.getInterest_id());
         insertStatement.executeUpdate();
+
     }
 
     public void InsertIsFriendOf(IsFriendOf isFriendOf) throws SQLException{

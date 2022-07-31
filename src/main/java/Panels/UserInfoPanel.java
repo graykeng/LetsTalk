@@ -7,7 +7,6 @@ import JDBC.Insert;
 import JDBC.Read;
 import TableStruture.Has;
 import TableStruture.Interest;
-import TableStruture.IsFriendOf;
 import TableStruture.User;
 
 import javax.swing.*;
@@ -20,7 +19,7 @@ import java.util.ArrayList;
 
 public class UserInfoPanel extends JPanel {
 
-    private JButton ChangeOrDelete;
+    private JButton editOrDelete;
     private JPanel wholePanel;
     private JPanel profile;
     private JPanel information;
@@ -36,10 +35,11 @@ public class UserInfoPanel extends JPanel {
     private JLabel birthdayTXT;
     private JLabel ageTXT;
     private JLabel interestTXT;
-    private JLabel singleInterest;
-    private JButton interestEditButton;
+    private JButton singleInterest;
+    private JButton interestAddButton;
 
     private User user;
+    private Read read;
 
     private MainPanel belongTo;
 
@@ -70,16 +70,17 @@ public class UserInfoPanel extends JPanel {
         birthdayTXT = new JLabel();
         ageTXT = new JLabel();
         interestTXT = new JLabel();
-        interestEditButton = new JButton();
-        ChangeOrDelete = new JButton();
+        interestAddButton = new JButton();
+        editOrDelete = new JButton();
         Insert insert = new Insert(belongTo.getConnection());
+        read = new Read(belongTo.getConnection());
 
         /**
          * Set the size and position for scrollPanel, information, interests, and photoWall
          */
         wholePanel.setLayout(null);
         wholePanel.setLocation(0, 0);
-        wholePanel.setPreferredSize(new Dimension(Constants.USER_INFO_WIDTH, Constants.HEIGHT*2));
+        wholePanel.setPreferredSize(new Dimension(Constants.USER_INFO_WIDTH, Constants.HEIGHT));
 
         profile.setLayout(null);
         profile.setLocation(0, 0);
@@ -115,12 +116,12 @@ public class UserInfoPanel extends JPanel {
         uIDTXT.setSize((int)uIDTXT.getPreferredSize().getWidth()+10, (int)uIDTXT.getPreferredSize().getHeight());
         profile.add(uIDTXT);
 
-        ChangeOrDelete.setFont(UnifiedFonts.font15P);
-        if(belongTo.getUser() == user){ ChangeOrDelete.setText("Edit Profile"); }
-        else { ChangeOrDelete.setText("Delete"); }
-        ChangeOrDelete.setLocation(Constants.USER_INFO_WIDTH/10, Constants.HEIGHT/10);
-        ChangeOrDelete.setSize((int)ChangeOrDelete.getPreferredSize().getWidth()+5,20);
-        ChangeOrDelete.addActionListener(new ActionListener() {
+        editOrDelete.setFont(UnifiedFonts.font15P);
+        if(belongTo.getUser() == user){ editOrDelete.setText("Edit Profile"); }
+        else { editOrDelete.setText("Delete"); }
+        editOrDelete.setLocation(Constants.USER_INFO_WIDTH/10, Constants.HEIGHT/10);
+        editOrDelete.setSize((int) editOrDelete.getPreferredSize().getWidth()+5,20);
+        editOrDelete.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if(belongTo.getUser()==user){
@@ -149,7 +150,7 @@ public class UserInfoPanel extends JPanel {
                 }
             }
         });
-        profile.add(ChangeOrDelete);
+        profile.add(editOrDelete);
 
         infoTXT.setFont(UnifiedFonts.font20B);
         infoTXT.setText("INFORMATION:");
@@ -181,49 +182,64 @@ public class UserInfoPanel extends JPanel {
         interestTXT.setSize((int)interestTXT.getPreferredSize().getWidth()+10, (int)interestTXT.getPreferredSize().getHeight());
         interests.add(interestTXT);
 
-        interestEditButton.setFont(UnifiedFonts.font15P);
-        interestEditButton.setText("Edit");
-        interestEditButton.setLocation((int)interestTXT.getPreferredSize().getWidth()+10, 0);
-        interestEditButton.setSize((int)interestEditButton.getPreferredSize().getWidth()+5, (int)interestEditButton.getPreferredSize().getHeight());
-        interestEditButton.addActionListener(new ActionListener() {
+
+        interestAddButton.setFont(UnifiedFonts.font15P);
+        interestAddButton.setText("Edit");
+        interestAddButton.setLocation((int)interestTXT.getPreferredSize().getWidth()+10, 0);
+        interestAddButton.setSize((int) interestAddButton.getPreferredSize().getWidth()+5, (int) interestAddButton.getPreferredSize().getHeight());
+        interestAddButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Interest interest = new Interest();
-                Has has = new Has();
-                String inputInterest = JOptionPane.showInputDialog(
-                        null,
-                        "Input Your Interest:"
-                );
-                interest.setInterest_name(inputInterest);
-
-                String inputInterestType = JOptionPane.showInputDialog(
-                        null,
-                        "Input Your Interest's Type:"
-                );
-                interest.setType(inputInterestType);
-
-                String iid = "";
-                Read read = new Read(belongTo.getConnection());
                 try {
-                    iid = "I" + String.format("%06d", read.CountInterest());
+                    if (read.CountUserInterest(user.getUser_id()) < 4) {
+                        Interest interest = new Interest();
+                        Has has = new Has();
+                        String inputInterest = JOptionPane.showInputDialog(
+                                null,
+                                "Input Your Interest:"
+                        );
+                        interest.setInterest_name(inputInterest);
+
+                        String inputInterestType = JOptionPane.showInputDialog(
+                                null,
+                                "Input Your Interest's Type:"
+                        );
+                        interest.setType(inputInterestType);
+
+                        String iid = "";
+                        try {
+                            iid = "I" + String.format("%06d", read.CountInterest());
+                        } catch (SQLException ex) {
+                            ex.printStackTrace();
+                        }
+                        interest.setInterest_id(iid);
+
+                        has.setInterest_id(iid);
+                        has.setUser_id(user.getUser_id());
+
+                        try {
+                            insert.InsertInterest(interest);
+                            insert.InsertHas(has);
+                            belongTo.UpdateState(State.UserInfoState);
+                        } catch (SQLException ex) {
+                            ex.printStackTrace();
+                        }
+                    }
+                    else{
+                        JOptionPane.showMessageDialog(
+                                null,
+                                "Normal people usually have few interests in their life.\n You are also one of them.\n Go delete one of them and come back. :)\n P.S. You can easily delete by clicking your interest.",
+                                "Warning",
+                                JOptionPane.WARNING_MESSAGE
+                        );
+                    }
                 } catch (SQLException ex) {
                     ex.printStackTrace();
                 }
-                interest.setInterest_id(iid);
 
-                has.setInterest_id(iid);
-                has.setUser_id(user.getUser_id());
-
-                try {
-                    insert.InsertInterest(interest);
-                    insert.InsertHas(has);
-                    belongTo.UpdateState(State.UserInfoState);
-                } catch (SQLException ex) {
-                    ex.printStackTrace();
-                }
             }
         });
-        interests.add(interestEditButton);
+        interests.add(interestAddButton);
 
         genderBirthdayAge.setLocation(0, (int)information.getPreferredSize().getHeight()/2);
         genderBirthdayAge.setSize(Constants.WIDTH - Constants.SIDE_PANEL_WIDTH, (int)sexTXT.getPreferredSize().getHeight());
@@ -234,7 +250,6 @@ public class UserInfoPanel extends JPanel {
          */
 
         // READ FIRST
-        Read read = new Read(belongTo.getConnection());
         ArrayList<Interest> allInterest = new ArrayList<>();
         try {
             allInterest = read.ReadAllInterest(user);
@@ -242,12 +257,35 @@ public class UserInfoPanel extends JPanel {
             e.printStackTrace();
         }
         for(int i = 0; i < allInterest.size(); i++){
-            singleInterest = new JLabel();
+            String interest_id = allInterest.get(i).getInterest_id();
+            String interest_name = allInterest.get(i).getInterest_name();
+            singleInterest = new JButton();
             Border border = BorderFactory.createLineBorder(Color.GRAY, 2);
             singleInterest.setBorder(border);
             singleInterest.setFont(UnifiedFonts.font20P);
             singleInterest.setText(allInterest.get(i).getInterest_name());
             singleInterest.setToolTipText(allInterest.get(i).getType());
+            singleInterest.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    int result = JOptionPane.showConfirmDialog(
+                            null,
+                            "Are you sure you're not interested in " + interest_name + " anymore?",
+                            "Delete Warning",
+                            JOptionPane.YES_NO_OPTION
+                    );
+                    if (result == JOptionPane.YES_OPTION){
+                        try {
+                            Delete delete = new Delete(belongTo.getConnection());
+                            delete.DeleteHas(interest_id);
+                        } catch (SQLException ex) {
+                            ex.printStackTrace();
+                        }
+                        belongTo.UpdateState(State.UserInfoState);
+                    }
+
+                }
+            });
 
             interestsGrid.add(singleInterest);
         }

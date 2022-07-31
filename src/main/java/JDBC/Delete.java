@@ -17,6 +17,22 @@ public class Delete {
         deleteStatement.executeUpdate();
     }
 
+    public void DeleteInterest(String interest_id) throws SQLException{
+        PreparedStatement deleteStatement = con.prepareStatement("DELETE FROM interest WHERE interest_id = ?;");
+
+        deleteStatement.setString(1, interest_id);
+
+        deleteStatement.executeUpdate();
+    }
+
+    public void DeleteHas(String interest_id) throws SQLException{
+        PreparedStatement deleteStatement = con.prepareStatement("DELETE FROM has WHERE interest_id = ?;");
+
+        deleteStatement.setString(1, interest_id);
+
+        deleteStatement.executeUpdate();
+    }
+
     public void DeleteUser(String user_id) throws SQLException {
         PreparedStatement deleteStatement = con.prepareStatement("DELETE FROM user WHERE user_id = ?;");
 

@@ -88,6 +88,19 @@ public class Read {
         return i;
     }
 
+    public int CountUserInterest(String uid) throws SQLException{
+        PreparedStatement countStatement = con.prepareStatement("SELECT count(*) FROM has WHERE user_id = ?;");
+
+        countStatement.setString(1, uid);
+
+        ResultSet resultSet = countStatement.executeQuery();
+
+        if(resultSet.next()){
+            return resultSet.getInt("count(*)");
+        }
+        return -1;
+    }
+
     public User UserLogin(String UID, String PWD) throws SQLException{
         PreparedStatement statement = con.prepareStatement("SELECT * FROM user WHERE user_id = ? AND password = ?;");
 
