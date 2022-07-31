@@ -266,4 +266,8 @@ public class MainPanel extends JPanel{
     public JFrame getOwner() {
         return owner;
     }
+
+    public State getState(){
+        return state;
+    }
 }
