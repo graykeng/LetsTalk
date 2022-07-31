@@ -18,6 +18,11 @@ public class AddFriendPanel extends JPanel {
     private JLabel label;
     private JTextField textField;
     private MainPanel beLongTo;
+    private JButton countAllUser;
+    private int countUser = 0;
+    private JButton showUser;
+    private JButton showUser_aboveAvgAge;
+    private Read read;
 
     public AddFriendPanel(MainPanel mainPanel) {
         // Setting
@@ -33,7 +38,7 @@ public class AddFriendPanel extends JPanel {
         addFriendLabel.setFont(UnifiedFonts.font30B);
 
         JPanel panel = new JPanel();
-        panel.setLayout(new GridLayout(3,1));
+        panel.setLayout(new GridLayout(4,1));
 
         JPanel panel1 = new JPanel();
         JPanel panel2 = new JPanel(new GridLayout(2,1));
@@ -42,7 +47,7 @@ public class AddFriendPanel extends JPanel {
         label = new JLabel("      Input your friend's UID:");
         textField = new JTextField(20);
 
-        // Button
+        // Buttons
         addButton = new JButton("Add");
         addButton.addActionListener(new ActionListener() {
             @Override
@@ -71,15 +76,83 @@ public class AddFriendPanel extends JPanel {
             }
         });
 
+        countAllUser = new JButton("Count all user");
+        countAllUser.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    read = new Read(beLongTo.getConnection());
+                    countUser = read.CountUser();
+                    JOptionPane jOptionPane = new JOptionPane();
+                    JPanel parentPanel = beLongTo;
+                    jOptionPane.showMessageDialog(parentPanel, "The number of all user currently: \n" + countUser, "Count all users", JOptionPane.INFORMATION_MESSAGE);
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+
+        showUser = new JButton("Show all user");
+        showUser.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JPanel parentPanel = beLongTo;
+                showUser(beLongTo.getOwner(), parentPanel, true);
+            }
+        });
+
+        showUser_aboveAvgAge = new JButton("Find user over average age");
+        showUser_aboveAvgAge.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
+
+        JPanel panel3 = new JPanel();
+        panel3.add(countAllUser);
+        panel3.add(showUser);
+        panel3.add(showUser_aboveAvgAge);
+
         panel1.add(textField);
         panel1.add(addButton);
         panel2.add(label);
         panel2.add(panel1);
         panel.add(new JPanel());
         panel.add(panel2);
+        panel.add(panel3);
         panel.add(new JPanel());
 
         this.add(addFriendLabel, BorderLayout.NORTH);
         this.add(panel, BorderLayout.CENTER);
+    }
+
+    private void showUser(Frame owner, Component parentComponent, boolean all_or_overAvg) {
+        final JDialog dialog = new JDialog(owner, "Show all user", true);
+        dialog.setSize(250, 150);
+        dialog.setResizable(false);
+        dialog.setLocationRelativeTo(parentComponent);
+
+        JPanel panel = new JPanel(new BorderLayout());
+
+        Object[] columnNames = {"User ID", "User Name"};
+
+        Object[][] rowData = null;
+        read = new Read(beLongTo.getConnection());
+        try{
+            if(all_or_overAvg)
+                rowData = read.ReadUserID_Name();
+            //else
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+        JTable table = new JTable(rowData, columnNames);
+
+        panel.add(table.getTableHeader(), BorderLayout.NORTH);
+        panel.add(table, BorderLayout.CENTER);
+
+        dialog.setContentPane(panel);
+        dialog.setVisible(true);
     }
 }
