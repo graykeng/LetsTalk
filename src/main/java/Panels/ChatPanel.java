@@ -7,6 +7,7 @@ import JDBC.Read;
 import TableStruture.Message;
 import TableStruture.User;
 import org.apache.commons.io.FileUtils;
+import Thread.*;
 
 import javax.imageio.ImageIO;
 import javax.sql.rowset.serial.SerialBlob;
@@ -25,9 +26,10 @@ import java.sql.Blob;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-public class ChatPanel extends JPanel {
+public class ChatPanel extends JPanel{
     private MainPanel beLongTo;
     private Read read;
+    private MessageReceiver messageReceiver;
 
     private JPanel Title;
     private JPanel msgSendPanel;
@@ -40,6 +42,7 @@ public class ChatPanel extends JPanel {
     private User user;
     private User friend;
     private ArrayList<Message> allMsg = new ArrayList<>();
+    private JScrollBar jScrollBar;
 
     private Border blackLine = BorderFactory.createLineBorder(Color.black);
 
@@ -160,15 +163,6 @@ public class ChatPanel extends JPanel {
             height += heights[i];
         }
         return height;
-    }
-
-    private String mergeToOneString(ArrayList<String> StringArray) {
-        String allStr = "";
-        for(int i = 0; i < StringArray.size(); i++){
-            String str = StringArray.get(i) + "\n\n";
-            allStr = allStr + str;
-        }
-        return allStr;
     }
 
     private void showThePopupMenu(Component invoker, int x, int y) {
@@ -304,6 +298,11 @@ public class ChatPanel extends JPanel {
     }
 
     private void UpdateMessagePanel(){
+        if(messageReceiver == null) {
+            messageReceiver = new MessageReceiver(beLongTo, this, allMsg);
+            messageReceiver.start();
+        }
+
         messagePanel = new JPanel(null);
         int rows = allMsg.size();
         int[] heights = getHeightForEachMsg();
@@ -383,9 +382,11 @@ public class ChatPanel extends JPanel {
         );
         scrollPanel.doLayout();
 
-        JScrollBar jscrollBar = scrollPanel.getVerticalScrollBar();
-        if (jscrollBar != null)
-            jscrollBar.setValue(jscrollBar.getMaximum());
+        jScrollBar = scrollPanel.getVerticalScrollBar();
+
+        if (jScrollBar != null) {
+            jScrollBar.setValue(jScrollBar.getMaximum());
+        }
 
         scrollPanel.setSize(Constants.CHAT_PANEL_WIDTH,Constants.CHAT_FIELD_HEIGHT);
         scrollPanel.setLocation(0,Constants.TITLE_HEIGHT);
@@ -428,4 +429,5 @@ public class ChatPanel extends JPanel {
         }
         return heights;
     }
+
 }

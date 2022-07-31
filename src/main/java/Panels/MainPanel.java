@@ -4,6 +4,7 @@ import Constants.Constants;
 import Constants.State;
 import JDBC.JDBConnection;
 import TableStruture.User;
+import Thread.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -36,6 +37,9 @@ public class MainPanel extends JPanel{
     private User user;
     private ArrayList<User> friends;
     private User currUser;
+
+    private MessageReceiver messageReceiver;
+    private Thread messageReceiverThread;
 
     public MainPanel() throws SQLException {
         this.setSize(Constants.WIDTH, Constants.HEIGHT);
