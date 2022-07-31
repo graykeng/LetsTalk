@@ -239,7 +239,9 @@ public class UserInfoPanel extends JPanel {
 
             }
         });
-        interests.add(interestAddButton);
+        if (user == belongTo.getUser()) {
+            interests.add(interestAddButton);
+        }
 
         genderBirthdayAge.setLocation(0, (int)information.getPreferredSize().getHeight()/2);
         genderBirthdayAge.setSize(Constants.WIDTH - Constants.SIDE_PANEL_WIDTH, (int)sexTXT.getPreferredSize().getHeight());
@@ -265,27 +267,51 @@ public class UserInfoPanel extends JPanel {
             singleInterest.setFont(UnifiedFonts.font20P);
             singleInterest.setText(allInterest.get(i).getInterest_name());
             singleInterest.setToolTipText(allInterest.get(i).getType());
-            singleInterest.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    int result = JOptionPane.showConfirmDialog(
-                            null,
-                            "Are you sure you're not interested in " + interest_name + " anymore?",
-                            "Delete Warning",
-                            JOptionPane.YES_NO_OPTION
-                    );
-                    if (result == JOptionPane.YES_OPTION){
-                        try {
-                            Delete delete = new Delete(belongTo.getConnection());
-                            delete.DeleteHas(interest_id);
-                        } catch (SQLException ex) {
-                            ex.printStackTrace();
+            if (user == belongTo.getUser()) {
+                singleInterest.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        int result = JOptionPane.showConfirmDialog(
+                                null,
+                                "Are you sure you're not interested in " + interest_name + " anymore?",
+                                "Delete Warning",
+                                JOptionPane.YES_NO_OPTION
+                        );
+                        if (result == JOptionPane.YES_OPTION) {
+                            try {
+                                Delete delete = new Delete(belongTo.getConnection());
+                                delete.DeleteHas(interest_id);
+                            } catch (SQLException ex) {
+                                ex.printStackTrace();
+                            }
+                            belongTo.UpdateState(State.UserInfoState);
                         }
-                        belongTo.UpdateState(State.UserInfoState);
+
                     }
 
-                }
-            });
+                });
+            }
+            else{
+                singleInterest.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        int result = JOptionPane.showConfirmDialog(
+                                null,
+                                "Are you sure you want to delete " + user.getName() + "'s interest: "+ interest_name + " ?",
+                                "Delete Warning",
+                                JOptionPane.YES_NO_OPTION
+                        );
+                        if (result == JOptionPane.YES_OPTION) {
+                            JOptionPane.showMessageDialog(
+                                    null,
+                                    "You can never ever destroy your friend's interest!",
+                                    "You're so BAD",
+                                    JOptionPane.WARNING_MESSAGE
+                            );
+                        }
+                    }
+                });
+            }
 
             interestsGrid.add(singleInterest);
         }

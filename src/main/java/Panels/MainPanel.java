@@ -257,4 +257,8 @@ public class MainPanel extends JPanel{
     public void setCurrUser(User currUser) {
         this.currUser = currUser;
     }
+
+    public State getState(){
+        return state;
+    }
 }
