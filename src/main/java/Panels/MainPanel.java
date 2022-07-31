@@ -77,12 +77,12 @@ public class MainPanel extends JPanel{
     }
 
     public void UpdateState(State changeToState){
-        System.out.println("Update");
+        System.out.print("Update State to: ");
         SidePanel sidePanel = new SidePanel(this);
         state = changeToState;
         switch (this.state){
             case LoginState:
-                System.out.println("LoginState");
+                System.out.print("LoginState");
                 this.removeAll();
                 this.repaint();
                 UpdateLoginStatePanel();
@@ -90,7 +90,7 @@ public class MainPanel extends JPanel{
                 break;
 
             case RegisterState:
-                System.out.println("ResisterState");
+                System.out.print("ResisterState");
                 this.removeAll();
                 this.repaint();
                 UpdateRegisterStatePanel();
@@ -98,7 +98,7 @@ public class MainPanel extends JPanel{
                 break;
 
             case ChatState:
-                System.out.println("ChatState");
+                System.out.print("ChatState");
                 this.removeAll();
                 this.repaint();
 
@@ -111,7 +111,7 @@ public class MainPanel extends JPanel{
                 break;
 
             case AddFriendState:
-                System.out.println("AddFriendState");
+                System.out.print("AddFriendState");
                 this.removeAll();
                 this.repaint();
                 UpdateAddFriendStatePanel();
@@ -119,7 +119,7 @@ public class MainPanel extends JPanel{
                 break;
 
             case AddGroupState:
-                System.out.println("AddGroupState");
+                System.out.print("AddGroupState");
                 this.removeAll();
                 this.repaint();
                 UpdateAddGroupStatePanel();
@@ -127,7 +127,7 @@ public class MainPanel extends JPanel{
                 break;
 
             case UserInfoState:
-                System.out.println("UserInfoState");
+                System.out.print("UserInfoState");
                 this.removeAll();
                 this.repaint();
                 UserInfoStatePanel.removeAll();
@@ -141,7 +141,7 @@ public class MainPanel extends JPanel{
                 break;
 
             case PhotoState:
-                System.out.println("PhotoState");
+                System.out.print("PhotoState");
                 this.removeAll();
                 this.repaint();
                 UpdatePhotoStatePanel();
@@ -149,7 +149,7 @@ public class MainPanel extends JPanel{
                 break;
 
             case ChangeButtonClickedState:
-                System.out.println("ChangeButtonClickedState");
+                System.out.print("ChangeButtonClickedState");
                 this.removeAll();
                 this.repaint();
                 UpdateChangeButtonClickedPanel();
@@ -157,7 +157,7 @@ public class MainPanel extends JPanel{
                 break;
 
             case PhotoAddPanelState:
-                System.out.println("PhotoAddPanelState");
+                System.out.print("PhotoAddPanelState");
                 this.removeAll();
                 this.repaint();
                 UpdatePhotoAddPanel();

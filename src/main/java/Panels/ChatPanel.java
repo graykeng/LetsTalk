@@ -1,39 +1,51 @@
 package Panels;
 
 import Constants.*;
+import Helper.CopeImageUtil;
 import JDBC.Insert;
 import JDBC.Read;
+import TableStruture.Message;
 import TableStruture.User;
+import org.apache.commons.io.FileUtils;
 
+import javax.imageio.ImageIO;
 import javax.sql.rowset.serial.SerialBlob;
+import javax.sql.rowset.serial.SerialException;
 import javax.swing.*;
 import javax.swing.border.Border;
+import javax.swing.text.View;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.io.UnsupportedEncodingException;
+import java.awt.image.BufferedImage;
+import java.io.*;
 import java.sql.Blob;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class ChatPanel extends JPanel {
     private MainPanel beLongTo;
+    private Read read;
 
     private JPanel Title;
     private JPanel msgSendPanel;
     private JScrollPane scrollPanel;
-    private JTextArea textFiled = new JTextArea();
-    private JTextArea textArea = new JTextArea();
+    private JPanel messagePanel = new JPanel(null);
+    //private JTextArea messageArea = new JTextArea();
+    private JTextArea inputTextArea = new JTextArea();
     private JButton sendButton = new JButton("Send");
     private JButton addButton = new JButton();
     private User user;
     private User friend;
-    private ArrayList<String> allMsg = new ArrayList<>();
+    private ArrayList<Message> allMsg = new ArrayList<>();
+
+    private Border blackLine = BorderFactory.createLineBorder(Color.black);
 
     public ChatPanel(MainPanel mainPanel) {
         beLongTo = mainPanel;
+        read = new Read(beLongTo.getConnection());
         user = beLongTo.getUser();
         friend = beLongTo.getCurrUser();
 
@@ -53,17 +65,8 @@ public class ChatPanel extends JPanel {
         Title.add(tileLabel, BorderLayout.CENTER);
 
         // scrollPanel
-
-        String strAll = mergeToOneString(allMsg);
-
-        textFiled.setLineWrap(true);
-        textFiled.setEditable(false);
-        textFiled.setBackground(new Color(238,238,238));
-        textFiled.setText(strAll);
-
-        textFiled.setFont(UnifiedFonts.font15P);
         scrollPanel = new JScrollPane(
-                textFiled,
+                messagePanel,
                 ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
                 ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER
         );
@@ -73,13 +76,14 @@ public class ChatPanel extends JPanel {
         msgSendPanel = new JPanel();
         msgSendPanel.setSize(Constants.CHAT_PANEL_WIDTH,Constants.TEXT_FIELD_HEIGHT-38);
         msgSendPanel.setLayout(new BorderLayout());
-        textArea.setLineWrap(true);
+        inputTextArea.setLineWrap(true);
 
         sendButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println("Send: " + textArea.getText());
-                String msgSend = textArea.getText();
+                System.out.println("Send Text: " + inputTextArea.getText());
+                String msgSend = inputTextArea.getText();
+                int wordCount = msgSend.length();
                 Blob msgSend_inBlob = null;
                 try {
                     // Change msg to Blob
@@ -87,15 +91,15 @@ public class ChatPanel extends JPanel {
 
                     // Send blob
                     Insert insert = new Insert(beLongTo.getConnection());
-                    insert.sendTextMsg(user.getUser_id(),friend.getUser_id(),msgSend_inBlob);
+                    insert.sendTextMsg(user.getUser_id(),friend.getUser_id(),msgSend_inBlob, wordCount);
                 } catch (SQLException ex) {
                     ex.printStackTrace();
                 } catch (UnsupportedEncodingException ex) {
                     ex.printStackTrace();
                 }
 
-                UpdateMessage();
-                textArea.setText("");
+                beLongTo.UpdateState(State.ChatState);
+                inputTextArea.setText("");
             }
         });
 
@@ -134,7 +138,7 @@ public class ChatPanel extends JPanel {
         buttonPanel.add(sendButton);
         buttonPanel.add(addButton);
 
-        msgSendPanel.add(textArea,BorderLayout.CENTER);
+        msgSendPanel.add(inputTextArea,BorderLayout.CENTER);
         msgSendPanel.add(buttonPanel, BorderLayout.EAST);
 
         Title.setLocation(0,0);
@@ -150,10 +154,18 @@ public class ChatPanel extends JPanel {
         this.add(msgSendPanel);
     }
 
-    private String mergeToOneString(ArrayList<String> allMsg) {
+    private int CalculateAllHeight(int[] heights) {
+        int height = 0;
+        for(int i = 0; i < heights.length; i++){
+            height += heights[i];
+        }
+        return height;
+    }
+
+    private String mergeToOneString(ArrayList<String> StringArray) {
         String allStr = "";
-        for(int i = 0; i < allMsg.size(); i++){
-            String str = allMsg.get(i) + "\n\n";
+        for(int i = 0; i < StringArray.size(); i++){
+            String str = StringArray.get(i) + "\n\n";
             allStr = allStr + str;
         }
         return allStr;
@@ -163,11 +175,14 @@ public class ChatPanel extends JPanel {
         JPopupMenu popupMenu = new JPopupMenu();
 
         JMenuItem send_emoji = new JMenuItem("Send Emoji");
-        JMenuItem send_file = new JMenuItem("Send File");
+        JMenuItem send_image = new JMenuItem("Send Image");
+        JMenuItem send_voice = new JMenuItem("Send Voice");
 
         popupMenu.add(send_emoji);
         popupMenu.addSeparator();
-        popupMenu.add(send_file);
+        popupMenu.add(send_image);
+        popupMenu.addSeparator();
+        popupMenu.add(send_voice);
 
         send_emoji.addActionListener(new ActionListener() {
             @Override
@@ -175,10 +190,16 @@ public class ChatPanel extends JPanel {
                 SendEmoji();
             }
         });
-        send_file.addActionListener(new ActionListener() {
+        send_image.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                SendFile();
+                SendImage();
+            }
+        });
+        send_voice.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                SendVoice();
             }
         });
 
@@ -187,7 +208,6 @@ public class ChatPanel extends JPanel {
 
     private void SendEmoji(){
         System.out.println("Send emoji");
-        Read read = new Read(beLongTo.getConnection());
         ArrayList<String> emoji_string = null;
         try{
             emoji_string = read.ReadUserOwnEmoji(beLongTo.getUser().getUser_id());
@@ -196,7 +216,6 @@ public class ChatPanel extends JPanel {
         }
 
         String[] emojis = emoji_string.toArray(new String[emoji_string.size()]);
-        // Object[] options = new Object[]{"\uD83D\uDE00", "\uD83D\uDE04", "\uD83D\uDE01","\uD83D\uDE06","\uD83D\uDE05","\uD83D\uDE02","\uD83D\uDE0A","\uD83D\uDE1C","\uD83D\uDE1F","\uD83D\uDE18","\uD83D\uDE35","\uD83D\uDE22","\uD83D\uDE30","\uD83D\uDE28","\uD83D\uDE20","\uD83D\uDE08","\uD83D\uDE37","\uD83D\uDE11","\uD83D\uDE0E"};
 
         int optionSelected = JOptionPane.showOptionDialog(
                 this,
@@ -210,16 +229,71 @@ public class ChatPanel extends JPanel {
         );
 
         if (optionSelected >= 0) {
-            textArea.setText(textArea.getText()+emojis[optionSelected]);
+            inputTextArea.setText(inputTextArea.getText()+ " " + emojis[optionSelected]);
         }
     }
 
-    private void SendFile(){
-        System.out.println("Send File");
+    private void SendImage(){
+        System.out.print("Send Image: ");
         String filePath = "";
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setCurrentDirectory(fileChooser.getCurrentDirectory());
-        fileChooser.setDialogTitle("Open File");
+        fileChooser.setDialogTitle("Open image File");
+        fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+
+        Blob blob = null;
+        int result = fileChooser.showOpenDialog(null);
+        if(JFileChooser.APPROVE_OPTION == result){
+            CopeImageUtil copeImageUtil = new CopeImageUtil();
+            filePath = fileChooser.getSelectedFile().getPath();
+
+            BufferedImage imageSend = null;
+            try {
+                // read image
+                imageSend = ImageIO.read(new File(filePath));
+                // cut image
+                int newWidth = imageSend.getWidth()*Constants.IMAGE_HEIGHT/imageSend.getHeight();
+                imageSend = copeImageUtil.scaleByPercentage(imageSend, newWidth, Constants.IMAGE_HEIGHT);
+
+                // write image to outputPath
+                OutputStream os = new FileOutputStream("src/main/resources/Image/ImageSend.png");
+                ImageIO.write(imageSend, "PNG", os);
+
+                // Convert it to blob
+                blob = new SerialBlob(convertFileContentToBlob("src/main/resources/Image/ImageSend.png"));
+
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+
+            // Send blob
+            try{
+                Insert insert = new Insert(beLongTo.getConnection());
+                insert.sendImageMsg(user.getUser_id(),friend.getUser_id(),blob, "PNG");
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+        beLongTo.UpdateState(State.ChatState);
+    }
+
+    private static byte[] convertFileContentToBlob(String filePath) throws IOException {
+        byte[] fileContent = null;
+        try {
+            fileContent = FileUtils.readFileToByteArray(new File(filePath));
+        } catch (IOException e) {
+            throw new IOException("Unable to convert file to byte array. " +
+                    e.getMessage());
+        }
+        return fileContent;
+    }
+
+    private void SendVoice(){
+        System.out.print("Send Voice: ");
+        String filePath = "";
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setCurrentDirectory(fileChooser.getCurrentDirectory());
+        fileChooser.setDialogTitle("Open audio File");
         fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 
         int result = fileChooser.showOpenDialog(null);
@@ -229,10 +303,57 @@ public class ChatPanel extends JPanel {
         System.out.println(filePath);
     }
 
-    public void UpdateMessage(){
-        Border blackline = BorderFactory.createLineBorder(Color.black);
+    private void UpdateMessagePanel(){
+        messagePanel = new JPanel(null);
+        int rows = allMsg.size();
+        int[] heights = getHeightForEachMsg();
+        int heightForAllMsg = CalculateAllHeight(heights);
+        messagePanel.setPreferredSize(new Dimension(Constants.CHAT_PANEL_WIDTH, heightForAllMsg+20));
+        int current_height = 0;
+        for (int i = 0; i < rows; i++) {
+            JPanel row = new JPanel();
 
-        // Get friend name and update title
+            Message message = allMsg.get(i);
+            String SenderNameAndTime = message.getSenderName() + " (" + message.getDate_and_time() +")" +": <br>";
+            if(message.getMessage_id().substring(7,8).equals("T")){
+                // it is a Text
+                String content = "";
+                try{
+                    content = new String(message.getContent().getBytes(1, (int) message.getContent().length()),"GBK");
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+                String allTogether = "<html>" + SenderNameAndTime+ content +"</html>";
+                JLabel rowLabel = new JLabel(allTogether);
+                rowLabel.setPreferredSize(new Dimension(Constants.CHAT_PANEL_WIDTH-20, heights[i]));
+                row.add(rowLabel);
+            }
+            else{
+                // it is an Image
+                System.out.println("It is image");
+                JLabel rowLabel_str = new JLabel("<html>"+SenderNameAndTime+"</html>");
+                rowLabel_str.setPreferredSize(new Dimension(Constants.CHAT_PANEL_WIDTH-20, 30));
+                row.add(rowLabel_str);
+
+
+                ImageIcon imageIcon = new CopeImageUtil().blobToIcon(message.getContent());
+                //rowLabel_image.setPreferredSize(new Dimension(Constants.CHAT_PANEL_WIDTH-20, Constants.IMAGE_HEIGHT));
+                JLabel rowLabel_image = new JLabel(imageIcon);
+                row.add(rowLabel_image);
+            }
+            row.setSize(Constants.CHAT_PANEL_WIDTH-10, heights[i]);
+            row.setLocation(0, current_height);
+            //row.setBorder(blackLine);
+            messagePanel.add(row);
+
+            current_height += heights[i];
+        }
+    }
+
+    public void UpdateMessage(){
+        System.out.println("The message panel is update.");
+
+        // Get new friend name and update title
         this.remove(Title);
         Title = new JPanel();
         Title.setLayout(new BorderLayout());
@@ -242,30 +363,63 @@ public class ChatPanel extends JPanel {
         Title.add(tileLabel, BorderLayout.CENTER);
 
         Title.setLocation(0,0);
-        Title.setBorder(blackline);
+        Title.setBorder(blackLine);
         this.add(Title);
 
-        // Get message
+        // Get new message list in Message
         try{
-            allMsg = new Read(beLongTo.getConnection()).ReadMsg_betweenUIDs(user.getUser_id(),friend.getUser_id());
-
+            allMsg = read.ReadMsg_betweenUIDs(user.getUser_id(),friend.getUser_id());
         }catch (Exception e){
             e.printStackTrace();
         }
-
-        String strAll = mergeToOneString(allMsg);
-
-        textFiled.setText(strAll);
+        System.out.println("There are "+allMsg.size()+" messages between the speakers");
 
         this.remove(scrollPanel);
+        UpdateMessagePanel();
         scrollPanel = new JScrollPane(
-                textFiled,
+                messagePanel,
                 ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
                 ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER
         );
         scrollPanel.setSize(Constants.CHAT_PANEL_WIDTH,Constants.CHAT_FIELD_HEIGHT);
         scrollPanel.setLocation(0,Constants.TITLE_HEIGHT);
-        scrollPanel.setBorder(blackline);
+        scrollPanel.setBorder(blackLine);
         this.add(scrollPanel);
+    }
+
+    private int getHeightOfMsgLabel(int maxWidth, String content){
+        JLabel jLabel = new JLabel("<html>" + content + "</html>");
+
+        javax.swing.text.View v = javax.swing.plaf.basic.BasicHTML.createHTMLView(jLabel, jLabel.getText());
+
+        v.setSize(maxWidth, Integer.MAX_VALUE);
+        int h = (int) v.getMinimumSpan(View.Y_AXIS);
+        return h;
+    }
+
+    private int[] getHeightForEachMsg(){
+        int[] heights = new int[allMsg.size()];
+        for(int i = 0; i < allMsg.size(); i++){
+            int height = 0;
+            Message message = allMsg.get(i);
+            String SenderNameAndTime = message.getSenderName() + " (send at " + message.getDate_and_time() +")" +":";
+            if(message.getMessage_id().substring(7,8).equals("T")){
+                // it is a Text
+                String content = "";
+                try{
+                    content = new String(message.getContent().getBytes(1, (int) message.getContent().length()),"GBK");
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+                String allTogether = "<html>" + SenderNameAndTime+ "<br>" + content + "</html>";
+                height = getHeightOfMsgLabel(Constants.CHAT_PANEL_WIDTH, allTogether);
+            }
+            else{
+                // it is an Image
+                height = getHeightOfMsgLabel(Constants.CHAT_PANEL_WIDTH, SenderNameAndTime) + Constants.IMAGE_HEIGHT;
+            }
+            heights[i] = height+30;
+        }
+        return heights;
     }
 }

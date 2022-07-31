@@ -50,7 +50,7 @@ public class CopeImageUtil {
         return null;
     }
 
-    public Icon blobToIcon(Blob headshot){
+    public ImageIcon blobToIcon(Blob headshot){
         try{
             byte[] imageByte = headshot.getBytes(1, (int)headshot.length());
             ByteArrayInputStream in = new ByteArrayInputStream(imageByte);

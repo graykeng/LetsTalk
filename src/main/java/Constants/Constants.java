@@ -13,4 +13,5 @@ public class Constants {
     public final static int TEXT_FIELD_HEIGHT = HEIGHT/8;
     public final static int CHAT_FIELD_HEIGHT = HEIGHT*3/4;
     public final static int SELECT_PANEL_HEIGHT = HEIGHT*7/8;
+    public final static int IMAGE_HEIGHT = 100;
 }

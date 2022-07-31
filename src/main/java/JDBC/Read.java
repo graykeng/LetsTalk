@@ -246,8 +246,8 @@ public class Read {
         return emojis_number;
     }
 
-    public ArrayList<String> ReadMsg_betweenUIDs(String user_id, String friend_id) throws SQLException {
-        ArrayList<String> msgList = new ArrayList<>();
+    public ArrayList<Message> ReadMsg_betweenUIDs(String user_id, String friend_id) throws SQLException {
+        ArrayList<Message> msgList = new ArrayList<>();
         PreparedStatement readStatement = con.prepareStatement("SELECT * FROM message WHERE (sender = ? AND receiver = ?) OR (sender = ? AND receiver = ?);");
 
         readStatement.setString(1, user_id);
@@ -257,25 +257,22 @@ public class Read {
 
         ResultSet resultSet = readStatement.executeQuery();
         while (resultSet.next()){
+            String message_id = resultSet.getString("message_id");
+            String senderUID = resultSet.getString("sender");
+            String receiverUID = resultSet.getString("receiver");
+            Boolean read_or_unread = resultSet.getBoolean("read_or_unread");
+            Blob content = resultSet.getBlob("content");
+
             // Get the sender's name
-            String sender_id = resultSet.getString("sender");
-            User sender = ReadUser(sender_id);
-            String msg_id = resultSet.getString("message_id");
+            User sender = ReadUser(senderUID);
+            String senderName = sender.getName();
 
             // Get the date and time that message send
-            String event_number = ReadEventNumber_byMsgID(msg_id);
-            String date_time = ReadDateAndTime_byEventNum(event_number);
+            String event_number = ReadEventNumber_byMsgID(message_id);
+            String date_and_time = ReadDateAndTime_byEventNum(event_number);
 
-            // Get the message content
-            Blob msg_blob = resultSet.getBlob("content");
-            String msg = "";
-            try{
-                msg = sender.getName() + " (send at " + date_time +")" +": \n"
-                        + new String(msg_blob.getBytes(1, (int) msg_blob.length()),"GBK");//blob change to String
-            }catch (Exception e){
-                e.printStackTrace();
-            }
-            msgList.add(msg);
+            Message message = new Message(message_id, senderUID,receiverUID,read_or_unread,content,senderName,date_and_time);
+            msgList.add(message);
         }
         return msgList;
     }

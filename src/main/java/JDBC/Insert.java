@@ -289,7 +289,7 @@ public class Insert {
         }
     }
 
-    public void sendTextMsg(String user_id, String friend_id, Blob msgSend_inBlob) throws SQLException {
+    public void sendTextMsg(String user_id, String friend_id, Blob msgSend_inBlob, int wordCount) throws SQLException {
         // Get event number
         String event_number = "";
         Read read = new Read(con);
@@ -306,7 +306,7 @@ public class Insert {
         // Get message id
         String message_id = "";
         try {
-            message_id = "M" + String.format("%06d", read.CountMessage());
+            message_id = "M" + String.format("%06d", read.CountMessage())+ "T";
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
@@ -314,6 +314,49 @@ public class Insert {
         // Insert new Message
         Message message = new Message(message_id, user_id, friend_id, false, msgSend_inBlob);
         InsertMessage(message);
+
+        // Insert new Text Message
+        Text textMsg = new Text();
+        textMsg.setMessage_id(message_id);
+        textMsg.setWord_count(wordCount);
+        InsertText(textMsg);
+
+        // Insert Include
+        Include eventIncludeMsg = new Include(message_id,user_id,event_number);
+        InsertInclude(eventIncludeMsg);
+    }
+
+    public void sendImageMsg(String user_id, String friend_id, Blob blob, String png) throws SQLException {
+        // Get event number
+        String event_number = "";
+        Read read = new Read(con);
+        try {
+            event_number = "V" + String.format("%06d", read.CountComminicationEvent());
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+
+        // Insert new Communication_event
+        CommunicationEventTake communicationEventTake = new CommunicationEventTake(user_id, event_number, LocalDateTime.now());
+        InsertCommunicationEventTake(communicationEventTake);
+
+        // Get message id
+        String message_id = "";
+        try {
+            message_id = "M" + String.format("%06d", read.CountMessage())+ "I";
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+
+        // Insert new Message
+        Message message = new Message(message_id, user_id, friend_id, false, blob);
+        InsertMessage(message);
+
+        // Insert new Image Message
+        Image imageMsg = new Image();
+        imageMsg.setMessage_id(message_id);
+        imageMsg.setFormat(png);
+        InsertImage(imageMsg);
 
         // Insert Include
         Include eventIncludeMsg = new Include(message_id,user_id,event_number);
@@ -330,5 +373,4 @@ public class Insert {
         insertStatement.setBlob(5,photoPost.getContent());
         insertStatement.executeUpdate();
     }
-
 }
