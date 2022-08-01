@@ -1,5 +1,6 @@
 /Users/graykeng/Documents/Coding/CMPT354/LetsChat/src/main/java/TableStruture/Voice.java
 /Users/graykeng/Documents/Coding/CMPT354/LetsChat/src/main/java/Constants/State.java
+/Users/graykeng/Documents/Coding/CMPT354/LetsChat/src/main/java/Panels/ChangeButtonClicked.java
 /Users/graykeng/Documents/Coding/CMPT354/LetsChat/src/main/java/TableStruture/Text.java
 /Users/graykeng/Documents/Coding/CMPT354/LetsChat/src/main/java/JDBC/Insert.java
 /Users/graykeng/Documents/Coding/CMPT354/LetsChat/src/main/java/TableStruture/Contain.java
@@ -14,6 +15,7 @@
 /Users/graykeng/Documents/Coding/CMPT354/LetsChat/src/main/java/TableStruture/UseMessageManager.java
 /Users/graykeng/Documents/Coding/CMPT354/LetsChat/src/main/java/TableStruture/UserInGroup.java
 /Users/graykeng/Documents/Coding/CMPT354/LetsChat/src/main/java/TableStruture/Image.java
+/Users/graykeng/Documents/Coding/CMPT354/LetsChat/src/main/java/Thread/MessageReceiver.java
 /Users/graykeng/Documents/Coding/CMPT354/LetsChat/src/main/java/TableStruture/Edt.java
 /Users/graykeng/Documents/Coding/CMPT354/LetsChat/src/main/java/Panels/PopUpPanel.java
 /Users/graykeng/Documents/Coding/CMPT354/LetsChat/src/main/java/TableStruture/Has.java
@@ -37,6 +39,8 @@
 /Users/graykeng/Documents/Coding/CMPT354/LetsChat/src/main/java/Constants/UnifiedFonts.java
 /Users/graykeng/Documents/Coding/CMPT354/LetsChat/src/main/java/Panels/RegisterPanel.java
 /Users/graykeng/Documents/Coding/CMPT354/LetsChat/src/main/java/TableStruture/Interest.java
+/Users/graykeng/Documents/Coding/CMPT354/LetsChat/src/main/java/Panels/PhotoAddPanel.java
 /Users/graykeng/Documents/Coding/CMPT354/LetsChat/src/main/java/Main.java
+/Users/graykeng/Documents/Coding/CMPT354/LetsChat/src/main/java/Helper/CopeImageUtil.java
 /Users/graykeng/Documents/Coding/CMPT354/LetsChat/src/main/java/Panels/SidePanel.java
 /Users/graykeng/Documents/Coding/CMPT354/LetsChat/src/main/java/JDBC/Update.java
