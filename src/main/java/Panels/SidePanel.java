@@ -2,11 +2,16 @@ package Panels;
 
 import Constants.*;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 
 public class SidePanel extends JPanel{
     private JButton chatButton;
@@ -26,8 +31,18 @@ public class SidePanel extends JPanel{
         photoButton = new JButton();
 
         chatButton.setSize(20,20);
-        chatButton.setIcon(new ImageIcon("src/main/resources/Image/ChatButton.png"));
-        chatButton.setPressedIcon(new ImageIcon("src/main/resources/Image/ChatButton_click.png"));
+        try {
+            ImageIcon icon = new ImageIcon(ImageIO.read(getClass().getResourceAsStream("/Image/ChatButton.png")));
+            chatButton.setIcon(icon);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try {
+            ImageIcon icon = new ImageIcon(ImageIO.read(getClass().getResourceAsStream("/Image/ChatButton_click.png")));
+            chatButton.setPressedIcon(icon);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         chatButton.setContentAreaFilled(false);
         chatButton.setFocusPainted(false);
         chatButton.addActionListener(new ActionListener() {
@@ -39,8 +54,18 @@ public class SidePanel extends JPanel{
         });
 
         photoButton.setSize(20,20);
-        photoButton.setIcon(new ImageIcon("src/main/resources/Image/PhotosButton.png"));
-        photoButton.setPressedIcon(new ImageIcon("src/main/resources/Image/PhotosButton_click.png"));
+        try {
+            ImageIcon icon = new ImageIcon(ImageIO.read(getClass().getResourceAsStream("/Image/newPhoto.png")));
+            photoButton.setIcon(icon);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try {
+            ImageIcon icon = new ImageIcon(ImageIO.read(getClass().getResourceAsStream("/Image/newPhoto.png")));
+            photoButton.setPressedIcon(icon);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         photoButton.setContentAreaFilled(false);
         photoButton.setFocusPainted(false);
         photoButton.addActionListener(new ActionListener() {

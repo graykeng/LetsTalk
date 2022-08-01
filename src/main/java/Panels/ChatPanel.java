@@ -106,7 +106,12 @@ public class ChatPanel extends JPanel{
             }
         });
 
-        addButton.setIcon(new ImageIcon("src/main/resources/Image/AddButton_small.png"));
+        try {
+            ImageIcon icon = new ImageIcon(ImageIO.read(getClass().getResourceAsStream("/Image/AddButton_small.png")));
+            addButton.setIcon(icon);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         addButton.setSize(20,20);
         addButton.setContentAreaFilled(false);
         addButton.setFocusPainted(false);
@@ -429,5 +434,4 @@ public class ChatPanel extends JPanel{
         }
         return heights;
     }
-
 }
