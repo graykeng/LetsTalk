@@ -156,9 +156,9 @@ public class ChangeButtonClicked extends JPanel {
         int result = fileChooser.showOpenDialog(null);
         if(JFileChooser.APPROVE_OPTION == result){
             filePath = fileChooser.getSelectedFile().getPath();
-            copeImageUtil.cutHeadImages(filePath, "src/main/resources/Image/newHeadShot.png");
+            String output = copeImageUtil.cutHeadImages(filePath);
             try {
-                blob = new SerialBlob(convertFileContentToBlob("src/main/resources/Image/newHeadShot.png"));
+                blob = new SerialBlob(convertFileContentToBlob(output));
             } catch (IOException ex) {
                 ex.printStackTrace();
             } catch (SerialException ex) {

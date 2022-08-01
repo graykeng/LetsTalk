@@ -84,7 +84,6 @@ public class ChatPanel extends JPanel{
         sendButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println("Send Text: " + inputTextArea.getText());
                 String msgSend = inputTextArea.getText();
                 int wordCount = msgSend.length();
                 Blob msgSend_inBlob = null;
@@ -206,7 +205,6 @@ public class ChatPanel extends JPanel{
     }
 
     private void SendEmoji(){
-        System.out.println("Send emoji");
         ArrayList<String> emoji_string = null;
         try{
             emoji_string = read.ReadUserOwnEmoji(beLongTo.getUser().getUser_id());
@@ -233,7 +231,6 @@ public class ChatPanel extends JPanel{
     }
 
     private void SendImage(){
-        System.out.print("Send Image: ");
         String filePath = "";
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setCurrentDirectory(fileChooser.getCurrentDirectory());
@@ -253,13 +250,14 @@ public class ChatPanel extends JPanel{
                 // cut image
                 int newWidth = imageSend.getWidth()*Constants.IMAGE_HEIGHT/imageSend.getHeight();
                 imageSend = copeImageUtil.scaleByPercentage(imageSend, newWidth, Constants.IMAGE_HEIGHT);
-
                 // write image to outputPath
-                OutputStream os = new FileOutputStream("src/main/resources/Image/ImageSend.png");
+                String outputPath = filePath.substring(0,filePath.length()-5) + ".png";
+
+                OutputStream os = new FileOutputStream(outputPath);
                 ImageIO.write(imageSend, "PNG", os);
 
                 // Convert it to blob
-                blob = new SerialBlob(convertFileContentToBlob("src/main/resources/Image/ImageSend.png"));
+                blob = new SerialBlob(convertFileContentToBlob(outputPath));
 
             }catch (Exception e){
                 e.printStackTrace();
@@ -288,7 +286,6 @@ public class ChatPanel extends JPanel{
     }
 
     private void SendVoice(){
-        System.out.print("Send Voice: ");
         String filePath = "";
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setCurrentDirectory(fileChooser.getCurrentDirectory());
@@ -299,7 +296,6 @@ public class ChatPanel extends JPanel{
         if(JFileChooser.APPROVE_OPTION == result){
             filePath = fileChooser.getSelectedFile().getPath();
         }
-        System.out.println(filePath);
     }
 
     private void UpdateMessagePanel(){
@@ -334,7 +330,6 @@ public class ChatPanel extends JPanel{
             }
             else{
                 // it is an Image
-                System.out.println("It is image");
                 JLabel rowLabel_str = new JLabel("<html>"+SenderNameAndTime+"</html>");
                 rowLabel_str.setPreferredSize(new Dimension(Constants.CHAT_PANEL_WIDTH-20, 30));
                 row.add(rowLabel_str);
@@ -355,8 +350,6 @@ public class ChatPanel extends JPanel{
     }
 
     public void UpdateMessage(){
-        System.out.println("The message panel is update.");
-
         // Get new friend name and update title
         this.remove(Title);
         Title = new JPanel();
@@ -376,8 +369,6 @@ public class ChatPanel extends JPanel{
         }catch (Exception e){
             e.printStackTrace();
         }
-        System.out.println("There are "+allMsg.size()+" messages between the speakers");
-
         this.remove(scrollPanel);
         UpdateMessagePanel();
         scrollPanel = new JScrollPane(

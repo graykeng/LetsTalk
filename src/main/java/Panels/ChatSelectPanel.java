@@ -45,7 +45,17 @@ public class ChatSelectPanel extends JPanel {
         Title.setSize(Constants.SELECT_PANEL_WIDTH,Constants.TITLE_HEIGHT);
         JButton UserHeadShotButton = new JButton();
 
-        UserHeadShotButton.setIcon(copeImageUtil.blobToIcon(user.getHeadshot()));
+        if (user.getHeadshot() == null){
+            try {
+                ImageIcon DefaultIcon = new ImageIcon(ImageIO.read(getClass().getResourceAsStream("/Image/headshot.png")));
+                UserHeadShotButton.setIcon(DefaultIcon);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        else {
+            UserHeadShotButton.setIcon(copeImageUtil.blobToIcon(user.getHeadshot()));
+        }
         UserHeadShotButton.setContentAreaFilled(false);
         UserHeadShotButton.setFocusPainted(false);
         UserHeadShotButton.addActionListener(new ActionListener() {
@@ -152,14 +162,24 @@ public class ChatSelectPanel extends JPanel {
 
             ImageIcon FriendIcon = new ImageIcon();
             try{
-                byte[] imageByte = friends.get(i).getHeadshot().getBytes(1, (int)friends.get(i).getHeadshot().length());
-                ByteArrayInputStream in = new ByteArrayInputStream(imageByte);
-                try{
-                    BufferedImage imag = ImageIO.read(in);
-                    FriendIcon = new ImageIcon(imag);
-                }catch(IOException ex){
-                    ex.printStackTrace();
+                if(friends.get(i).getHeadshot() == null){
+                    try {
+                        FriendIcon = new ImageIcon(ImageIO.read(getClass().getResourceAsStream("/Image/headshot.png")));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
+                else{
+                    byte[] imageByte = friends.get(i).getHeadshot().getBytes(1, (int)friends.get(i).getHeadshot().length());
+                    ByteArrayInputStream in = new ByteArrayInputStream(imageByte);
+                    try{
+                        BufferedImage imag = ImageIO.read(in);
+                        FriendIcon = new ImageIcon(imag);
+                    }catch(IOException ex){
+                        ex.printStackTrace();
+                    }
+                }
+
             }catch(SQLException ex){
                 ex.printStackTrace();
             }

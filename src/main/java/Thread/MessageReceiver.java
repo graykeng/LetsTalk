@@ -27,13 +27,10 @@ public class MessageReceiver extends Thread{
     public void run() {
         while(true){
             try {
-                Thread.sleep(3000);
+                Thread.sleep(5000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            System.out.println("Thread start");
-
-
             chatPanel.UpdateMessage();
 //                allMessage = read.ReadMsg_betweenUIDs(beLongTo.getUser().getUser_id(),beLongTo.getCurrUser().getUser_id());
         }

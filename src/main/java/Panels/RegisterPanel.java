@@ -12,7 +12,9 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.sql.Blob;
 import java.sql.SQLException;
 
@@ -21,6 +23,7 @@ import JDBC.Insert;
 import JDBC.Read;
 import TableStruture.User;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 
 public class RegisterPanel extends JPanel {
 
@@ -79,15 +82,15 @@ public class RegisterPanel extends JPanel {
         });
         GenderCombobox.setSelectedIndex(0);
 
-        try {
-            blob = new SerialBlob(convertFileContentToBlob("src/main/resources/Image/headshot.png"));
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        } catch (SerialException ex) {
-            ex.printStackTrace();
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
+//        try {
+//            blob = new SerialBlob(convertDefaultHeadshotToBlob());
+//        } catch (IOException ex) {
+//            ex.printStackTrace();
+//        } catch (SerialException ex) {
+//            ex.printStackTrace();
+//        } catch (SQLException ex) {
+//            ex.printStackTrace();
+//        }
 
         Submit.addActionListener(new ActionListener() {
             @Override
@@ -167,6 +170,15 @@ public class RegisterPanel extends JPanel {
         return fileContent;
     }
 
+//    public static byte[] convertDefaultHeadshotToBlob() throws IOException {
+//        byte[] fileContent = null;
+//        InputStream inputStream = RegisterPanel.class.getResourceAsStream("/Image/headshot.png");
+//
+//        fileContent = IOUtils.toByteArray(inputStream);
+//
+//        return fileContent;
+//    }
+
     public void createHeadShot(){
         String filePath;
         JFileChooser fileChooser = new JFileChooser();
@@ -177,9 +189,9 @@ public class RegisterPanel extends JPanel {
         int result = fileChooser.showOpenDialog(null);
         if(JFileChooser.APPROVE_OPTION == result){
             filePath = fileChooser.getSelectedFile().getPath();
-            copeImageUtil.cutHeadImages(filePath, "src/main/resources/Image/newHeadShot.png");
+            String output = copeImageUtil.cutHeadImages(filePath);
             try {
-                blob = new SerialBlob(convertFileContentToBlob("src/main/resources/Image/newHeadShot.png"));
+                blob = new SerialBlob(convertFileContentToBlob(output));
             } catch (IOException ex) {
                 ex.printStackTrace();
             } catch (SerialException ex) {

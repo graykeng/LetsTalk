@@ -13,7 +13,7 @@ public class CopeImageUtil {
 
     }
 
-    public BufferedImage cutHeadImages(String filePath, String outputPath) {
+    public String cutHeadImages(String filePath) {
         BufferedImage avatarImage = null;
         try {
             avatarImage = ImageIO.read(new File(filePath));
@@ -41,9 +41,10 @@ public class CopeImageUtil {
             graphics.setColor(Color.WHITE);
             graphics.drawOval(border1, border1, width - border1 * 2, width - border1 * 2);
             graphics.dispose();
+            String outputPath = filePath.substring(0,filePath.length()-5)+".png";
             OutputStream os = new FileOutputStream(outputPath);
             ImageIO.write(formatAvatarImage, "PNG", os);
-            return formatAvatarImage;
+            return outputPath;
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -9,11 +9,13 @@ import TableStruture.Has;
 import TableStruture.Interest;
 import TableStruture.User;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -105,7 +107,18 @@ public class UserInfoPanel extends JPanel {
         profile.add(userNameTXT);
 
         CopeImageUtil copeImageUtil = new CopeImageUtil();
-        image.setIcon(copeImageUtil.blobToIcon(user.getHeadshot()));
+        if (user.getHeadshot() == null){
+            ImageIcon icon = null;
+            try {
+                icon = new ImageIcon(ImageIO.read(getClass().getResourceAsStream("/Image/headshot.png")));
+                image.setIcon(icon);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        else {
+            image.setIcon(copeImageUtil.blobToIcon(user.getHeadshot()));
+        }
         image.setLocation(userNameTXT.getX()-100, userNameTXT.getY());
         image.setSize((int)image.getPreferredSize().getWidth(), (int)image.getPreferredSize().getHeight());
         profile.add(image);
