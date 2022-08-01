@@ -154,6 +154,18 @@ public class Read {
         return user;
     }
 
+    public String ReadNewUser_uid() throws SQLException {
+        Statement statement = con.createStatement();
+        ResultSet resultSet = statement.executeQuery("SELECT * FROM user");
+        String lastUID = "";
+        while (resultSet.next()) {
+            lastUID = resultSet.getString("user_id");
+        }
+        String uid = lastUID.substring(1,lastUID.length());
+        int lastID = Integer.parseInt(uid);
+        return "U" + String.format("%06d", lastID+1);
+    }
+
     public Object[][] ReadUserID_Name() throws SQLException {
         int count = CountUser();
         Object[][] id_name = new Object[count][2];

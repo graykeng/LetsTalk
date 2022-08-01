@@ -20,7 +20,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class UserInfoPanel extends JPanel {
-
+    private JButton deleteAccount;
     private JButton editOrDelete;
     private JPanel wholePanel;
     private JPanel profile;
@@ -74,6 +74,7 @@ public class UserInfoPanel extends JPanel {
         interestTXT = new JLabel();
         interestAddButton = new JButton();
         editOrDelete = new JButton();
+        deleteAccount = new JButton();
         Insert insert = new Insert(belongTo.getConnection());
         read = new Read(belongTo.getConnection());
 
@@ -129,9 +130,31 @@ public class UserInfoPanel extends JPanel {
         uIDTXT.setSize((int)uIDTXT.getPreferredSize().getWidth()+10, (int)uIDTXT.getPreferredSize().getHeight());
         profile.add(uIDTXT);
 
+        if(belongTo.getUser() == user){
+            deleteAccount.setFont(UnifiedFonts.font15P);
+            deleteAccount.setText("Delete My Account");
+            deleteAccount.setLocation(Constants.USER_INFO_WIDTH/10, Constants.HEIGHT/10 + 50);
+            deleteAccount.setSize((int) deleteAccount.getPreferredSize().getWidth()+10,20);
+            deleteAccount.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    Delete delete = new Delete(belongTo.getConnection());
+                    try {
+                        delete.DeleteUser(belongTo.getUser().getUser_id());
+                    } catch (SQLException ex) {
+                        ex.printStackTrace();
+                    }
+                    belongTo.UpdateState(State.LoginState);
+                }
+            });
+        }
+        profile.add(deleteAccount);
+
         editOrDelete.setFont(UnifiedFonts.font15P);
         if(belongTo.getUser() == user){ editOrDelete.setText("Edit Profile"); }
-        else { editOrDelete.setText("Delete"); }
+        else {
+            editOrDelete.setText("Delete");
+        }
         editOrDelete.setLocation(Constants.USER_INFO_WIDTH/10, Constants.HEIGHT/10);
         editOrDelete.setSize((int) editOrDelete.getPreferredSize().getWidth()+5,20);
         editOrDelete.addActionListener(new ActionListener() {

@@ -98,7 +98,7 @@ public class RegisterPanel extends JPanel {
                 Read read = new Read(beLongTo.getConnection());
                 Insert insert = new Insert(beLongTo.getConnection());
                 try {
-                    uid = "U" + String.format("%06d", read.CountUser());
+                    uid = read.ReadNewUser_uid();
                 } catch (SQLException ex) {
                     ex.printStackTrace();
                 }
@@ -131,8 +131,6 @@ public class RegisterPanel extends JPanel {
         p2.add(InputYourInformation);
         p3.add(Name);
         p3.add(Nametext);
-        //p4.add(Age);
-        //p4.add(Agetext);
         p5.add(HeadShot);
         p5.add(ChooseFile);
         p6.add(Birthday);

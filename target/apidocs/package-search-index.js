@@ -1,1 +1,0 @@
-packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"Constants"},{"l":"Helper"},{"l":"JDBC"},{"l":"Panels"},{"l":"TableStruture"},{"l":"Thread"}];updateSearchResults();
