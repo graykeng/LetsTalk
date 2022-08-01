@@ -22,6 +22,8 @@ public class AddFriendPanel extends JPanel {
     private int countUser = 0;
     private JButton showUser;
     private JButton showUser_aboveAvgAge;
+    private JButton showGender;
+    private JButton findUserHasAllFriends;
     private Read read;
 
     public AddFriendPanel(MainPanel mainPanel) {
@@ -38,7 +40,7 @@ public class AddFriendPanel extends JPanel {
         addFriendLabel.setFont(UnifiedFonts.font30B);
 
         JPanel panel = new JPanel();
-        panel.setLayout(new GridLayout(4,1));
+        panel.setLayout(new GridLayout(5,1));
 
         JPanel panel1 = new JPanel();
         JPanel panel2 = new JPanel(new GridLayout(2,1));
@@ -105,7 +107,26 @@ public class AddFriendPanel extends JPanel {
         showUser_aboveAvgAge.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                JPanel parentPanel = beLongTo;
+                showUser(beLongTo.getOwner(), parentPanel, false);
+            }
+        });
 
+        showGender = new JButton("<html>Count users of different gender over average age</html>");
+        showGender.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JPanel parentPanel = beLongTo;
+                showCount_withGender(beLongTo.getOwner(), parentPanel);
+            }
+        });
+
+        findUserHasAllFriends = new JButton("<html>Find user who has all users as friend</html>");
+        findUserHasAllFriends.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JPanel parentPanel = beLongTo;
+                showUserHasAllFriend(beLongTo.getOwner(), parentPanel);
             }
         });
 
@@ -113,6 +134,10 @@ public class AddFriendPanel extends JPanel {
         panel3.add(countAllUser);
         panel3.add(showUser);
         panel3.add(showUser_aboveAvgAge);
+        panel3.add(showGender);
+
+        JPanel panel4 = new JPanel();
+        panel4.add(findUserHasAllFriends);
 
         panel1.add(textField);
         panel1.add(addButton);
@@ -121,6 +146,7 @@ public class AddFriendPanel extends JPanel {
         panel.add(new JPanel());
         panel.add(panel2);
         panel.add(panel3);
+        panel.add(panel4);
         panel.add(new JPanel());
 
         this.add(addFriendLabel, BorderLayout.NORTH);
@@ -142,7 +168,64 @@ public class AddFriendPanel extends JPanel {
         try{
             if(all_or_overAvg)
                 rowData = read.ReadUserID_Name();
-            //else
+            else{
+                rowData = read.ReadUserID_Name_overAvg();
+            }
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+        JTable table = new JTable(rowData, columnNames);
+
+        panel.add(table.getTableHeader(), BorderLayout.NORTH);
+        panel.add(table, BorderLayout.CENTER);
+
+        dialog.setContentPane(panel);
+        dialog.setVisible(true);
+    }
+
+    //CountUser_overAvg_OfEachGender();
+    private void showCount_withGender(Frame owner, Component parentComponent){
+        final JDialog dialog = new JDialog(owner, "Count users with different gender and their average age", true);
+        dialog.setResizable(false);
+        dialog.setSize(250, 150);
+        dialog.setLocationRelativeTo(parentComponent);
+
+        JPanel panel = new JPanel(new BorderLayout());
+
+        Object[] columnNames = {"Gender", "count", "avg_age"};
+
+        Object[][] rowData = null;
+        read = new Read(beLongTo.getConnection());
+        try{
+            rowData = read.CountUser_overAvg_OfEachGender();
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+        JTable table = new JTable(rowData, columnNames);
+
+        panel.add(table.getTableHeader(), BorderLayout.NORTH);
+        panel.add(table, BorderLayout.CENTER);
+
+        dialog.setContentPane(panel);
+        dialog.setVisible(true);
+    }
+
+    private void showUserHasAllFriend(Frame owner, Component parentComponent){
+        final JDialog dialog = new JDialog(owner, "Find user who has all users as friend", true);
+        dialog.setResizable(false);
+        dialog.setSize(250, 150);
+        dialog.setLocationRelativeTo(parentComponent);
+
+        JPanel panel = new JPanel(new BorderLayout());
+
+        Object[] columnNames = {"User ID", "User Name"};
+
+        Object[][] rowData = null;
+        read = new Read(beLongTo.getConnection());
+        try{
+            rowData = read.ReadUserID_Name_hasAllFriend();
         }
         catch (Exception e){
             e.printStackTrace();

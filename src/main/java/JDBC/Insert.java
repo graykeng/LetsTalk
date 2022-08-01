@@ -105,6 +105,10 @@ public class Insert {
 
         // Insert all emoji for user
         InsertAllOwn_byUID(user.getUser_id());
+
+        // Insert is_friend_of for user
+        IsFriendOf isFriendOfSelf = new IsFriendOf(user.getUser_id(), user.getUser_id());
+        InsertIsFriendOf(isFriendOfSelf);
     }
 
     public void InsertOwn(Own own) throws SQLException{

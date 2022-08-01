@@ -171,52 +171,92 @@ public class Read {
         return id_name;
     }
 
-//    public double ReadAvgAge() throws SQLException {
-//        ArrayList<Integer> ages = new ArrayList<Integer>();
-//        int sum = 0;
-//        double avgAge = 0;
-//        Statement statement = con.createStatement();
-//        ResultSet resultSet = statement.executeQuery("SELECT * FROM user_birthday_and_age");
-//        while (resultSet.next()) {
-//            int age = resultSet.getInt("age");
-//            ages.add(age);
-//        }
-//
-//        for(int i = 0; i < ages.size(); i++){
-//            sum += ages.get(i);
-//        }
-//        avgAge = sum/ages.size();
-//        return avgAge;
-//    }
-//
-//    public ArrayList<User> ReadUserOverAvg() throws SQLException{
-//        ArrayList<User> users = new ArrayList<>();
-//        double avgAge = ReadAvgAge();
-//        Statement statement = con.createStatement();
-//        ResultSet resultSet = statement.executeQuery("SELECT * FROM user_birthday_and_age WHERE age > " + avgAge);
-//        int i = 0;
-//        while (resultSet.next()) {
-//            String birthday = resultSet.getString("birthday");
-//        }
-//        return i;
-//    }
-//
-//    public Object[][] ReadUserIDNameOverAvg() throws SQLException {
-//        int count = CountUserOverAvg();
-//        Object[][] id_name = new Object[count][2];
-//        PreparedStatement statement = con.prepareStatement("SELECT user_id, name FROM user;");
-//        ResultSet resultSet = statement.executeQuery();
-//        int i = 0;
-//        while (resultSet.next()) {
-//            String uid = resultSet.getString("user_id");
-//            String name = resultSet.getString("name");
-//            id_name[i][0] = uid;
-//            id_name[i][1] = name;
-//            i++;
-//        }
-//
-//        return id_name;
-//    }
+    public Object[][] ReadUserID_Name_hasAllFriend() throws SQLException {
+        PreparedStatement statement = con.prepareStatement("select user_id, name " +
+                                                                "from user u " +
+                                                                "WHERE NOT exists " +
+                                                                "(select * from user f " +
+                                                                "WHERE NOT exists " +
+                                                                "(select * " +
+                                                                "FROM is_friend_of r " +
+                                                                "where u.user_id = r.user_id " +
+                                                                "AND f.user_id = r.friend_id));");
+        ArrayList<User> users = new ArrayList<>();
+        ResultSet resultSet = statement.executeQuery();
+        while (resultSet.next()) {
+            String uid = resultSet.getString("user_id");
+            String name = resultSet.getString("name");
+            User user = new User();
+
+            user.setUser_id(uid);
+            user.setName(name);
+            users.add(user);
+        }
+
+        int count = users.size();
+        Object[][] id_name = new Object[count][2];
+        for(int i = 0; i < count; i++){
+            id_name[i][0] = users.get(i).getUser_id();
+            id_name[i][1] = users.get(i).getName();
+        }
+
+        return id_name;
+    }
+
+    public Object[][] ReadUserID_Name_overAvg() throws SQLException {
+        PreparedStatement statement = con.prepareStatement("select user_id, name FROM user, user_birthday_and_age " +
+                                                                "WHERE user.birthday = user_birthday_and_age.birthday " +
+                                                                "AND age > (Select AVG(age) from user, user_birthday_and_age  WHERE user.birthday = user_birthday_and_age.birthday) Group By user_id, name;");
+        ArrayList<User> users = new ArrayList<>();
+        ResultSet resultSet = statement.executeQuery();
+        while (resultSet.next()) {
+            String uid = resultSet.getString("user_id");
+            String name = resultSet.getString("name");
+            User user = new User();
+
+            user.setUser_id(uid);
+            user.setName(name);
+            users.add(user);
+        }
+
+        int count = users.size();
+        Object[][] id_name = new Object[count][2];
+        for(int i = 0; i < count; i++){
+            id_name[i][0] = users.get(i).getUser_id();
+            id_name[i][1] = users.get(i).getName();
+        }
+
+        return id_name;
+    }
+
+    public Object[][] CountUser_overAvg_OfEachGender() throws SQLException {
+        PreparedStatement statement = con.prepareStatement("select gender, count(*), AVG(age) FROM user, user_birthday_and_age " +
+                                                                "WHERE user.birthday = user_birthday_and_age.birthday " +
+                                                                "Group By gender;");
+        ArrayList<User> users = new ArrayList<>();
+        ResultSet resultSet = statement.executeQuery();
+        while (resultSet.next()) {
+            String gender = resultSet.getString("gender");
+            int numOfUser = resultSet.getInt("count(*)");
+            double avgAge = resultSet.getDouble("AVG(age)");
+            User user = new User();
+
+            user.setGender(gender);
+            user.setAge(numOfUser);
+            user.setName("" + avgAge);
+            users.add(user);
+        }
+
+        int count = users.size();
+        Object[][] results = new Object[count][3];
+        for(int i = 0; i < count; i++){
+            results[i][0] = users.get(i).getGender();
+            results[i][1] = users.get(i).getAge();
+            results[i][2] = users.get(i).getName();
+        }
+
+        return results;
+    }
 
     public ArrayList<User> ReadFriendInfo (String uid)throws SQLException{
         ArrayList<User> friends = new ArrayList<>();
