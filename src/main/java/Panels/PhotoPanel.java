@@ -46,8 +46,8 @@ public class PhotoPanel extends JPanel {
         });
         Search_Add_panel.setSize(Constants.WIDTH-Constants.SIDE_PANEL_WIDTH,70);
         Search_Add_panel.setLocation(0,0);
-        Search_Add_panel.add(SearchInsert);
-        Search_Add_panel.add(searchButton);
+        //Search_Add_panel.add(SearchInsert);
+        //Search_Add_panel.add(searchButton);
         Search_Add_panel.add(AddButton);
         this.add(Search_Add_panel);
         scroll_panel= new JScrollPane();

@@ -74,7 +74,6 @@ public class RegisterPanel extends JPanel {
         GenderCombobox.addItemListener(new ItemListener() {
             @Override
             public void itemStateChanged(ItemEvent e) {
-                // 只处理选中的状态
                 if (e.getStateChange() == ItemEvent.SELECTED) {
                     setGender(GenderCombobox.getSelectedItem().toString());
                 }

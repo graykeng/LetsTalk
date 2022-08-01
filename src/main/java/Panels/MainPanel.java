@@ -3,6 +3,7 @@ package Panels;
 import Constants.Constants;
 import Constants.State;
 import JDBC.JDBConnection;
+import JDBC.Read;
 import TableStruture.User;
 import Thread.*;
 
@@ -103,6 +104,11 @@ public class MainPanel extends JPanel{
                 this.removeAll();
                 this.repaint();
 
+                try{
+                    setFriends(new Read(this.getConnection()).ReadFriendInfo(this.getUser().getUser_id()));
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
                 chatSelectPanel = new ChatSelectPanel(this);
                 chatPanel = new ChatPanel(this);
                 chatPanel.UpdateMessage();

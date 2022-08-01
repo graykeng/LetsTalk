@@ -180,7 +180,14 @@ public class AddFriendPanel extends JPanel {
         panel.add(table.getTableHeader(), BorderLayout.NORTH);
         panel.add(table, BorderLayout.CENTER);
 
-        dialog.setContentPane(panel);
+        JScrollPane scrollPanel = new JScrollPane(
+                panel,
+                ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
+                ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER
+        );
+        scrollPanel.setSize(250,150);
+
+        dialog.setContentPane(scrollPanel);
         dialog.setVisible(true);
     }
 
@@ -235,7 +242,14 @@ public class AddFriendPanel extends JPanel {
         panel.add(table.getTableHeader(), BorderLayout.NORTH);
         panel.add(table, BorderLayout.CENTER);
 
-        dialog.setContentPane(panel);
+        JScrollPane scrollPanel = new JScrollPane(
+                panel,
+                ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
+                ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER
+        );
+        scrollPanel.setSize(250,150);
+
+        dialog.setContentPane(scrollPanel);
         dialog.setVisible(true);
     }
 }
