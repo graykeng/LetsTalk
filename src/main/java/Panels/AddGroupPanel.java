@@ -34,7 +34,7 @@ public class AddGroupPanel extends JPanel {
         addGroupLabel.setFont(UnifiedFonts.font30B);
 
         JPanel panel = new JPanel();
-        panel.setLayout(new GridLayout(4,1));
+        panel.setLayout(new GridLayout(5,1));
 
         JPanel panel1 = new JPanel();
         JPanel panel2 = new JPanel(new GridLayout(2,1));
@@ -74,6 +74,7 @@ public class AddGroupPanel extends JPanel {
         panel2.add(panel1);
         panel.add(new JPanel());
         panel.add(panel2);
+        panel.add(new JPanel());
         panel.add(new JPanel());
         panel.add(new JPanel());
 

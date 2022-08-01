@@ -8,6 +8,8 @@ import Constants.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -49,10 +51,11 @@ public class RegisterPanel extends JPanel {
     JLabel Birthday = new JLabel("Birthday: (DD/MM/YYYY)");
     JTextField BirthdayText= new JTextField(10);
     JLabel Gender = new JLabel("Gender: (M/F)");
-    JTextField GenderText= new JTextField(10);
     JLabel Password = new JLabel("Password:");
     JTextField PasswordText= new JTextField(10);
     JButton Submit= new JButton("Submit");
+    JComboBox GenderCombobox;
+    String gender = "";
 
     public RegisterPanel(MainPanel mainPanel){
         beLongTo = mainPanel;
@@ -60,6 +63,21 @@ public class RegisterPanel extends JPanel {
         this.setLocation(0, 0);
         this.setLayout(new BorderLayout());
         panel29 = new JPanel(new GridLayout(8,1));
+
+        Object[] listGender = new String[]{"Male", "Female"};
+        GenderCombobox= new JComboBox(listGender);
+        gender = "Male";
+
+        GenderCombobox.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                // 只处理选中的状态
+                if (e.getStateChange() == ItemEvent.SELECTED) {
+                    setGender(GenderCombobox.getSelectedItem().toString());
+                }
+            }
+        });
+        GenderCombobox.setSelectedIndex(0);
 
         try {
             blob = new SerialBlob(convertFileContentToBlob("src/main/resources/Image/headshot.png"));
@@ -83,7 +101,7 @@ public class RegisterPanel extends JPanel {
                     ex.printStackTrace();
                 }
 
-                user = new User(uid, Nametext.getText(), blob, BirthdayText.getText(), GenderText.getText(), PasswordText.getText());
+                user = new User(uid, Nametext.getText(), blob, BirthdayText.getText(), gender, PasswordText.getText());
                 try {
                     insert.InsertUser(user);
                 } catch (SQLException ex) {
@@ -118,7 +136,7 @@ public class RegisterPanel extends JPanel {
         p6.add(Birthday);
         p6.add(BirthdayText);
         p7.add(Gender);
-        p7.add(GenderText);
+        p7.add(GenderCombobox);
         p8.add(Password);
         p8.add(PasswordText);
         p9.add(Submit);
@@ -170,5 +188,13 @@ public class RegisterPanel extends JPanel {
                 ex.printStackTrace();
             }
         }
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
     }
 }
