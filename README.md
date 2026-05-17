@@ -117,4 +117,4 @@ java -jar target/LetsTalk-jar-with-dependencies.jar
 
 ## Authors
 
-Built by Kerla Zhou, Gray Keng, and Lester Li.
+Built by Sibei Zhou, Gray Keng, and Lester Li.
