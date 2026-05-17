@@ -33,6 +33,27 @@ LetsTalk is a Java Swing desktop chat and photo-sharing application backed by a 
 - Photo post upload and browsing
 - Analytical SQL queries used for project reporting, such as average user age by gender and users with complete friendship coverage
 
+## Application Walkthrough
+
+The original project report includes UI screenshots and usage notes. Key screens are extracted into `document/screenshots` so the project can be understood quickly without running the desktop app first.
+
+| Registration | Chat Workspace |
+| --- | --- |
+| <img src="document/screenshots/screenshot-02.png" width="420" alt="Register new user screen"> | <img src="document/screenshots/screenshot-04.png" width="420" alt="Chat screen with friend list and message composer"> |
+| New users enter profile details, choose a headshot image, select gender, and submit to create a database-backed account. | The main chat view combines navigation, friend selection, conversation history, message input, and attachment actions. |
+
+| Profile And Friendship | Friend Discovery |
+| --- | --- |
+| <img src="document/screenshots/screenshot-05.png" width="420" alt="User profile screen"> | <img src="document/screenshots/screenshot-08.png" width="420" alt="Add friend query result dialog"> |
+| Users can view profile information, interests, birthday, age, and friendship actions from the profile panel. | The add-friend panel demonstrates database-backed user lookup and reporting-style queries from the course requirements. |
+
+| Group / Relationship Query | ERD |
+| --- | --- |
+| <img src="document/screenshots/screenshot-12.png" width="420" alt="Group and relationship query dialog"> | <img src="document/screenshots/screenshot-01.png" width="420" alt="LetsTalk ERD"> |
+| Group and relationship workflows show how users, friends, and shared groups are retrieved from relational tables. | The ERD captures the main schema behind users, messages, groups, photos, notifications, emojis, and relationship tables. |
+
+For the full usage report, see `document/report.pdf`.
+
 ## Architecture
 
 The project is organized around three main layers:
@@ -64,11 +85,12 @@ Typical chat flow:
 |   +-- Main.java
 +-- src/main/resources/Image
 +-- document
-|   +-- CMPT 354 Milestone 4.pdf
 |   +-- LetsTalk Data Script.sql
 |   +-- LetsTalk Query List.pdf
 |   +-- LetsTalk Tables Script.pdf
 |   +-- LetsTalkERD.pdf
+|   +-- report.pdf
+|   +-- screenshots
 +-- pom.xml
 +-- LetsTalk_Executable.jar
 ```
