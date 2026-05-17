@@ -60,7 +60,7 @@ LetsTalk is a Java Swing desktop chat and photo-sharing application backed by a 
 | Users can view profile information, interests, birthday, age, and friendship actions from the profile panel. | The add-friend panel demonstrates database-backed user lookup and reporting-style queries from the course requirements. |
 
 ## ERD
-<img src="document/screenshots/screenshot-12.png" width="420" alt="Group and relationship query dialog"> | <img src="document/screenshots/screenshot-01.png" width="420" alt="LetsTalk ERD"> 
+ <img src="document/screenshots/screenshot-01.png" width="700" alt="LetsTalk ERD"> 
 
 For the full usage report, see `document/report.pdf`.
 
